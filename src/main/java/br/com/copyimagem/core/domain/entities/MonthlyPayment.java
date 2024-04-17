@@ -24,19 +24,23 @@ public class MonthlyPayment implements Serializable {
     @Column( nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer mes;
-    private Integer ano;
-    private Double valorMensalidade;
-    private Integer contadorImpressoes;
-    private Integer quantidadeImpressoes;
-    private Double valorExcedente;
-    private Double valorTotal;
+    private Integer month;
+    private Integer year;
+    private Double monthlyAmount;
+    private Integer impressionsCounter;
+    private Integer quantityPrints;
+    private Double excessValuePrints;
+    private Double amountPrinter;
+
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date dataVencimento;
+    private Date expirationDate;
+
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date dataPagamento;
+    private Date paymentDate;
+
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
+
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
