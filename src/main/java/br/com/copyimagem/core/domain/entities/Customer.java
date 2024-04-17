@@ -30,9 +30,12 @@ public abstract class Customer implements Serializable {
     private Long id;
     private String clientName;
     @Column(unique = true)
-    private String email;
+    private String primaryEmail;
+    @ElementCollection
+    private List<String> emailList = new ArrayList<>();
     private String phoneNumber;
     private String whatsapp;
+    private String bankCode;
     @OneToOne
     @JoinColumn(name = "adress_id")
     private Adress adress;
@@ -40,6 +43,7 @@ public abstract class Customer implements Serializable {
     private Date startContract;
     @Enumerated(EnumType.STRING)
     private FinancialSituation financialSituation;
+    private byte payDay;
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer")
