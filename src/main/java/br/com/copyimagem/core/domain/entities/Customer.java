@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 @Getter
@@ -52,4 +53,17 @@ public abstract class Customer implements Serializable {
     @JsonIgnore
     @OneToMany(fetch =FetchType.EAGER  ,mappedBy = "customer")
     private List<MonthlyPayment> monthlyPaymentList = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return Objects.equals(id, customer.id) && Objects.equals(primaryEmail, customer.primaryEmail);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, primaryEmail);
+    }
 }
