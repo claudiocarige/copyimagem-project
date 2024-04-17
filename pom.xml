@@ -13,6 +13,17 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>copyimagem-backend</name>
     <description>copyimagem-backend</description>
+    <developers>
+        <developer>
+            <name>Claudio Carige</name>
+            <email>ccarige@gmail.com</email>
+            <url>https://www.linkedin.com/in/claudiocarige</url>
+            <roles>
+                <role>Full Stack Developer</role>
+            </roles>
+            <timezone>UTC-3</timezone>
+        </developer>
+    </developers>
     <properties>
         <java.version>17</java.version>
     </properties>
