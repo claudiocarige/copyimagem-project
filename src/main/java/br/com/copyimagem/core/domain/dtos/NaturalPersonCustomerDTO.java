@@ -23,6 +23,7 @@ public class NaturalPersonCustomerDTO implements Serializable{
 
     private Long id;
     private String clientName;
+    private String cpf;
     private String primaryEmail;
     @Setter(AccessLevel.NONE)
     private List<String> emailList = new ArrayList<>();
