@@ -25,7 +25,6 @@ public class NaturalPersonCustomerDTO implements Serializable{
     private String clientName;
     private String cpf;
     private String primaryEmail;
-    @Setter(AccessLevel.NONE)
     private List<String> emailList = new ArrayList<>();
     private String phoneNumber;
     private String whatsapp;
@@ -35,8 +34,8 @@ public class NaturalPersonCustomerDTO implements Serializable{
     private Date startContract;
     private String financialSituation;
     private byte payDay;
-    @Setter(AccessLevel.NONE)
+
     private LinkedList<MultiPrinter> multiPrinterList = new LinkedList<>();
-    @Setter(AccessLevel.NONE)
+
     private LinkedList<MonthlyPayment> monthlyPaymentList = new LinkedList<>();
 }
