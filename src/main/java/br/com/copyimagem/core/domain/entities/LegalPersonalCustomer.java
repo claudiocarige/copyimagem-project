@@ -18,7 +18,7 @@ public class LegalPersonalCustomer extends Customer{
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Column(nullable = false, unique = true,length = 18)
+    @Column(unique = true,length = 18)
     private String cnpj;
 
     @Override
