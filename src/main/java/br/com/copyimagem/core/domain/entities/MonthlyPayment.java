@@ -24,8 +24,8 @@ public class MonthlyPayment implements Serializable {
     @Column( nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer month;
-    private Integer year;
+    private Integer monthPayment;
+    private Integer yearPayment;
     private Double monthlyAmount;
     private Integer impressionsCounter;
     private Integer quantityPrints;
