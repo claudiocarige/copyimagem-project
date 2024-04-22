@@ -33,10 +33,10 @@ public class MonthlyPayment implements Serializable {
     private Double amountPrinter;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date expirationDate;
+    private LocalDate expirationDate;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date paymentDate;
+    private LocalDate paymentDate;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
