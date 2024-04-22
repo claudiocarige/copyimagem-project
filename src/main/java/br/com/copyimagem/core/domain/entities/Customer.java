@@ -41,7 +41,7 @@ public abstract class Customer implements Serializable {
     @JoinColumn(name = "adress_id")
     private Adress adress;
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date startContract;
+    private LocalDate startContract;
     @Enumerated(EnumType.STRING)
     private FinancialSituation financialSituation;
     private byte payDay;
