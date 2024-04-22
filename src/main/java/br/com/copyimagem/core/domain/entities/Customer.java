@@ -8,8 +8,8 @@ import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,13 +46,25 @@ public abstract class Customer implements Serializable {
     private FinancialSituation financialSituation;
     private byte payDay;
 
+    @Setter(AccessLevel.NONE)
     @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer")
     private List<MultiPrinter> multiPrinterList = new ArrayList<>();
 
+    @Setter(AccessLevel.NONE)
     @JsonIgnore
     @OneToMany(fetch =FetchType.EAGER  ,mappedBy = "customer")
     private List<MonthlyPayment> monthlyPaymentList = new ArrayList<>();
+
+
+    public void addMultiPrinter(List<MultiPrinter> multiPrinter){
+        multiPrinterList.addAll(multiPrinter);
+    }
+
+    public void addMonthlyPayment(List<MonthlyPayment> monthlyPayment){
+        monthlyPaymentList.addAll(monthlyPayment);
+    }
+
 
     @Override
     public boolean equals(Object o) {
