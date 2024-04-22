@@ -2,7 +2,9 @@ package br.com.copyimagem.core.domain.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 import java.io.Serial;
 
@@ -11,7 +13,6 @@ import java.io.Serial;
 @Setter
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class LegalPersonalCustomer extends Customer{
 
@@ -20,6 +21,14 @@ public class LegalPersonalCustomer extends Customer{
 
     @Column(unique = true,length = 18)
     private String cnpj;
+
+    public LegalPersonalCustomer(String cnpj) {
+        super();
+        if (cnpj == null || cnpj.length() != 18) {
+            throw new IllegalArgumentException("Invalid CNPJ");
+        }
+        this.cnpj = cnpj;
+    }
 
     @Override
     public int hashCode() { return super.hashCode(); }
