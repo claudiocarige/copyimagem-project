@@ -10,7 +10,6 @@ import java.io.Serial;
 @Setter
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class NaturalPersonCustomer extends Customer{
 
@@ -20,6 +19,13 @@ public class NaturalPersonCustomer extends Customer{
     @Column(unique = true, length = 14)
     private String cpf;
 
+    public NaturalPersonCustomer(String cpf) {
+        super();
+        if (cpf == null || cpf.length() != 14) {
+            throw new IllegalArgumentException("Invalid CPF");
+        }
+        this.cpf = cpf;
+    }
     @Override
     public boolean equals(Object o) {
         return super.equals(o);
