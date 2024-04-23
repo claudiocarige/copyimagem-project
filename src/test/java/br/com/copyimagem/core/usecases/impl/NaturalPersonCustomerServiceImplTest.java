@@ -97,13 +97,23 @@ class NaturalPersonCustomerServiceImplTest {
         );
     }
     @Test
-    @DisplayName("Must throw NoSuchElementException when email already exists")
-    void youMustThrowNoSuchElementExceptionWhenEmailAlreadyExists() {
+    @DisplayName("Must throw return NoSuchElementException when EMAIL already exists")
+    void youMustReturnThrowNoSuchElementExceptionWhenEmailAlreadyExists() {
         when(naturalPersonCustomerRepository.findByPrimaryEmail(customerPf.getPrimaryEmail()))
                 .thenReturn(Optional.of(customerPf));
         NoSuchElementException noSuchElementException = assertThrows(NoSuchElementException.class,() ->
                 naturalPersonCustomerService.saveNaturalPersonCustomer(customerPf));
-        assertTrue(noSuchElementException.getMessage().endsWith("already exists!"));
+        assertTrue(noSuchElementException.getMessage().startsWith("Email"));
+    }
+
+    @Test
+    @DisplayName("Must throw return NoSuchElementException when CPF already exists")
+    void youMustReturnThrowNoSuchElementExceptionWhenCpfAlreadyExists() {
+        when(naturalPersonCustomerRepository.findByCpf(customerPf.getCpf()))
+                .thenReturn(Optional.of(customerPf));
+        NoSuchElementException noSuchElementException = assertThrows(NoSuchElementException.class,() ->
+                naturalPersonCustomerService.saveNaturalPersonCustomer(customerPf));
+        assertTrue(noSuchElementException.getMessage().startsWith("CPF"));
     }
 
     private void start() {
