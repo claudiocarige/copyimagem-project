@@ -33,6 +33,7 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
     public NaturalPersonCustomer saveNaturalPersonCustomer(NaturalPersonCustomer naturalPersonCustomer) {
         naturalPersonCustomer.setId(null);
         checkEmail(naturalPersonCustomer);
+        checkCpf(naturalPersonCustomer);
         return naturalPersonCustomerRepository.save(naturalPersonCustomer);
     }
     private void checkEmail(NaturalPersonCustomer naturalPersonCustomer) {
@@ -40,6 +41,14 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
                 naturalPersonCustomer.getPrimaryEmail());
         if (customer.isPresent() && customer.get().getPrimaryEmail().equals(naturalPersonCustomer.getPrimaryEmail())) {
             throw new NoSuchElementException(String.format("Email %s already exists!", naturalPersonCustomer.getPrimaryEmail()));
+        }
+    }
+
+    private void checkCpf(NaturalPersonCustomer naturalPersonCustomer) {
+        Optional<NaturalPersonCustomer> customer = naturalPersonCustomerRepository.findByCpf(
+                naturalPersonCustomer.getCpf());
+        if (customer.isPresent() && customer.get().getCpf().equals(naturalPersonCustomer.getCpf())) {
+            throw new NoSuchElementException(String.format("CPF %s already exists!", naturalPersonCustomer.getCpf()));
         }
     }
 }
