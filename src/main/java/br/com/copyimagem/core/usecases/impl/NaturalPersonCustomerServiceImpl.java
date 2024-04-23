@@ -31,6 +31,15 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
 
     @Override
     public NaturalPersonCustomer saveNaturalPersonCustomer(NaturalPersonCustomer naturalPersonCustomer) {
+        naturalPersonCustomer.setId(null);
+        checkEmail(naturalPersonCustomer);
         return naturalPersonCustomerRepository.save(naturalPersonCustomer);
+    }
+    private void checkEmail(NaturalPersonCustomer naturalPersonCustomer) {
+        Optional<NaturalPersonCustomer> customer = naturalPersonCustomerRepository.findByPrimaryEmail(
+                naturalPersonCustomer.getPrimaryEmail());
+        if (customer.isPresent() && customer.get().getPrimaryEmail().equals(naturalPersonCustomer.getPrimaryEmail())) {
+            throw new NoSuchElementException(String.format("Email %s already exists!", naturalPersonCustomer.getPrimaryEmail()));
+        }
     }
 }
