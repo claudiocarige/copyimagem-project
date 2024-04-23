@@ -1,6 +1,7 @@
 package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
+import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.infra.repositories.NaturalPersonCustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -57,7 +58,7 @@ class NaturalPersonCustomerServiceImplTest {
         try {
             naturalPersonCustomerService.findNaturalPersonCustomerById(11L);
         } catch (Exception ex) {
-            assertEquals(RuntimeException.class, ex.getClass());
+            assertEquals(NoSuchElementException.class, ex.getClass());
             assertEquals("Customer not found", ex.getMessage());
         }
     }
@@ -89,9 +90,20 @@ class NaturalPersonCustomerServiceImplTest {
         NaturalPersonCustomer natural = naturalPersonCustomerService.saveNaturalPersonCustomer(customerPf);
         assertAll("NaturalPersonCustomer",
                 () -> assertNotNull(natural),
-                () -> assertEquals(natural, customerPf),
+                () -> assertEquals(customerPf, natural),
+                () -> assertEquals(CPF, natural.getCpf()),
+                () -> assertEquals(customerPf.getPrimaryEmail(), natural.getPrimaryEmail()),
                 () -> assertEquals(NaturalPersonCustomer.class, natural.getClass())
         );
+    }
+    @Test
+    @DisplayName("Must throw NoSuchElementException when email already exists")
+    void youMustThrowNoSuchElementExceptionWhenEmailAlreadyExists() {
+        when(naturalPersonCustomerRepository.findByPrimaryEmail(customerPf.getPrimaryEmail()))
+                .thenReturn(Optional.of(customerPf));
+        NoSuchElementException noSuchElementException = assertThrows(NoSuchElementException.class,() ->
+                naturalPersonCustomerService.saveNaturalPersonCustomer(customerPf));
+        assertTrue(noSuchElementException.getMessage().endsWith("already exists!"));
     }
 
     private void start() {
