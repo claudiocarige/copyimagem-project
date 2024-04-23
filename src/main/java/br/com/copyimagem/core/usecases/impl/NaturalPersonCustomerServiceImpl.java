@@ -1,6 +1,7 @@
 package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
+import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.NaturalPersonCustomerService;
 import br.com.copyimagem.infra.repositories.NaturalPersonCustomerRepository;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,8 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
 
     @Override
     public NaturalPersonCustomer findNaturalPersonCustomerById(Long id) {
-        return naturalPersonCustomerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
+        return naturalPersonCustomerRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Customer not found"));
     }
 
     @Override
