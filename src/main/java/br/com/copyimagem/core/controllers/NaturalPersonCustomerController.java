@@ -22,4 +22,10 @@ public class NaturalPersonCustomerController {
     public ResponseEntity<List<NaturalPersonCustomer>> getAllNaturalPersonCustomers(){
         return  ResponseEntity.ok().body(naturalPersonCustomerService.findAllNaturalPersonCustomer());
     }
+
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<NaturalPersonCustomer> getNaturalPersonCustomerById(@PathVariable Long id){
+        return ResponseEntity.ok().body(naturalPersonCustomerService.findNaturalPersonCustomerById(id));
+    }
+
 }
