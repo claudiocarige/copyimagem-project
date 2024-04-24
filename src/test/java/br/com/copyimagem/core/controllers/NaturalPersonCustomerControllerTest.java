@@ -54,6 +54,19 @@ class NaturalPersonCustomerControllerTest {
                 .andExpect(jsonPath("$[0].id").value(1));
     }
 
+    @Test
+    @DisplayName("Should return a NaturalPersonCustomer by id")
+    void shouldReturnANaturalPersonCustomerById() throws Exception {
+        when(naturalPersonCustomerService.findNaturalPersonCustomerById(ID1L)).thenReturn(customerPf);
+        ResponseEntity<NaturalPersonCustomer> naturalPersonCustomerById = naturalPersonCustomerController.getNaturalPersonCustomerById(ID1L);
+        assertNotNull(naturalPersonCustomerById);
+        mockMvc.perform(get("/api/v1/customers/pf/{id}", ID1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(1));
+    }
+
     private void start() {
         customerPf = oneCustomer().withCpf(CPF).nowCustomerPF();
     }
