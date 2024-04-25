@@ -1,6 +1,7 @@
 package br.com.copyimagem.core.controllers;
 
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
+import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.NaturalPersonCustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +17,7 @@ import java.util.List;
 import org.springframework.http.MediaType;
 import static br.com.copyimagem.core.domain.builders.CustomerBuilder.oneCustomer;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -60,11 +61,28 @@ class NaturalPersonCustomerControllerTest {
         when(naturalPersonCustomerService.findNaturalPersonCustomerById(ID1L)).thenReturn(customerPf);
         ResponseEntity<NaturalPersonCustomer> naturalPersonCustomerById = naturalPersonCustomerController.getNaturalPersonCustomerById(ID1L);
         assertNotNull(naturalPersonCustomerById);
+
         mockMvc.perform(get("/api/v1/customers/pf/{id}", ID1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1));
+        verify(naturalPersonCustomerService, times(2)).findNaturalPersonCustomerById(ID1L);
+
+    }
+
+    @Test
+    @DisplayName("Should return a exception when NaturalPersonCustomer not found")
+    void shouldReturnAExceptionWhenNaturalPersonCustomerNotFound() {
+        when(naturalPersonCustomerService.findNaturalPersonCustomerById(anyLong()))
+                .thenThrow(new NoSuchElementException("Customer not found"));
+
+        assertThrows(NoSuchElementException.class,
+                () ->  naturalPersonCustomerController.getNaturalPersonCustomerById(ID1L));
+        String naturalPersonCustomerById = assertThrows(NoSuchElementException.class,
+                () -> naturalPersonCustomerController.getNaturalPersonCustomerById(ID1L)).getMessage();
+        assertEquals("Customer not found", naturalPersonCustomerById);
+        verify(naturalPersonCustomerService, times(2)).findNaturalPersonCustomerById(ID1L);
     }
 
     private void start() {
