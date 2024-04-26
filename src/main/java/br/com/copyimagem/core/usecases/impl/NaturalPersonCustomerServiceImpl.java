@@ -38,17 +38,15 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
         return naturalPersonCustomerRepository.save(naturalPersonCustomer);
     }
     private void checkEmail(NaturalPersonCustomer naturalPersonCustomer) {
-        Optional<NaturalPersonCustomer> customer = naturalPersonCustomerRepository.findByPrimaryEmail(
-                naturalPersonCustomer.getPrimaryEmail());
-        if (customer.isPresent() && customer.get().getPrimaryEmail().equals(naturalPersonCustomer.getPrimaryEmail())) {
+        if (naturalPersonCustomerRepository.findByPrimaryEmail(
+                naturalPersonCustomer.getPrimaryEmail()).isPresent()) {
             throw new DataIntegrityViolationException(String.format("Email %s already exists!", naturalPersonCustomer.getPrimaryEmail()));
         }
     }
 
     private void checkCpf(NaturalPersonCustomer naturalPersonCustomer) {
-        Optional<NaturalPersonCustomer> customer = naturalPersonCustomerRepository.findByCpf(
-                naturalPersonCustomer.getCpf());
-        if (customer.isPresent() && customer.get().getCpf().equals(naturalPersonCustomer.getCpf())) {
+        if ( naturalPersonCustomerRepository.findByCpf(
+                naturalPersonCustomer.getCpf()).isPresent()) {
             throw new DataIntegrityViolationException(String.format("CPF %s already exists!", naturalPersonCustomer.getCpf()));
         }
     }
