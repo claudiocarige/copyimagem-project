@@ -3,6 +3,9 @@ package br.com.copyimagem.core.controllers;
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.NaturalPersonCustomerService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
@@ -83,6 +88,31 @@ class NaturalPersonCustomerControllerTest {
                 () -> naturalPersonCustomerController.getNaturalPersonCustomerById(ID1L)).getMessage();
         assertEquals("Customer not found", naturalPersonCustomerById);
         verify(naturalPersonCustomerService, times(2)).findNaturalPersonCustomerById(ID1L);
+    }
+    @Test
+    @DisplayName("Should save a NaturalPersonCustomer")
+    void shouldSaveANaturalPersonCustomer() throws Exception {
+        NaturalPersonCustomer customerSalvo = new NaturalPersonCustomer();
+        customerSalvo.setId(1L);
+        when(naturalPersonCustomerService.saveNaturalPersonCustomer(customerPf)).thenReturn(customerSalvo);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/customers/pf/save")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJsonString(customerPf)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        String locationUri = mvcResult.getResponse().getHeader("Location");
+        assertNotNull(locationUri);
+        assertTrue(locationUri.startsWith("http://localhost"));
+        assertTrue(locationUri.endsWith("pf/save/1"));
+    }
+
+    private static String toJsonString(final NaturalPersonCustomer obj) throws JsonProcessingException {
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            final String jsonContent = mapper.writeValueAsString(obj);
+            return jsonContent;
     }
 
     private void start() {
