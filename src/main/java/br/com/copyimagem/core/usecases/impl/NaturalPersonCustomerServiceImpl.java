@@ -1,6 +1,7 @@
 package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
+import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.NaturalPersonCustomerService;
 import br.com.copyimagem.infra.repositories.NaturalPersonCustomerRepository;
@@ -40,7 +41,7 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
         Optional<NaturalPersonCustomer> customer = naturalPersonCustomerRepository.findByPrimaryEmail(
                 naturalPersonCustomer.getPrimaryEmail());
         if (customer.isPresent() && customer.get().getPrimaryEmail().equals(naturalPersonCustomer.getPrimaryEmail())) {
-            throw new NoSuchElementException(String.format("Email %s already exists!", naturalPersonCustomer.getPrimaryEmail()));
+            throw new DataIntegrityViolationException(String.format("Email %s already exists!", naturalPersonCustomer.getPrimaryEmail()));
         }
     }
 
@@ -48,7 +49,7 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
         Optional<NaturalPersonCustomer> customer = naturalPersonCustomerRepository.findByCpf(
                 naturalPersonCustomer.getCpf());
         if (customer.isPresent() && customer.get().getCpf().equals(naturalPersonCustomer.getCpf())) {
-            throw new NoSuchElementException(String.format("CPF %s already exists!", naturalPersonCustomer.getCpf()));
+            throw new DataIntegrityViolationException(String.format("CPF %s already exists!", naturalPersonCustomer.getCpf()));
         }
     }
 }

@@ -1,6 +1,7 @@
 package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
+import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.infra.repositories.NaturalPersonCustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -101,9 +102,9 @@ class NaturalPersonCustomerServiceImplTest {
     void youMustReturnThrowNoSuchElementExceptionWhenEmailAlreadyExists() {
         when(naturalPersonCustomerRepository.findByPrimaryEmail(customerPf.getPrimaryEmail()))
                 .thenReturn(Optional.of(customerPf));
-        NoSuchElementException noSuchElementException = assertThrows(NoSuchElementException.class,() ->
+        DataIntegrityViolationException dataException = assertThrows(DataIntegrityViolationException.class,() ->
                 naturalPersonCustomerService.saveNaturalPersonCustomer(customerPf));
-        assertTrue(noSuchElementException.getMessage().startsWith("Email"));
+        assertTrue(dataException.getMessage().startsWith("Email"));
     }
 
     @Test
@@ -111,9 +112,9 @@ class NaturalPersonCustomerServiceImplTest {
     void youMustReturnThrowNoSuchElementExceptionWhenCpfAlreadyExists() {
         when(naturalPersonCustomerRepository.findByCpf(customerPf.getCpf()))
                 .thenReturn(Optional.of(customerPf));
-        NoSuchElementException noSuchElementException = assertThrows(NoSuchElementException.class,() ->
+        DataIntegrityViolationException dataException = assertThrows(DataIntegrityViolationException.class,() ->
                 naturalPersonCustomerService.saveNaturalPersonCustomer(customerPf));
-        assertTrue(noSuchElementException.getMessage().startsWith("CPF"));
+        assertTrue(dataException.getMessage().startsWith("CPF"));
     }
 
     private void start() {
