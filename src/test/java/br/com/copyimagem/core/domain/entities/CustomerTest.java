@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static br.com.copyimagem.core.domain.builders.CustomerBuilder.oneCustomer;
+import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CustomerTest {

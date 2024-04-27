@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static br.com.copyimagem.core.domain.builders.CustomerBuilder.oneCustomer;
+import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LegalPersonalCustomerTest {
@@ -43,6 +43,7 @@ class LegalPersonalCustomerTest {
                 () -> Assertions.assertThrows(IllegalArgumentException.class, () -> oneCustomer().withCnpj(null).nowCustomerPJ()
         ));
     }
+
     private void startLegalPersonalCustomer() {
         legalPersonalCustomer = oneCustomer()
                 .withCnpj("12.123.123/0001-12")
