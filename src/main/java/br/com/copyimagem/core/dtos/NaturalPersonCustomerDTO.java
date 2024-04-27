@@ -1,4 +1,4 @@
-package br.com.copyimagem.core.domain.dtos;
+package br.com.copyimagem.core.dtos;
 
 import br.com.copyimagem.core.domain.entities.Adress;
 import br.com.copyimagem.core.domain.entities.MonthlyPayment;
