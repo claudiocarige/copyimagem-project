@@ -15,7 +15,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 import java.util.Optional;
 
-import static br.com.copyimagem.core.domain.builders.CustomerBuilder.oneCustomer;
+import static br.com.copyimagem.core.domain.builders.NaturalPersonCustomerBuilder.oneCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

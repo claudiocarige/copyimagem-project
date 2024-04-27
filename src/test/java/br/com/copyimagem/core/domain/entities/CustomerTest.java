@@ -15,7 +15,9 @@ class CustomerTest {
     @Test
     @DisplayName("You must create customer natural person customer")
     void youMustCreateCustomerNaturalPersonCustomer() {
-        NaturalPersonCustomer customer = oneCustomer().withCpf("123.456.789.10").nowCustomerPF();
+        NaturalPersonCustomer customer =
+                br.com.copyimagem.core.domain.builders.NaturalPersonCustomerBuilder.oneCustomer()
+                        .withCpf("123.456.789.10").nowCustomerPF();
         assertNotNull(customer);
         assertEquals("Claudio Carigé", customer.getClientName());
         assertEquals("123.456.789.10", customer.getCpf());

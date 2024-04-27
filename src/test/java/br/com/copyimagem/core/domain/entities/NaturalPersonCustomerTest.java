@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static br.com.copyimagem.core.domain.builders.CustomerBuilder.oneCustomer;
+import static br.com.copyimagem.core.domain.builders.NaturalPersonCustomerBuilder.oneCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 
 class NaturalPersonCustomerTest {
@@ -15,7 +15,6 @@ class NaturalPersonCustomerTest {
     @BeforeEach
     void setUp(){
         startNaturalPersonCustomer();
-
     }
 
     @Test
