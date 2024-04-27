@@ -1,6 +1,7 @@
 package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
+import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
 import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.infra.repositories.NaturalPersonCustomerRepository;
@@ -23,9 +24,11 @@ class NaturalPersonCustomerServiceImplTest {
     public static final long ID1L = 1L;
     public static final String CPF = "123.456.789-01";
     private NaturalPersonCustomer customerPf;
+    private NaturalPersonCustomerDTO customerPfDTO;
     @Mock
     private NaturalPersonCustomerRepository naturalPersonCustomerRepository;
-
+    @Mock
+    private ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
     @InjectMocks
     private NaturalPersonCustomerServiceImpl naturalPersonCustomerService;
 
@@ -36,16 +39,18 @@ class NaturalPersonCustomerServiceImplTest {
     }
 
     @Test
-    @DisplayName("Must return a NaturalPersonCustomer by Id")
-    void youMustReturnANaturalPersonCustomerById(){
+    @DisplayName("Must return a NaturalPersonCustomerDTO by Id")
+    void youMustReturnANaturalPersonCustomerDTOById(){
         when(naturalPersonCustomerRepository.findById(ID1L)).thenReturn(Optional.of(customerPf));
-        NaturalPersonCustomer natural = naturalPersonCustomerService.findNaturalPersonCustomerById(1L);
+
+        when(convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(customerPf)).thenReturn(customerPfDTO);
+        NaturalPersonCustomerDTO expectedDTO = naturalPersonCustomerService.findNaturalPersonCustomerById(1L);
 
         assertAll("NaturalPersonCustomer",
-                () -> assertNotNull(natural),
-                () -> assertEquals(ID1L, natural.getId()),
-                () -> assertEquals(natural, customerPf),
-                () -> assertEquals(NaturalPersonCustomer.class, natural.getClass())
+                () -> assertNotNull(expectedDTO),
+                () -> assertEquals(ID1L, expectedDTO.getId()),
+                () -> assertEquals(expectedDTO, customerPfDTO),
+                () -> assertEquals(NaturalPersonCustomerDTO.class, expectedDTO.getClass())
         );
     }
 
@@ -67,19 +72,17 @@ class NaturalPersonCustomerServiceImplTest {
     @Test
     @DisplayName("Must return a list of NaturalPersonCustomer")
     void youMustReturnAListOfNaturalPersonCustomer(){
-        String cpf = "894.965.315-04";
-        String email = "julio@mail.com";
-        when(naturalPersonCustomerRepository.findAll()).thenReturn(List.of(customerPf,
-                oneCustomer().withCpf(cpf).withPrimaryEmail(email).nowCustomerPF()));
-        List<NaturalPersonCustomer> natural = naturalPersonCustomerService.findAllNaturalPersonCustomer();
+        String email = "carige@mail.com";
+        when(naturalPersonCustomerRepository.findAll()).thenReturn(List.of(customerPf));
+        when(convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(customerPf)).thenReturn(customerPfDTO);
+        List<NaturalPersonCustomerDTO> natural = naturalPersonCustomerService.findAllNaturalPersonCustomer();
         assertAll("NaturalPersonCustomer",
                 () -> assertNotNull(natural),
-                () -> assertEquals(2, natural.size()),
-                () -> assertEquals(NaturalPersonCustomer.class, natural.get(0).getClass()),
-                () -> assertEquals(natural.get(0), customerPf),
-                () -> assertEquals(natural.get(1).getPrimaryEmail(), email),
-                () -> assertEquals(CPF, natural.get(0).getCpf()),
-                () -> assertEquals(cpf, natural.get(1).getCpf())
+                () -> assertEquals(1, natural.size()),
+                () -> assertEquals(NaturalPersonCustomerDTO.class, natural.get(0).getClass()),
+                () -> assertEquals(customerPfDTO, natural.get(0)),
+                () -> assertEquals(email, natural.get(0).getPrimaryEmail()),
+                () -> assertEquals(CPF, natural.get(0).getCpf())
         );
 
     }
@@ -87,15 +90,23 @@ class NaturalPersonCustomerServiceImplTest {
     @Test
     @DisplayName("Must save a NaturalPersonCustomer")
     void youMustSaveANaturalPersonCustomer(){
+        when(convertObjectToObjectDTOService.convertToNaturalPersonCustomer(customerPfDTO)).thenReturn(customerPf);
+        when(naturalPersonCustomerRepository.findByPrimaryEmail(customerPfDTO.getPrimaryEmail())).thenReturn(Optional.empty());
+        when(naturalPersonCustomerRepository.findByCpf(customerPfDTO.getCpf())).thenReturn(Optional.empty());
         when(naturalPersonCustomerRepository.save(customerPf)).thenReturn(customerPf);
-        NaturalPersonCustomer natural = naturalPersonCustomerService.saveNaturalPersonCustomer(customerPf);
-        assertAll("NaturalPersonCustomer",
+        when(convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(customerPf)).thenReturn(customerPfDTO);
+        NaturalPersonCustomerDTO natural = naturalPersonCustomerService.saveNaturalPersonCustomer(customerPfDTO);
+        assertAll("NaturalPersonCustomerDTO",
                 () -> assertNotNull(natural),
-                () -> assertEquals(customerPf, natural),
-                () -> assertEquals(CPF, natural.getCpf()),
-                () -> assertEquals(customerPf.getPrimaryEmail(), natural.getPrimaryEmail()),
-                () -> assertEquals(NaturalPersonCustomer.class, natural.getClass())
+                () -> assertEquals(customerPfDTO, natural),
+                () ->  assertEquals(customerPfDTO.getId(), natural.getId()),
+                () ->  assertEquals(customerPfDTO.getCpf(), natural.getCpf()),
+                () ->  assertEquals(customerPfDTO.getClass(), natural.getClass())
         );
+        verify(convertObjectToObjectDTOService, times(1)).convertToNaturalPersonCustomer(customerPfDTO);
+        verify(naturalPersonCustomerRepository, times(1)).findByPrimaryEmail(customerPfDTO.getPrimaryEmail());
+        verify(naturalPersonCustomerRepository, times(1)).findByCpf(customerPfDTO.getCpf());
+        verify(naturalPersonCustomerRepository, times(1)).save(customerPf);
     }
     @Test
     @DisplayName("Must throw return NoSuchElementException when EMAIL already exists")
@@ -103,7 +114,7 @@ class NaturalPersonCustomerServiceImplTest {
         when(naturalPersonCustomerRepository.findByPrimaryEmail(customerPf.getPrimaryEmail()))
                 .thenReturn(Optional.of(customerPf));
         DataIntegrityViolationException dataException = assertThrows(DataIntegrityViolationException.class,() ->
-                naturalPersonCustomerService.saveNaturalPersonCustomer(customerPf));
+                naturalPersonCustomerService.saveNaturalPersonCustomer(customerPfDTO));
         assertTrue(dataException.getMessage().startsWith("Email"));
     }
 
@@ -113,12 +124,25 @@ class NaturalPersonCustomerServiceImplTest {
         when(naturalPersonCustomerRepository.findByCpf(customerPf.getCpf()))
                 .thenReturn(Optional.of(customerPf));
         DataIntegrityViolationException dataException = assertThrows(DataIntegrityViolationException.class,() ->
-                naturalPersonCustomerService.saveNaturalPersonCustomer(customerPf));
+                naturalPersonCustomerService.saveNaturalPersonCustomer(customerPfDTO));
         assertTrue(dataException.getMessage().startsWith("CPF"));
     }
 
     private void start() {
-        customerPf =  oneCustomer().withCpf(CPF).nowCustomerPF();
+        customerPf = oneCustomer().withId(ID1L).withCpf(CPF).withPrimaryEmail("carige@mail.com").nowCustomerPF();
+        customerPfDTO = new NaturalPersonCustomerDTO();
+        customerPfDTO.setId(ID1L);
+        customerPfDTO.setCpf(CPF);
+        customerPfDTO.setPrimaryEmail(customerPf.getPrimaryEmail());
+        customerPfDTO.setEmailList(customerPf.getEmailList());
+        customerPfDTO.setPhoneNumber(customerPf.getPhoneNumber());
+        customerPfDTO.setAdress(customerPf.getAdress());
+        customerPfDTO.setClientName(customerPf.getClientName());
+        customerPfDTO.setBankCode(customerPf.getBankCode());
+        customerPfDTO.setFinancialSituation(customerPf.getFinancialSituation().toString());
+        customerPfDTO.setPayDay(customerPf.getPayDay());
+        customerPfDTO.setStartContract(customerPf.getStartContract());
+        customerPfDTO.setMonthlyPaymentList(customerPf.getMonthlyPaymentList());
+        customerPfDTO.setMultiPrinterList(customerPf.getMultiPrinterList());
     }
-
 }

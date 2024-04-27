@@ -1,57 +1,66 @@
 package br.com.copyimagem.core.controllers;
 
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
+import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
+import br.com.copyimagem.core.usecases.impl.ConvertObjectToObjectDTOService;
 import br.com.copyimagem.core.usecases.interfaces.NaturalPersonCustomerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.http.MediaType;
 import static br.com.copyimagem.core.domain.builders.CustomerBuilder.oneCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Log4j2
 class NaturalPersonCustomerControllerTest {
 
     public static final long ID1L = 1L;
     public static final String CPF = "123.456.789-01";
     private NaturalPersonCustomer customerPf;
+    private NaturalPersonCustomerDTO customerPfDTO;
+    @Mock
+    private ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
     @Mock
     private NaturalPersonCustomerService naturalPersonCustomerService;
     @InjectMocks
     private NaturalPersonCustomerController naturalPersonCustomerController;
-
+    @Mock
+    private ModelMapper modelMapper;
     private MockMvc mockMvc;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(naturalPersonCustomerController).build();
+        modelMapper = new ModelMapper();
+        convertObjectToObjectDTOService = new ConvertObjectToObjectDTOService(modelMapper);
         start();
     }
 
     @Test
     @DisplayName("Should return a list of NaturalPersonCustomers")
     void shouldReturnAListOfNaturalPersonCustomers() throws Exception {
-        String cpf = "894.965.315-04";
-        String email = "julio@mail.com";
-        when(naturalPersonCustomerService.findAllNaturalPersonCustomer()).thenReturn(List.of(customerPf,
-                oneCustomer().withCpf(cpf).withPrimaryEmail(email).nowCustomerPF()));
-        ResponseEntity<List<NaturalPersonCustomer>> allNaturalPersonCustomers = naturalPersonCustomerController.getAllNaturalPersonCustomers();
+        when(naturalPersonCustomerService.findAllNaturalPersonCustomer()).thenReturn(List.of(customerPfDTO));
+        ResponseEntity<List<NaturalPersonCustomerDTO>> allNaturalPersonCustomers = naturalPersonCustomerController.getAllNaturalPersonCustomers();
         assertNotNull(allNaturalPersonCustomers);
         mockMvc.perform(get("/api/v1/customers/pf/all")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -63,17 +72,18 @@ class NaturalPersonCustomerControllerTest {
     @Test
     @DisplayName("Should return a NaturalPersonCustomer by id")
     void shouldReturnANaturalPersonCustomerById() throws Exception {
-        when(naturalPersonCustomerService.findNaturalPersonCustomerById(ID1L)).thenReturn(customerPf);
-        ResponseEntity<NaturalPersonCustomer> naturalPersonCustomerById = naturalPersonCustomerController.getNaturalPersonCustomerById(ID1L);
-        assertNotNull(naturalPersonCustomerById);
+        NaturalPersonCustomerDTO expectedCustomerDto = convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(customerPf);
+        when(naturalPersonCustomerService.findNaturalPersonCustomerById(expectedCustomerDto.getId()))
+                .thenReturn(expectedCustomerDto);
 
-        mockMvc.perform(get("/api/v1/customers/pf/{id}", ID1L)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/v1/customers/pf/{id}", expectedCustomerDto.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(1));
-        verify(naturalPersonCustomerService, times(2)).findNaturalPersonCustomerById(ID1L);
-
+                .andExpect(jsonPath("$.id").value(expectedCustomerDto.getId()))
+                .andExpect(jsonPath("$.clientName").value(expectedCustomerDto.getClientName())); // Add assertions for other fields
+        verify(naturalPersonCustomerService, times(1)).findNaturalPersonCustomerById(expectedCustomerDto.getId());
     }
 
     @Test
@@ -92,30 +102,49 @@ class NaturalPersonCustomerControllerTest {
     @Test
     @DisplayName("Should save a NaturalPersonCustomer")
     void shouldSaveANaturalPersonCustomer() throws Exception {
-        NaturalPersonCustomer customerSalvo = new NaturalPersonCustomer();
-        customerSalvo.setId(1L);
-        when(naturalPersonCustomerService.saveNaturalPersonCustomer(customerPf)).thenReturn(customerSalvo);
+        NaturalPersonCustomerDTO requestDTO = new NaturalPersonCustomerDTO();
+        requestDTO.setClientName("John Doe");
+        requestDTO.setCpf("123.456.789-00");
+        requestDTO.setPrimaryEmail("john.doe@example.com");
+        requestDTO.setPhoneNumber("1234567890");
+        requestDTO.setWhatsapp("1234567890");
+        requestDTO.setBankCode("ABC123");
+        requestDTO.setStartContract(LocalDate.of(2023, 1, 1));
+        requestDTO.setFinancialSituation("PAGO");
+        requestDTO.setPayDay((byte) 1);
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/customers/pf/save")
+        NaturalPersonCustomerDTO savedDTO = new NaturalPersonCustomerDTO();
+        savedDTO.setId(1L);
+        savedDTO.setClientName("John Doe");
+        savedDTO.setCpf("123.456.789-00");
+        savedDTO.setPrimaryEmail("john.doe@example.com");
+        savedDTO.setPhoneNumber("1234567890");
+        savedDTO.setWhatsapp("1234567890");
+        savedDTO.setBankCode("ABC123");
+        savedDTO.setStartContract(LocalDate.of(2023, 1, 1));
+        savedDTO.setFinancialSituation("PAGO");
+        savedDTO.setPayDay((byte) 1);
+
+        when(naturalPersonCustomerService.saveNaturalPersonCustomer(requestDTO)).thenReturn(savedDTO);
+
+        mockMvc.perform(post("/api/v1/customers/pf/save")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJsonString(customerPf)))
+                        .content(toJsonString(requestDTO)))
                 .andExpect(status().isCreated())
-                .andReturn();
+                .andExpect(header().exists("Location"))
+                .andExpect(header().string("Location", "http://localhost/api/v1/customers/pf/save/1"));
 
-        String locationUri = mvcResult.getResponse().getHeader("Location");
-        assertNotNull(locationUri);
-        assertTrue(locationUri.startsWith("http://localhost"));
-        assertTrue(locationUri.endsWith("pf/save/1"));
+        verify(naturalPersonCustomerService, times(1)).saveNaturalPersonCustomer(requestDTO);
     }
 
-    private static String toJsonString(final NaturalPersonCustomer obj) throws JsonProcessingException {
+    private static String toJsonString(NaturalPersonCustomerDTO obj) throws JsonProcessingException {
             final ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
-            final String jsonContent = mapper.writeValueAsString(obj);
-            return jsonContent;
+        return mapper.writeValueAsString(obj);
     }
 
     private void start() {
-        customerPf = oneCustomer().withCpf(CPF).nowCustomerPF();
+        customerPf = oneCustomer().withId(ID1L).withCpf(CPF).nowCustomerPF();
+        customerPfDTO = convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(oneCustomer().withId(1L).withCpf(CPF).nowCustomerPF());
     }
 }
