@@ -1,12 +1,12 @@
 package br.com.copyimagem.core.usecases.interfaces;
 
-import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
+import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
 
 import java.util.List;
 
 public interface NaturalPersonCustomerService {
 
-    List<NaturalPersonCustomer> findAllNaturalPersonCustomer();
-    NaturalPersonCustomer findNaturalPersonCustomerById(Long id);
-    NaturalPersonCustomer saveNaturalPersonCustomer(NaturalPersonCustomer naturalPersonCustomer);
+    List<NaturalPersonCustomerDTO> findAllNaturalPersonCustomer();
+    NaturalPersonCustomerDTO findNaturalPersonCustomerById(Long id);
+    NaturalPersonCustomerDTO saveNaturalPersonCustomer(NaturalPersonCustomerDTO naturalPersonCustomer);
 }
