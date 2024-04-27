@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ConvertObjectToObjectDTOService {
 
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     public ConvertObjectToObjectDTOService(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
