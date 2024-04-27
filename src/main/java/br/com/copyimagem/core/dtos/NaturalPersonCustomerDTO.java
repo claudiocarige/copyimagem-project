@@ -4,14 +4,12 @@ import br.com.copyimagem.core.domain.entities.Adress;
 import br.com.copyimagem.core.domain.entities.MonthlyPayment;
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,11 +29,11 @@ public class NaturalPersonCustomerDTO implements Serializable{
     private String bankCode;
     private Adress adress;
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private Date startContract;
+    private LocalDate startContract;
     private String financialSituation;
     private byte payDay;
 
-    private LinkedList<MultiPrinter> multiPrinterList = new LinkedList<>();
+    private List<MultiPrinter> multiPrinterList = new LinkedList<>();
 
-    private LinkedList<MonthlyPayment> monthlyPaymentList = new LinkedList<>();
+    private List<MonthlyPayment> monthlyPaymentList = new LinkedList<>();
 }
