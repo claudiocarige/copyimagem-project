@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serial;
+import java.io.Serializable;
 
 
 @Getter
@@ -11,7 +12,7 @@ import java.io.Serial;
 @ToString
 @NoArgsConstructor
 @Entity
-public class NaturalPersonCustomer extends Customer{
+public class NaturalPersonCustomer extends Customer implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
