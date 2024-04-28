@@ -4,11 +4,17 @@ import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
 import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
 import br.com.copyimagem.infra.repositories.LegalPersonalCustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Optional;
+
 import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneCustomer;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 
 class LegalPersonalCustomerServiceImplTest {
@@ -35,6 +41,21 @@ class LegalPersonalCustomerServiceImplTest {
         start();
     }
 
+    @Test
+    @DisplayName("Must return a LegalPersonalCustomerDTO by Id")
+    void youMustReturnALegalPersonalCustomerDTOById(){
+        when(legalPersonalCustomerRepository.findById(ID1L)).thenReturn(Optional.of(customerPj));
+        when(convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(customerPj)).thenReturn(customerPjDTO);
+
+        LegalPersonalCustomerDTO legalPersonalCustomerDTO = legalPersonalCustomerService.findLegalPersonalCustomerById(ID1L);
+
+        assertAll("LegalPersonalCustomer",
+                () -> assertNotNull(legalPersonalCustomerDTO),
+                () -> assertEquals(ID1L, legalPersonalCustomerDTO.getId()),
+                () -> assertEquals(legalPersonalCustomerDTO, customerPjDTO),
+                () -> assertEquals(LegalPersonalCustomerDTO.class, legalPersonalCustomerDTO.getClass())
+                );
+    }
 
     private void start() {
         customerPj = oneCustomer().withId(ID1L).withCnpj(CNPJ).withPrimaryEmail("carige@mail.com").nowCustomerPJ();
