@@ -60,7 +60,8 @@ class NaturalPersonCustomerControllerTest {
     @DisplayName("Should return a list of NaturalPersonCustomers")
     void shouldReturnAListOfNaturalPersonCustomers() throws Exception {
         when(naturalPersonCustomerService.findAllNaturalPersonCustomer()).thenReturn(List.of(customerPfDTO));
-        ResponseEntity<List<NaturalPersonCustomerDTO>> allNaturalPersonCustomers = naturalPersonCustomerController.getAllNaturalPersonCustomers();
+        ResponseEntity<List<NaturalPersonCustomerDTO>> allNaturalPersonCustomers = naturalPersonCustomerController
+                                                                                        .getAllNaturalPersonCustomers();
         assertNotNull(allNaturalPersonCustomers);
         mockMvc.perform(get("/api/v1/customers/pf/all")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -72,7 +73,8 @@ class NaturalPersonCustomerControllerTest {
     @Test
     @DisplayName("Should return a NaturalPersonCustomer by id")
     void shouldReturnANaturalPersonCustomerById() throws Exception {
-        NaturalPersonCustomerDTO expectedCustomerDto = convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(customerPf);
+        NaturalPersonCustomerDTO expectedCustomerDto = convertObjectToObjectDTOService
+                                                                    .convertToNaturalPersonCustomerDTO(customerPf);
         when(naturalPersonCustomerService.findNaturalPersonCustomerById(expectedCustomerDto.getId()))
                 .thenReturn(expectedCustomerDto);
 
@@ -83,7 +85,8 @@ class NaturalPersonCustomerControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(expectedCustomerDto.getId()))
                 .andExpect(jsonPath("$.clientName").value(expectedCustomerDto.getClientName())); // Add assertions for other fields
-        verify(naturalPersonCustomerService, times(1)).findNaturalPersonCustomerById(expectedCustomerDto.getId());
+        verify(naturalPersonCustomerService, times(1))
+                                        .findNaturalPersonCustomerById(expectedCustomerDto.getId());
     }
 
     @Test
@@ -145,6 +148,8 @@ class NaturalPersonCustomerControllerTest {
 
     private void start() {
         customerPf = oneCustomer().withId(ID1L).withCpf(CPF).nowCustomerPF();
-        customerPfDTO = convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(oneCustomer().withId(1L).withCpf(CPF).nowCustomerPF());
+        customerPfDTO = convertObjectToObjectDTOService
+                .convertToNaturalPersonCustomerDTO(oneCustomer()
+                                        .withId(1L).withCpf(CPF).nowCustomerPF());
     }
 }
