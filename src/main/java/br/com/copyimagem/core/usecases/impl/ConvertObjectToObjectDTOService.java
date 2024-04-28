@@ -1,6 +1,8 @@
 package br.com.copyimagem.core.usecases.impl;
 
+import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
+import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
 import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,14 @@ public class ConvertObjectToObjectDTOService {
 
     public NaturalPersonCustomer convertToNaturalPersonCustomer(NaturalPersonCustomerDTO naturalPersonCustomerDTO) {
         return modelMapper.map(naturalPersonCustomerDTO, NaturalPersonCustomer.class);
+    }
+
+    public LegalPersonalCustomerDTO convertToLegalPersonalCustomerDTO(LegalPersonalCustomer legalPersonalCustomer) {
+        return modelMapper.map(legalPersonalCustomer, LegalPersonalCustomerDTO.class);
+    }
+
+    public LegalPersonalCustomer convertToLegalPersonalCustomer(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
+        return modelMapper.map(legalPersonalCustomerDTO, LegalPersonalCustomer.class);
     }
 
 }
