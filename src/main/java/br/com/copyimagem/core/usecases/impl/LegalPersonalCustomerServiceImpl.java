@@ -43,7 +43,10 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
 
     @Override
     public List<LegalPersonalCustomerDTO> findAllLegalPersonalCustomer() {
-        return null;
+        log.info("[ INFO ] Finding all LegalPersonalCustomers");
+        List<LegalPersonalCustomer> legalPersonalCustumerList = legalPersonalCustomerRepository.findAll();
+        return legalPersonalCustumerList.stream()
+                .map(convertObjectToObjectDTOService::convertToLegalPersonalCustomerDTO).toList();
     }
 
 }
