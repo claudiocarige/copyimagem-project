@@ -8,12 +8,16 @@ import br.com.copyimagem.infra.repositories.NaturalPersonCustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static br.com.copyimagem.core.domain.builders.NaturalPersonCustomerBuilder.oneCustomer;
 import static org.junit.jupiter.api.Assertions.*;
@@ -126,6 +130,23 @@ class NaturalPersonCustomerServiceImplTest {
         DataIntegrityViolationException dataException = assertThrows(DataIntegrityViolationException.class,() ->
                 naturalPersonCustomerService.saveNaturalPersonCustomer(customerPfDTO));
         assertTrue(dataException.getMessage().startsWith("CPF"));
+    }
+
+    @ParameterizedTest(name = "{1}")
+    @MethodSource(value = "mandatoryscenarios")
+    void mustValidateMandatoryFieldsWhenSaving(Long id, String cpf, String message) {
+        String exMessage = assertThrows(IllegalArgumentException.class, () -> {
+            NaturalPersonCustomer naturalPersonCustomer = oneCustomer().withId(id).withCpf(cpf).nowCustomerPF();
+            NaturalPersonCustomerDTO naturalPersonCustomerDTO  =  convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(naturalPersonCustomer);
+            naturalPersonCustomerService.saveNaturalPersonCustomer(naturalPersonCustomerDTO);
+        }).getMessage();
+        assertEquals(message, exMessage);
+    }
+
+    private static Stream<Arguments> mandatoryscenarios(){
+        return Stream.of(
+                Arguments.of(ID1L, null, "Invalid CPF")
+        );
     }
 
     private void start() {

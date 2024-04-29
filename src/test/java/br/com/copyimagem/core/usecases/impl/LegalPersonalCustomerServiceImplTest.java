@@ -9,12 +9,16 @@ import br.com.copyimagem.infra.repositories.LegalPersonalCustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneCustomer;
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,7 +40,7 @@ class LegalPersonalCustomerServiceImplTest {
     private ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
 
     @InjectMocks
-    private  LegalPersonalCustomerServiceImpl legalPersonalCustomerService;
+    private LegalPersonalCustomerServiceImpl legalPersonalCustomerService;
 
 
     @BeforeEach
@@ -47,7 +51,7 @@ class LegalPersonalCustomerServiceImplTest {
 
     @Test
     @DisplayName("Must return a LegalPersonalCustomerDTO by Id")
-    void shoulReturnALegalPersonalCustomerDTOById(){
+    void shoulReturnALegalPersonalCustomerDTOById() {
         when(legalPersonalCustomerRepository.findById(ID1L)).thenReturn(Optional.of(customerPj));
         when(convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(customerPj)).thenReturn(customerPjDTO);
 
@@ -58,7 +62,7 @@ class LegalPersonalCustomerServiceImplTest {
                 () -> assertEquals(ID1L, legalPersonalCustomerDTO.getId()),
                 () -> assertEquals(legalPersonalCustomerDTO, customerPjDTO),
                 () -> assertEquals(LegalPersonalCustomerDTO.class, legalPersonalCustomerDTO.getClass())
-                );
+        );
     }
 
     @Test
@@ -74,61 +78,93 @@ class LegalPersonalCustomerServiceImplTest {
             assertEquals(NoSuchElementException.class, message.getClass());
         }
     }
+
     @Test
     @DisplayName("should return a list of legalPersonalCustomer")
-    void shouldReturnAListfLegalPersonalCustomer(){
+    void shouldReturnAListfLegalPersonalCustomer() {
         when(legalPersonalCustomerRepository.findAll()).thenReturn(List.of(customerPj));
         when(convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(customerPj)).thenReturn(customerPjDTO);
 
         List<LegalPersonalCustomerDTO> legalPersonalCustomerList = legalPersonalCustomerService.findAllLegalPersonalCustomer();
         assertAll("LegalPersonalCustomerLis",
                 () -> assertNotNull(legalPersonalCustomerList),
-                () -> assertEquals(1 , legalPersonalCustomerList.size()),
-                () -> assertEquals(LegalPersonalCustomerDTO.class,legalPersonalCustomerList.get(0).getClass()),
-                () -> assertAll("MultPrint",
-                        () -> assertNotNull(legalPersonalCustomerList.get(0).getMultiPrinterList()),
-                        () -> assertEquals(MultiPrinter.class, legalPersonalCustomerList.get(0).getMultiPrinterList().get(0).getClass()),
-                        () -> assertEquals(1, legalPersonalCustomerList.get(0).getMultiPrinterList().size())
-                        ),
-                () -> assertAll("MonthlyPayment",
-                        () -> assertEquals(1 , legalPersonalCustomerList.get(0).getMonthlyPaymentList().size()),
-                        () -> assertEquals(MonthlyPayment.class, legalPersonalCustomerList.get(0).getMonthlyPaymentList().get(0).getClass())
-                        )
-                );
+                () -> assertEquals(1, legalPersonalCustomerList.size()),
+                () -> assertEquals(LegalPersonalCustomerDTO.class, legalPersonalCustomerList.get(0).getClass()),
+                () -> {
+                    assertAll("MultPrint",
+                            () -> assertNotNull(legalPersonalCustomerList.get(0).getMultiPrinterList()),
+                            () -> assertEquals(MultiPrinter.class, legalPersonalCustomerList.get(0).getMultiPrinterList().get(0).getClass()),
+                            () -> assertEquals(1, legalPersonalCustomerList.get(0).getMultiPrinterList().size())
+                    );
+                },
+                () -> {
+                    assertAll("MonthlyPayment",
+                            () -> assertEquals(1, legalPersonalCustomerList.get(0).getMonthlyPaymentList().size()),
+                            () -> assertEquals(MonthlyPayment.class, legalPersonalCustomerList.get(0).getMonthlyPaymentList().get(0).getClass())
+                    );
+                }
+        );
+
     }
 
     @Test
     @DisplayName("should save a LegalPersonalCustomer")
-    void shouldSaveALegalPersonalCustomer(){
+    void shouldSaveALegalPersonalCustomer() {
         when(legalPersonalCustomerRepository.findByPrimaryEmail(customerPjDTO.getPrimaryEmail()))
-                                                                                .thenReturn(Optional.empty());
+                .thenReturn(Optional.empty());
         when(legalPersonalCustomerRepository.findByCnpj(CNPJ)).thenReturn(Optional.empty());
         when(legalPersonalCustomerRepository.save(customerPj)).thenReturn(customerPj);
         when(convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(customerPj)).thenReturn(customerPjDTO);
         when(convertObjectToObjectDTOService.convertToLegalPersonalCustomer(customerPjDTO)).thenReturn(customerPj);
 
         LegalPersonalCustomerDTO legalPersonalCustomerDTO = legalPersonalCustomerService
-                                                                        .saveLegalPersonalCustomer(customerPjDTO);
+                .saveLegalPersonalCustomer(customerPjDTO);
         assertAll("LegalPersonalCustomer",
                 () -> assertNotNull(legalPersonalCustomerDTO),
                 () -> assertEquals(customerPjDTO.getId(), legalPersonalCustomerDTO.getId()),
                 () -> assertEquals(LegalPersonalCustomerDTO.class, legalPersonalCustomerDTO.getClass()),
                 () -> assertEquals(customerPjDTO, legalPersonalCustomerDTO),
                 () -> assertEquals(customerPjDTO.getPrimaryEmail(), legalPersonalCustomerDTO.getPrimaryEmail()),
-                () -> assertEquals(customerPjDTO.getClass(),legalPersonalCustomerDTO.getClass())
-                );
+                () -> assertEquals(customerPjDTO.getClass(), legalPersonalCustomerDTO.getClass()),
+                () -> {
+                    assertAll("MultPrint",
+                            () -> assertNotNull(legalPersonalCustomerDTO.getMultiPrinterList()),
+                            () -> assertEquals(MultiPrinter.class, legalPersonalCustomerDTO.getMultiPrinterList().get(0).getClass()),
+                            () -> assertEquals(1, legalPersonalCustomerDTO.getMultiPrinterList().size())
+                    );
+                },
+                () -> {
+                    assertAll("MonthlyPayment",
+                            () -> assertEquals(1, legalPersonalCustomerDTO.getMonthlyPaymentList().size()),
+                            () -> assertEquals(MonthlyPayment.class, legalPersonalCustomerDTO.getMonthlyPaymentList().get(0).getClass())
+                    );
+                }
+        );
         verify(convertObjectToObjectDTOService, times(1))
-                                                                    .convertToLegalPersonalCustomerDTO(customerPj);
+                .convertToLegalPersonalCustomerDTO(customerPj);
         verify(convertObjectToObjectDTOService, times(1))
-                                                                    .convertToLegalPersonalCustomer(customerPjDTO);
+                .convertToLegalPersonalCustomer(customerPjDTO);
         verify(legalPersonalCustomerRepository, times(1))
-                                                              .findByPrimaryEmail(customerPjDTO.getPrimaryEmail());
+                .findByPrimaryEmail(customerPjDTO.getPrimaryEmail());
         verify(legalPersonalCustomerRepository, times(1)).findByCnpj(customerPj.getCnpj());
     }
 
+    @ParameterizedTest(name = "{1}")
+    @MethodSource(value = "mandatoryscenarios")
+    void mustValidateMandatoryFieldsWhenSaving(Long id, String cnpj, String message) {
+            String exMessage = assertThrows(IllegalArgumentException.class, () -> {
+            LegalPersonalCustomer legalPersonalCustomer = oneCustomer().withId(id).withCnpj(cnpj).nowCustomerPJ();
+            LegalPersonalCustomerDTO legalPersonalCustomerDTO  =  convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(legalPersonalCustomer);
+            legalPersonalCustomerService.saveLegalPersonalCustomer(legalPersonalCustomerDTO);
+        }).getMessage();
+            assertEquals(message, exMessage);
+    }
 
-
-
+    private static Stream<Arguments> mandatoryscenarios(){
+        return Stream.of(
+          Arguments.of(ID1L, null, "Invalid CNPJ")
+        );
+    }
 
     private void start() {
         customerPj = oneCustomer().withId(ID1L).withCnpj(CNPJ).withPrimaryEmail("carige@mail.com").nowCustomerPJ();
