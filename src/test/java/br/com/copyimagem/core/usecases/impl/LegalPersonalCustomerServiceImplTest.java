@@ -18,7 +18,7 @@ import java.util.Optional;
 
 import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneCustomer;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 class LegalPersonalCustomerServiceImplTest {
@@ -66,7 +66,7 @@ class LegalPersonalCustomerServiceImplTest {
     void shoulReturnEmptyWhenNaturalPersonCustomerNotFound() {
         when(legalPersonalCustomerRepository.findById(ID1L)).thenReturn(Optional.empty());
         assertThrows(NoSuchElementException.class,
-                () -> legalPersonalCustomerService.findLegalPersonalCustomerById(ID1L)).getMessage();
+                () -> legalPersonalCustomerService.findLegalPersonalCustomerById(ID1L));
         try {
             legalPersonalCustomerService.findLegalPersonalCustomerById(ID1L);
         } catch (NoSuchElementException message) {
@@ -95,6 +95,35 @@ class LegalPersonalCustomerServiceImplTest {
                         () -> assertEquals(MonthlyPayment.class, legalPersonalCustomerList.get(0).getMonthlyPaymentList().get(0).getClass())
                         )
                 );
+    }
+
+    @Test
+    @DisplayName("should save a LegalPersonalCustomer")
+    void shouldSaveALegalPersonalCustomer(){
+        when(legalPersonalCustomerRepository.findByPrimaryEmail(customerPjDTO.getPrimaryEmail()))
+                                                                                .thenReturn(Optional.empty());
+        when(legalPersonalCustomerRepository.findByCnpj(CNPJ)).thenReturn(Optional.empty());
+        when(legalPersonalCustomerRepository.save(customerPj)).thenReturn(customerPj);
+        when(convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(customerPj)).thenReturn(customerPjDTO);
+        when(convertObjectToObjectDTOService.convertToLegalPersonalCustomer(customerPjDTO)).thenReturn(customerPj);
+
+        LegalPersonalCustomerDTO legalPersonalCustomerDTO = legalPersonalCustomerService
+                                                                        .saveLegalPersonalCustomer(customerPjDTO);
+        assertAll("LegalPersonalCustomer",
+                () -> assertNotNull(legalPersonalCustomerDTO),
+                () -> assertEquals(customerPjDTO.getId(), legalPersonalCustomerDTO.getId()),
+                () -> assertEquals(LegalPersonalCustomerDTO.class, legalPersonalCustomerDTO.getClass()),
+                () -> assertEquals(customerPjDTO, legalPersonalCustomerDTO),
+                () -> assertEquals(customerPjDTO.getPrimaryEmail(), legalPersonalCustomerDTO.getPrimaryEmail()),
+                () -> assertEquals(customerPjDTO.getClass(),legalPersonalCustomerDTO.getClass())
+                );
+        verify(convertObjectToObjectDTOService, times(1))
+                                                                    .convertToLegalPersonalCustomerDTO(customerPj);
+        verify(convertObjectToObjectDTOService, times(1))
+                                                                    .convertToLegalPersonalCustomer(customerPjDTO);
+        verify(legalPersonalCustomerRepository, times(1))
+                                                              .findByPrimaryEmail(customerPjDTO.getPrimaryEmail());
+        verify(legalPersonalCustomerRepository, times(1)).findByCnpj(customerPj.getCnpj());
     }
 
 
