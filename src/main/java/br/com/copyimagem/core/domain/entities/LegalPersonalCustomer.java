@@ -2,9 +2,7 @@ package br.com.copyimagem.core.domain.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.validator.constraints.br.CNPJ;
 
 import java.io.Serial;
 
