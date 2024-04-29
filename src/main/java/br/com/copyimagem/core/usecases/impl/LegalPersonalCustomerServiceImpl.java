@@ -26,8 +26,6 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
         this.convertObjectToObjectDTOService = convertObjectToObjectDTOService;
     }
 
-
-
     @Override
     public LegalPersonalCustomerDTO findLegalPersonalCustomerById(Long id) {
         log.info("[ INFO ] Finding LegalPersonalCustomer by id: {}", id);
@@ -37,16 +35,38 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
     }
 
     @Override
-    public LegalPersonalCustomerDTO saveLegalPersonalCustomer(LegalPersonalCustomerDTO legalPersonalCustomer) {
-        return null;
-    }
-
-    @Override
     public List<LegalPersonalCustomerDTO> findAllLegalPersonalCustomer() {
         log.info("[ INFO ] Finding all LegalPersonalCustomers");
         List<LegalPersonalCustomer> legalPersonalCustumerList = legalPersonalCustomerRepository.findAll();
         return legalPersonalCustumerList.stream()
                 .map(convertObjectToObjectDTOService::convertToLegalPersonalCustomerDTO).toList();
     }
+    @Override
+    public LegalPersonalCustomerDTO saveLegalPersonalCustomer(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
+        log.info("[ INFO ] Saving LegalPersonalCustomer. {}", legalPersonalCustomerDTO.getClass());
+        legalPersonalCustomerDTO.setId(null);
+        checkEmail(legalPersonalCustomerDTO);
+        checkCnpj(legalPersonalCustomerDTO);
+        LegalPersonalCustomer saveLegalPersonalCustomer = legalPersonalCustomerRepository
+                .save(convertObjectToObjectDTOService.convertToLegalPersonalCustomer(legalPersonalCustomerDTO));
+        return convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(saveLegalPersonalCustomer);
+    }
 
+    private void checkEmail(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
+        log.info("[ INFO ] Checking if the email already exists.");
+        if (legalPersonalCustomerRepository.findByPrimaryEmail(
+                legalPersonalCustomerDTO.getPrimaryEmail()).isPresent()) {
+            log.error("[ ERROR ] Exception :  {}.", DataIntegrityViolationException.class);
+            throw new DataIntegrityViolationException("Email already exists!");
+        }
+    }
+
+    private void checkCnpj(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
+        log.info("[ INFO ] Checking if the CPF already exists.");
+        if ( legalPersonalCustomerRepository.findByCnpj(
+                legalPersonalCustomerDTO.getCnpj()).isPresent()) {
+            log.error("[ ERROR ] Exception :  {}.", DataIntegrityViolationException.class);
+            throw new DataIntegrityViolationException("CPF already exists!");
+        }
+    }
 }
