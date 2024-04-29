@@ -111,13 +111,13 @@ public class LegalPersonalCustomerBuilder implements Serializable {
         return this;
     }
 
-    public LegalPersonalCustomerBuilder withListaMultiPrinterList(MultiPrinter... multiPrinterList) {
-        this.multiPrinterList = Arrays.asList(multiPrinterList);
+    public LegalPersonalCustomerBuilder withListaMultiPrinterList(List<MultiPrinter> multiPrinterList) {
+        this.multiPrinterList = multiPrinterList;
         return this;
     }
 
-    public LegalPersonalCustomerBuilder withListaMonthlyPaymentList(MonthlyPayment... monthlyPaymentList) {
-        this.monthlyPaymentList = Arrays.asList(monthlyPaymentList);
+    public LegalPersonalCustomerBuilder withListaMonthlyPaymentList(List<MonthlyPayment> monthlyPaymentList) {
+        this.monthlyPaymentList = monthlyPaymentList;
         return this;
     }
 
