@@ -3,6 +3,7 @@ package br.com.copyimagem.core.usecases.impl;
 import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
 import br.com.copyimagem.core.domain.entities.MonthlyPayment;
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
+import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.infra.repositories.LegalPersonalCustomerRepository;
@@ -147,6 +148,42 @@ class LegalPersonalCustomerServiceImplTest {
         verify(legalPersonalCustomerRepository, times(1))
                 .findByPrimaryEmail(customerPjDTO.getPrimaryEmail());
         verify(legalPersonalCustomerRepository, times(1)).findByCnpj(customerPj.getCnpj());
+    }
+
+    @Test
+    @DisplayName("Must retunr a Customer Response DTO By CNPJ")
+    void mustReturnACustomerResponseDTOByCpnj(){
+        CustomerResponseDTO customerResponseDTO = new CustomerResponseDTO();
+        customerResponseDTO.setId(ID1L);
+        customerResponseDTO.setCpfOrCnpj(CNPJ);
+        customerResponseDTO.setClientName(customerPj.getClientName());
+        customerResponseDTO.setAddress(customerPj.getAdress());
+        when(legalPersonalCustomerRepository.findByCnpj(CNPJ)).thenReturn(Optional.of(customerPj));
+        when(convertObjectToObjectDTOService.convertToCustomerResponseDTO(customerPj)).thenReturn(customerResponseDTO);
+        CustomerResponseDTO responseDTO = legalPersonalCustomerService.findByCnpj(CNPJ);
+        assertAll("CustomerResponseDTO",
+                () -> assertNotNull(responseDTO),
+                () -> assertEquals(customerResponseDTO, responseDTO),
+                () -> assertEquals(CustomerResponseDTO.class, responseDTO.getClass()),
+                () -> assertEquals(ID1L, responseDTO.getId()),
+                () -> assertEquals(CNPJ, responseDTO.getCpfOrCnpj()),
+                () -> assertEquals(customerResponseDTO.getClientName(), responseDTO.getClientName()),
+                () -> assertEquals(customerResponseDTO.getAddress(), responseDTO.getAddress())
+        );
+    }
+
+    @Test
+    @DisplayName("Must return a empty when Customer not found")
+    void mustReturnEmptyWhenCustomerNotFound(){
+        when(legalPersonalCustomerRepository.findByCnpj(CNPJ)).thenReturn(Optional.empty());
+        assertThrows(NoSuchElementException.class,
+                () -> legalPersonalCustomerService.findByCnpj(CNPJ));
+        try {
+            legalPersonalCustomerService.findByCnpj(CNPJ);
+        } catch (NoSuchElementException message) {
+            assertEquals("Customer not found", message.getMessage());
+            assertEquals(NoSuchElementException.class, message.getClass());
+        }
     }
 
     @ParameterizedTest(name = "{1}")
