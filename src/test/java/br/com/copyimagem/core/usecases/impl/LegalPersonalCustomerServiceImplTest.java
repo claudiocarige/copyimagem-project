@@ -173,8 +173,8 @@ class LegalPersonalCustomerServiceImplTest {
     }
 
     @Test
-    @DisplayName("Must return a empty when Customer not found")
-    void mustReturnEmptyWhenCustomerNotFound(){
+    @DisplayName("must return a empty when CNPJ not found")
+    void mustReturnEmptyWhenCnpjNotFound(){
         when(legalPersonalCustomerRepository.findByCnpj(CNPJ)).thenReturn(Optional.empty());
         assertThrows(NoSuchElementException.class,
                 () -> legalPersonalCustomerService.findByCnpj(CNPJ));
