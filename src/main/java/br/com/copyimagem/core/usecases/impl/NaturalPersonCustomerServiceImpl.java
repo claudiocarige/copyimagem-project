@@ -2,6 +2,7 @@ package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.Adress;
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
+import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
 import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
@@ -10,8 +11,10 @@ import br.com.copyimagem.infra.repositories.AdressRepository;
 import br.com.copyimagem.infra.repositories.NaturalPersonCustomerRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @Service
@@ -45,6 +48,7 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
         return custumerList.stream().map(convertObjectToObjectDTOService::convertToNaturalPersonCustomerDTO).toList();
     }
 
+    @Transactional
     @Override
     public NaturalPersonCustomerDTO saveNaturalPersonCustomer(NaturalPersonCustomerDTO naturalPersonCustomerDTO) {
         log.info("[ INFO ] Saving customer. {}", naturalPersonCustomerDTO.getClass());
@@ -55,6 +59,16 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
         NaturalPersonCustomer save = naturalPersonCustomerRepository.save(convertObjectToObjectDTOService.convertToNaturalPersonCustomer(naturalPersonCustomerDTO));
         save.setAdress(adress);
         return convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(save);
+    }
+
+    @Override
+    public CustomerResponseDTO findByCpf(String cpf) {
+        Optional<NaturalPersonCustomer> naturalPersonCustomer = naturalPersonCustomerRepository.findByCpf(cpf);
+            if (naturalPersonCustomer.isEmpty()) {
+                log.error("[ ERROR ] Exception :  {}.", NoSuchElementException.class);
+                throw new NoSuchElementException("Customer not found");
+            }
+        return convertObjectToObjectDTOService.convertToCustomerResponseDTO(naturalPersonCustomer.get());
     }
 
     private void checkEmail(NaturalPersonCustomerDTO naturalPersonCustomerDTO) {
