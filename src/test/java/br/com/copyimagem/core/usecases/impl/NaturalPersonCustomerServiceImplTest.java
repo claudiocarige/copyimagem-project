@@ -152,6 +152,16 @@ class NaturalPersonCustomerServiceImplTest {
         assertEquals(CustomerResponseDTO.class, customerDTO.getClass());
         assertEquals(CPF, customerDTO.getCpfOrCnpj());
     }
+    @Test
+    @DisplayName("must return a empty when CPF not found.")
+    void mustReturnEmptyWhenCpfNotFound() {
+        when(naturalPersonCustomerRepository.findByCpf(customerPf.getCpf()))
+                .thenReturn(Optional.empty());
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () ->
+                naturalPersonCustomerService.findByCpf(customerPf.getCpf()));
+        assertEquals("Customer not found", exception.getMessage());
+        verify(naturalPersonCustomerRepository, times(1)).findByCpf(customerPf.getCpf());
+    }
 
     @ParameterizedTest(name = "{1}")
     @MethodSource(value = "mandatoryscenarios")
