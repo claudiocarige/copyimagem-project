@@ -55,11 +55,11 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
         log.info("[ INFO ] Saving LegalPersonalCustomer. {}", legalPersonalCustomerDTO.getClass());
         legalPersonalCustomerDTO.setId(null);
         Adress adress = adressRepository.save(legalPersonalCustomerDTO.getAdress());
+        legalPersonalCustomerDTO.setAdress(adress);
         checkEmail(legalPersonalCustomerDTO);
         checkCnpj(legalPersonalCustomerDTO);
         LegalPersonalCustomer saveLegalPersonalCustomer = legalPersonalCustomerRepository
                 .save(convertObjectToObjectDTOService.convertToLegalPersonalCustomer(legalPersonalCustomerDTO));
-        saveLegalPersonalCustomer.setAdress(adress);
         return convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(saveLegalPersonalCustomer);
     }
 
