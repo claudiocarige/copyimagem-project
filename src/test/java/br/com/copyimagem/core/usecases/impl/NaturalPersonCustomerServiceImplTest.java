@@ -1,6 +1,7 @@
 package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
+import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
 import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
@@ -130,6 +131,26 @@ class NaturalPersonCustomerServiceImplTest {
         DataIntegrityViolationException dataException = assertThrows(DataIntegrityViolationException.class,() ->
                 naturalPersonCustomerService.saveNaturalPersonCustomer(customerPfDTO));
         assertTrue(dataException.getMessage().startsWith("CPF"));
+    }
+
+    @Test
+    @DisplayName("must return a NaturalPersonCustomer by CPF.")
+    void mustReturnANaturalPersonCustomerByCPF() {
+        CustomerResponseDTO customerResponseDTO = new CustomerResponseDTO();
+        customerResponseDTO.setId(ID1L);
+        customerResponseDTO.setCpfOrCnpj(CPF);
+        customerResponseDTO.setClientName(customerPf.getClientName());
+        customerResponseDTO.setAddress(customerPf.getAdress());
+        when(naturalPersonCustomerRepository.findByCpf(customerPf.getCpf()))
+                .thenReturn(Optional.of(customerPf));
+        when(convertObjectToObjectDTOService.convertToCustomerResponseDTO(customerPf))
+                .thenReturn(customerResponseDTO);
+        CustomerResponseDTO customerDTO = naturalPersonCustomerService.findByCpf(customerPf.getCpf());
+        assertNotNull(customerDTO);
+        assertEquals(customerResponseDTO, customerDTO);
+        assertEquals(customerResponseDTO.getId(), customerDTO.getId());
+        assertEquals(CustomerResponseDTO.class, customerDTO.getClass());
+        assertEquals(CPF, customerDTO.getCpfOrCnpj());
     }
 
     @ParameterizedTest(name = "{1}")
