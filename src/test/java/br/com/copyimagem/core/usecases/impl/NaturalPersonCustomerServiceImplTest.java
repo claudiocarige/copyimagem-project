@@ -5,6 +5,7 @@ import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
 import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
+import br.com.copyimagem.infra.repositories.AdressRepository;
 import br.com.copyimagem.infra.repositories.NaturalPersonCustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,6 +33,10 @@ class NaturalPersonCustomerServiceImplTest {
     private NaturalPersonCustomerDTO customerPfDTO;
     @Mock
     private NaturalPersonCustomerRepository naturalPersonCustomerRepository;
+
+    @Mock
+    private AdressRepository adressRepository;
+
     @Mock
     private ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
     @InjectMocks
@@ -100,6 +105,7 @@ class NaturalPersonCustomerServiceImplTest {
         when(naturalPersonCustomerRepository.findByCpf(customerPfDTO.getCpf())).thenReturn(Optional.empty());
         when(naturalPersonCustomerRepository.save(customerPf)).thenReturn(customerPf);
         when(convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(customerPf)).thenReturn(customerPfDTO);
+        when(adressRepository.save(customerPf.getAdress())).thenReturn(customerPfDTO.getAdress());
         NaturalPersonCustomerDTO natural = naturalPersonCustomerService.saveNaturalPersonCustomer(customerPfDTO);
         assertAll("NaturalPersonCustomerDTO",
                 () -> assertNotNull(natural),

@@ -6,6 +6,7 @@ import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
+import br.com.copyimagem.infra.repositories.AdressRepository;
 import br.com.copyimagem.infra.repositories.LegalPersonalCustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,6 +40,9 @@ class LegalPersonalCustomerServiceImplTest {
 
     @Mock
     private ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
+
+    @Mock
+    private AdressRepository adressRepository;
 
     @InjectMocks
     private LegalPersonalCustomerServiceImpl legalPersonalCustomerService;
@@ -117,7 +121,7 @@ class LegalPersonalCustomerServiceImplTest {
         when(legalPersonalCustomerRepository.save(customerPj)).thenReturn(customerPj);
         when(convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(customerPj)).thenReturn(customerPjDTO);
         when(convertObjectToObjectDTOService.convertToLegalPersonalCustomer(customerPjDTO)).thenReturn(customerPj);
-
+        when(adressRepository.save(customerPj.getAdress())).thenReturn(customerPjDTO.getAdress());
         LegalPersonalCustomerDTO legalPersonalCustomerDTO = legalPersonalCustomerService
                 .saveLegalPersonalCustomer(customerPjDTO);
         assertAll("LegalPersonalCustomer",
