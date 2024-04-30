@@ -2,6 +2,7 @@ package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.Adress;
 import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
+import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
 import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
@@ -10,8 +11,10 @@ import br.com.copyimagem.infra.repositories.AdressRepository;
 import br.com.copyimagem.infra.repositories.LegalPersonalCustomerRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @Service
@@ -46,6 +49,7 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
         return legalPersonalCustumerList.stream()
                 .map(convertObjectToObjectDTOService::convertToLegalPersonalCustomerDTO).toList();
     }
+    @Transactional
     @Override
     public LegalPersonalCustomerDTO saveLegalPersonalCustomer(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
         log.info("[ INFO ] Saving LegalPersonalCustomer. {}", legalPersonalCustomerDTO.getClass());
@@ -57,6 +61,16 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
                 .save(convertObjectToObjectDTOService.convertToLegalPersonalCustomer(legalPersonalCustomerDTO));
         saveLegalPersonalCustomer.setAdress(adress);
         return convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(saveLegalPersonalCustomer);
+    }
+
+    @Override
+    public CustomerResponseDTO findByCnpj(String cnpj) {
+        Optional<LegalPersonalCustomer> legalPersonalCustomer = legalPersonalCustomerRepository.findByCnpj(cnpj);
+        if (legalPersonalCustomer.isEmpty()) {
+            log.error("[ ERROR ] Exception :  {}.", NoSuchElementException.class);
+            throw new NoSuchElementException("Customer not found");
+        }
+        return convertObjectToObjectDTOService.convertToCustomerResponseDTO(legalPersonalCustomer.get());
     }
 
     private void checkEmail(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
