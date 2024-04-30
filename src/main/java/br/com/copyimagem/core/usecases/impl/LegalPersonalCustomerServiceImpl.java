@@ -1,10 +1,12 @@
 package br.com.copyimagem.core.usecases.impl;
 
+import br.com.copyimagem.core.domain.entities.Adress;
 import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
 import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
 import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.LegalPersonalCustomerService;
+import br.com.copyimagem.infra.repositories.AdressRepository;
 import br.com.copyimagem.infra.repositories.LegalPersonalCustomerRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -17,12 +19,15 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
 
     private final LegalPersonalCustomerRepository legalPersonalCustomerRepository;
 
+    private final AdressRepository adressRepository;
+
     private final ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
 
     public LegalPersonalCustomerServiceImpl(
             LegalPersonalCustomerRepository legalPersonalCustomerRepository,
-            ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
+            AdressRepository adressRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
         this.legalPersonalCustomerRepository = legalPersonalCustomerRepository;
+        this.adressRepository = adressRepository;
         this.convertObjectToObjectDTOService = convertObjectToObjectDTOService;
     }
 
@@ -45,10 +50,12 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
     public LegalPersonalCustomerDTO saveLegalPersonalCustomer(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
         log.info("[ INFO ] Saving LegalPersonalCustomer. {}", legalPersonalCustomerDTO.getClass());
         legalPersonalCustomerDTO.setId(null);
+        Adress adress = adressRepository.save(legalPersonalCustomerDTO.getAdress());
         checkEmail(legalPersonalCustomerDTO);
         checkCnpj(legalPersonalCustomerDTO);
         LegalPersonalCustomer saveLegalPersonalCustomer = legalPersonalCustomerRepository
                 .save(convertObjectToObjectDTOService.convertToLegalPersonalCustomer(legalPersonalCustomerDTO));
+        saveLegalPersonalCustomer.setAdress(adress);
         return convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(saveLegalPersonalCustomer);
     }
 

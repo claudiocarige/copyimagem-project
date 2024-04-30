@@ -1,10 +1,12 @@
 package br.com.copyimagem.core.usecases.impl;
 
+import br.com.copyimagem.core.domain.entities.Adress;
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
 import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
 import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.NaturalPersonCustomerService;
+import br.com.copyimagem.infra.repositories.AdressRepository;
 import br.com.copyimagem.infra.repositories.NaturalPersonCustomerRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -16,13 +18,15 @@ import java.util.List;
 public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerService {
 
     private final NaturalPersonCustomerRepository naturalPersonCustomerRepository;
+    private final AdressRepository adressRepository;
 
     private final ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
 
     public NaturalPersonCustomerServiceImpl(
             NaturalPersonCustomerRepository naturalPersonCustomerRepository,
-            ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
+            AdressRepository adressRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
         this.naturalPersonCustomerRepository = naturalPersonCustomerRepository;
+        this.adressRepository = adressRepository;
         this.convertObjectToObjectDTOService = convertObjectToObjectDTOService;
     }
 
@@ -45,9 +49,11 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
     public NaturalPersonCustomerDTO saveNaturalPersonCustomer(NaturalPersonCustomerDTO naturalPersonCustomerDTO) {
         log.info("[ INFO ] Saving customer. {}", naturalPersonCustomerDTO.getClass());
         naturalPersonCustomerDTO.setId(null);
+        Adress adress = adressRepository.save(naturalPersonCustomerDTO.getAdress());
         checkEmail(naturalPersonCustomerDTO);
         checkCpf(naturalPersonCustomerDTO);
         NaturalPersonCustomer save = naturalPersonCustomerRepository.save(convertObjectToObjectDTOService.convertToNaturalPersonCustomer(naturalPersonCustomerDTO));
+        save.setAdress(adress);
         return convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(save);
     }
 
