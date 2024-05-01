@@ -3,7 +3,6 @@ package br.com.copyimagem.core.domain.builders;
 import br.com.copyimagem.core.domain.entities.Adress;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 
-import java.util.Arrays;
 
 import static br.com.copyimagem.core.domain.builders.AdressBuilder.oneAdress;
 
