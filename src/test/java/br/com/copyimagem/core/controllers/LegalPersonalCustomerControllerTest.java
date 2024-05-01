@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.time.LocalDate;
 import java.util.List;
 
+import static br.com.copyimagem.core.domain.builders.AdressBuilder.oneAdress;
 import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -35,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class LegalPersonalCustomerControllerTest {
 
     public static final long ID1L = 1L;
-    public static final String CNPJ = "12.123.123/0001-12";
+    public static final String CNPJ = "14.124.420/0001-94";
     private LegalPersonalCustomer customerPj;
     private LegalPersonalCustomerDTO customerPjDTO;
     @Mock
@@ -106,28 +107,8 @@ class LegalPersonalCustomerControllerTest {
     @Test
     @DisplayName("Should save a LegalPersonalCustomer")
     void shouldSaveALegalPersonalCustomer() throws Exception {
-        LegalPersonalCustomerDTO requestDTO = new LegalPersonalCustomerDTO();
-        requestDTO.setClientName("John Doe");
-        requestDTO.setCnpj("123.456.789-00");
-        requestDTO.setPrimaryEmail("john.doe@example.com");
-        requestDTO.setPhoneNumber("1234567890");
-        requestDTO.setWhatsapp("1234567890");
-        requestDTO.setBankCode("ABC123");
-        requestDTO.setStartContract(LocalDate.of(2023, 1, 1));
-        requestDTO.setFinancialSituation("PAGO");
-        requestDTO.setPayDay((byte) 1);
-
-        LegalPersonalCustomerDTO savedDTO = new LegalPersonalCustomerDTO();
-        savedDTO.setId(1L);
-        savedDTO.setClientName("John Doe");
-        savedDTO.setCnpj("123.456.789-00");
-        savedDTO.setPrimaryEmail("john.doe@example.com");
-        savedDTO.setPhoneNumber("1234567890");
-        savedDTO.setWhatsapp("1234567890");
-        savedDTO.setBankCode("ABC123");
-        savedDTO.setStartContract(LocalDate.of(2023, 1, 1));
-        savedDTO.setFinancialSituation("PAGO");
-        savedDTO.setPayDay((byte) 1);
+        LegalPersonalCustomerDTO requestDTO = newLegalPersonalCustomer();
+        LegalPersonalCustomerDTO savedDTO = newLegalPersonalCustomer();
 
         when(legalPersonalCustomerService.saveLegalPersonalCustomer(requestDTO)).thenReturn(savedDTO);
 
@@ -139,6 +120,22 @@ class LegalPersonalCustomerControllerTest {
                 .andExpect(header().string("Location", "http://localhost/api/v1/customers/pj/save/1"));
 
         verify(legalPersonalCustomerService, times(1)).saveLegalPersonalCustomer(requestDTO);
+    }
+
+    private static LegalPersonalCustomerDTO newLegalPersonalCustomer() {
+        LegalPersonalCustomerDTO newObj = new LegalPersonalCustomerDTO();
+        newObj.setId(1L);
+        newObj.setClientName("Claudio Carigé");
+        newObj.setCnpj("14.124.420/0001-94");
+        newObj.setPrimaryEmail("carige@mail.com");
+        newObj.setPhoneNumber("71991125697");
+        newObj.setWhatsapp("71991125697");
+        newObj.setBankCode("123");
+        newObj.setAdress(oneAdress().now());
+        newObj.setStartContract(LocalDate.of(2023, 1, 1));
+        newObj.setFinancialSituation("PAGO");
+        newObj.setPayDay((byte) 5);
+        return newObj;
     }
 
     private static String toJsonString(LegalPersonalCustomerDTO obj) throws JsonProcessingException {
