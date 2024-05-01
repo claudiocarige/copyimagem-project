@@ -2,6 +2,7 @@ package br.com.copyimagem.core.controllers;
 
 import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
 import br.com.copyimagem.core.usecases.interfaces.NaturalPersonCustomerService;
+import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,15 +33,17 @@ public class NaturalPersonCustomerController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<NaturalPersonCustomerDTO> getNaturalPersonCustomerById(@PathVariable Long id){
         log.info("[ INFO ] HTTP call with GET method with path: ../customers/pf/{id}");
-        NaturalPersonCustomerDTO naturalPersonCustomerById = naturalPersonCustomerService.findNaturalPersonCustomerById(id);
+        NaturalPersonCustomerDTO naturalPersonCustomerById =
+                                            naturalPersonCustomerService.findNaturalPersonCustomerById(id);
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(naturalPersonCustomerById);
     }
 
     @PostMapping(value = "/save", produces = "application/json")
     public ResponseEntity<HttpStatus> saveNaturalPersonCustomer(
-            @RequestBody NaturalPersonCustomerDTO naturalPersonCustomerDTO){
+            @Valid @RequestBody NaturalPersonCustomerDTO naturalPersonCustomerDTO){
         log.info("[ INFO ] HTTP call with POST method with path: ../customers/pf/save");
-        NaturalPersonCustomerDTO naturalPersonCustomer1 = naturalPersonCustomerService.saveNaturalPersonCustomer(naturalPersonCustomerDTO);
+        NaturalPersonCustomerDTO naturalPersonCustomer1 =
+                naturalPersonCustomerService.saveNaturalPersonCustomer(naturalPersonCustomerDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(naturalPersonCustomer1.getId())
                 .toUri();
