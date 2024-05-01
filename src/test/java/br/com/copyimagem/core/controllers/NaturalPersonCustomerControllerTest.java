@@ -5,6 +5,7 @@ import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.impl.ConvertObjectToObjectDTOService;
 import br.com.copyimagem.core.usecases.interfaces.NaturalPersonCustomerService;
+import br.com.copyimagem.infra.repositories.NaturalPersonCustomerRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -23,6 +24,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.http.MediaType;
+
+import static br.com.copyimagem.core.domain.builders.AdressBuilder.oneAdress;
 import static br.com.copyimagem.core.domain.builders.NaturalPersonCustomerBuilder.oneCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -34,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class NaturalPersonCustomerControllerTest {
 
     public static final long ID1L = 1L;
-    public static final String CPF = "123.456.789-01";
+    public static final String CPF = "156.258.240-29";
     private NaturalPersonCustomer customerPf;
     private NaturalPersonCustomerDTO customerPfDTO;
     @Mock
@@ -105,31 +108,10 @@ class NaturalPersonCustomerControllerTest {
     @Test
     @DisplayName("Should save a NaturalPersonCustomer")
     void shouldSaveANaturalPersonCustomer() throws Exception {
-        NaturalPersonCustomerDTO requestDTO = new NaturalPersonCustomerDTO();
-        requestDTO.setClientName("John Doe");
-        requestDTO.setCpf("123.456.789-00");
-        requestDTO.setPrimaryEmail("john.doe@example.com");
-        requestDTO.setPhoneNumber("1234567890");
-        requestDTO.setWhatsapp("1234567890");
-        requestDTO.setBankCode("ABC123");
-        requestDTO.setStartContract(LocalDate.of(2023, 1, 1));
-        requestDTO.setFinancialSituation("PAGO");
-        requestDTO.setPayDay((byte) 1);
-
-        NaturalPersonCustomerDTO savedDTO = new NaturalPersonCustomerDTO();
-        savedDTO.setId(1L);
-        savedDTO.setClientName("John Doe");
-        savedDTO.setCpf("123.456.789-00");
-        savedDTO.setPrimaryEmail("john.doe@example.com");
-        savedDTO.setPhoneNumber("1234567890");
-        savedDTO.setWhatsapp("1234567890");
-        savedDTO.setBankCode("ABC123");
-        savedDTO.setStartContract(LocalDate.of(2023, 1, 1));
-        savedDTO.setFinancialSituation("PAGO");
-        savedDTO.setPayDay((byte) 1);
+        NaturalPersonCustomerDTO requestDTO = newNaturalCustomer();
+        NaturalPersonCustomerDTO savedDTO = newNaturalCustomer();
 
         when(naturalPersonCustomerService.saveNaturalPersonCustomer(requestDTO)).thenReturn(savedDTO);
-
         mockMvc.perform(post("/api/v1/customers/pf/save")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJsonString(requestDTO)))
@@ -138,6 +120,22 @@ class NaturalPersonCustomerControllerTest {
                 .andExpect(header().string("Location", "http://localhost/api/v1/customers/pf/save/1"));
 
         verify(naturalPersonCustomerService, times(1)).saveNaturalPersonCustomer(requestDTO);
+    }
+
+    private static NaturalPersonCustomerDTO newNaturalCustomer() {
+        NaturalPersonCustomerDTO requestDTO = new NaturalPersonCustomerDTO();
+        requestDTO.setId(1L);
+        requestDTO.setClientName("Claudio Carigé");
+        requestDTO.setCpf("156.258.240-29");
+        requestDTO.setPrimaryEmail("carige@mail.com");
+        requestDTO.setPhoneNumber("71991125697");
+        requestDTO.setWhatsapp("71991125697");
+        requestDTO.setBankCode("123");
+        requestDTO.setAdress(oneAdress().now());
+        requestDTO.setStartContract(LocalDate.of(2023, 1, 1));
+        requestDTO.setFinancialSituation("PAGO");
+        requestDTO.setPayDay((byte) 5);
+        return requestDTO;
     }
 
     private static String toJsonString(NaturalPersonCustomerDTO obj) throws JsonProcessingException {
