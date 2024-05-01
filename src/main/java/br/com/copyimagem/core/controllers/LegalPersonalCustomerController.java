@@ -2,6 +2,7 @@ package br.com.copyimagem.core.controllers;
 
 import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
 import br.com.copyimagem.core.usecases.interfaces.LegalPersonalCustomerService;
+import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -38,7 +39,7 @@ public class LegalPersonalCustomerController {
     }
 
     @PostMapping(value = "/save", produces = "application/json")
-    public ResponseEntity<HttpStatus> saveLegalPersonalCustomer(
+    public ResponseEntity<HttpStatus> saveLegalPersonalCustomer(@Valid
             @RequestBody LegalPersonalCustomerDTO legalPersonalCustomerDTO){
         log.info("[ INFO ] HTTP call with POST method with path: ../customers/pj/save");
         LegalPersonalCustomerDTO legalPersonalCustomer = legalPersonalCustomerService
