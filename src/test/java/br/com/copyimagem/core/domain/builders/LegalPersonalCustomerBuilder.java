@@ -54,6 +54,7 @@ public class LegalPersonalCustomerBuilder implements Serializable {
         builder.payDay = 5;
         builder.multiPrinterList = Arrays.asList(oneMultiPrinter().now());
         builder.monthlyPaymentList = Arrays.asList(oneMonthlyPayment().now());
+        builder.cnpj = "14.124.420/0001-94";
     }
 
     public LegalPersonalCustomerBuilder withId(Long id) {
@@ -71,7 +72,7 @@ public class LegalPersonalCustomerBuilder implements Serializable {
         return this;
     }
 
-    public LegalPersonalCustomerBuilder withListaEmailList(String... emailList) {
+    public LegalPersonalCustomerBuilder withEmailList(String... emailList) {
         this.emailList = Arrays.asList(emailList);
         return this;
     }

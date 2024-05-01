@@ -53,6 +53,7 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         builder.payDay = 5;
         builder.multiPrinterList = Arrays.asList(oneMultiPrinter().now());
         builder.monthlyPaymentList = Arrays.asList(oneMonthlyPayment().now());
+        builder.cpf = "156.258.240-29";
     }
 
     public NaturalPersonCustomerBuilder withId(Long id) {
@@ -70,7 +71,7 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         return this;
     }
 
-    public NaturalPersonCustomerBuilder withListaEmailList(String... emailList) {
+    public NaturalPersonCustomerBuilder withEmailList(String... emailList) {
         this.emailList = Arrays.asList(emailList);
         return this;
     }
@@ -110,12 +111,12 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         return this;
     }
 
-    public NaturalPersonCustomerBuilder withListaMultiPrinterList(MultiPrinter... multiPrinterList) {
+    public NaturalPersonCustomerBuilder withMultiPrinterList(MultiPrinter... multiPrinterList) {
         this.multiPrinterList = Arrays.asList(multiPrinterList);
         return this;
     }
 
-    public NaturalPersonCustomerBuilder withListaMonthlyPaymentList(MonthlyPayment... monthlyPaymentList) {
+    public NaturalPersonCustomerBuilder withMonthlyPaymentList(MonthlyPayment... monthlyPaymentList) {
         this.monthlyPaymentList = Arrays.asList(monthlyPaymentList);
         return this;
     }
