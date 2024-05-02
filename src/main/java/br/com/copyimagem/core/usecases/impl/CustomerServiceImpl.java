@@ -2,6 +2,7 @@ package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.Customer;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
+import br.com.copyimagem.core.exceptions.IllegalArgumentException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.CustomerService;
 import br.com.copyimagem.core.usecases.interfaces.LegalPersonalCustomerService;
@@ -38,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
                 case "cpf" -> findByCpf(valueParam);
                 case "cnpj" -> findByCnpj(valueParam);
                 case "email" -> findByPrimaryEmail(valueParam);
-                default -> null;
+                default -> throw new IllegalArgumentException("Parameter [ " + typeParam + " ] type not accepted.");
             };
     }
 
