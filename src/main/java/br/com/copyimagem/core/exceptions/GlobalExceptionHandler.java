@@ -26,4 +26,12 @@ public class GlobalExceptionHandler {
         log.error(String.format("[ ERROR ] DataIntegrityViolationException Classs : %S",error.getMessage()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<StandardError> illegalArgumentException(IllegalArgumentException ex, HttpServletRequest request){
+        StandardError error = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(), request.getRequestURI());
+        log.error(String.format("[ ERROR ] IllegalArgumentException Classs : %S", error.getMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 }
