@@ -11,7 +11,6 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Entity
@@ -52,9 +51,25 @@ public class MonthlyPayment implements Serializable {
     public MonthlyPayment(Long id, Integer monthPayment, Integer yearPayment,
                           Double monthlyAmount, Integer impressionsCounter,
                           Integer quantityPrints, Double excessValuePrints,
-                          Double amountPrinter, LocalDate expirationDate,
-                          LocalDate paymentDate, PaymentStatus paymentStatus,
-                          Integer printingFranchise, String invoiceNumber,
-                          String ticketNumber, Customer customer) {
+                          Double amountPrinter, String invoiceNumber,
+                          String ticketNumber, Integer printingFranchise,
+                          LocalDate expirationDate, LocalDate paymentDate,
+                          PaymentStatus paymentStatus, Customer customer) {
+        this.id = id;
+        this.monthPayment = monthPayment;
+        this.yearPayment = yearPayment;
+        this.monthlyAmount = monthlyAmount;
+        this.impressionsCounter = impressionsCounter;
+        this.quantityPrints = quantityPrints;
+        this.excessValuePrints = excessValuePrints;
+        this.amountPrinter = amountPrinter;
+        this.invoiceNumber = invoiceNumber;
+        this.ticketNumber = ticketNumber;
+        this.printingFranchise = printingFranchise;
+        this.expirationDate = expirationDate;
+        this.paymentDate = paymentDate;
+        this.paymentStatus = paymentStatus;
+        this.customer = customer;
     }
+
 }
