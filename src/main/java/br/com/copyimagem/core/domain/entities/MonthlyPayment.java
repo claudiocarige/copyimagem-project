@@ -31,6 +31,10 @@ public class MonthlyPayment implements Serializable {
     private Integer quantityPrints;
     private Double excessValuePrints;
     private Double amountPrinter;
+    //new attributes
+    private String invoiceNumber;
+    private String ticketNumber;
+    private Integer printingFranchise;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate expirationDate;
@@ -45,4 +49,12 @@ public class MonthlyPayment implements Serializable {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    public MonthlyPayment(Long id, Integer monthPayment, Integer yearPayment,
+                          Double monthlyAmount, Integer impressionsCounter,
+                          Integer quantityPrints, Double excessValuePrints,
+                          Double amountPrinter, LocalDate expirationDate,
+                          LocalDate paymentDate, PaymentStatus paymentStatus,
+                          Integer printingFranchise, String invoiceNumber,
+                          String ticketNumber, Customer customer) {
+    }
 }

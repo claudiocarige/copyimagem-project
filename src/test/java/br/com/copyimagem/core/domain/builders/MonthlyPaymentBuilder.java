@@ -17,6 +17,9 @@ public class MonthlyPaymentBuilder {
     private LocalDate paymentDate;
     private PaymentStatus paymentStatus;
     private Customer customer;
+    private String invoiceNumber;
+    private String ticketNumber;
+    private Integer printingFranchise;
 
     private MonthlyPaymentBuilder(){}
 
@@ -38,6 +41,9 @@ public class MonthlyPaymentBuilder {
         builder.expirationDate = LocalDate.of(2022, 2, 1);
         builder.paymentDate = LocalDate.of(2022, 1, 1);
         builder.paymentStatus = PaymentStatus.PAGO;
+        builder.printingFranchise = 2000;
+        builder.invoiceNumber = "0001";
+        builder.ticketNumber = "0002";
     }
 
     public MonthlyPaymentBuilder withId(Long id) {
@@ -95,12 +101,29 @@ public class MonthlyPaymentBuilder {
         return this;
     }
 
+    public MonthlyPaymentBuilder withPrintingFranchise(Integer printingFranchise) {
+        this.printingFranchise = printingFranchise;
+        return this;
+    }
+    public MonthlyPaymentBuilder withInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
+        return this;
+    }
+    public MonthlyPaymentBuilder withTicketNumber(String ticketNumber) {
+        this.ticketNumber = ticketNumber;
+        return this;
+    }
+
+
     public MonthlyPaymentBuilder withCustomer(Customer customer) {
         this.customer = customer;
         return this;
     }
 
     public MonthlyPayment now() {
-        return new MonthlyPayment(id, monthPayment, yearPayment, monthlyAmount, impressionsCounter, quantityPrints, excessValuePrints, amountPrinter, expirationDate, paymentDate, paymentStatus, customer);
+        return new MonthlyPayment(
+                id, monthPayment, yearPayment, monthlyAmount, impressionsCounter,
+                quantityPrints, excessValuePrints, amountPrinter, expirationDate,
+                paymentDate, paymentStatus, printingFranchise, invoiceNumber, ticketNumber ,customer);
     }
 }
