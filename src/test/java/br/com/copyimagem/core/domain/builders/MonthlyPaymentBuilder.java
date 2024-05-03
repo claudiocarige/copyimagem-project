@@ -36,11 +36,11 @@ public class MonthlyPaymentBuilder {
         builder.monthlyAmount = 200.0;
         builder.impressionsCounter = 1000;
         builder.quantityPrints = 2000;
-        builder.excessValuePrints = 20.0;
-        builder.amountPrinter = 220.0;
-        builder.expirationDate = LocalDate.of(2022, 2, 1);
-        builder.paymentDate = LocalDate.of(2022, 1, 1);
-        builder.paymentStatus = PaymentStatus.PAGO;
+        builder.excessValuePrints = 2035.25;
+        builder.amountPrinter = 3525.20;
+        builder.expirationDate = LocalDate.of(2023, 11, 30);
+        builder.paymentDate = LocalDate.of(2022, 12, 10);
+        builder.paymentStatus = PaymentStatus.PENDENTE;
         builder.printingFranchise = 2000;
         builder.invoiceNumber = "0001";
         builder.ticketNumber = "0002";
@@ -122,8 +122,9 @@ public class MonthlyPaymentBuilder {
 
     public MonthlyPayment now() {
         return new MonthlyPayment(
-                id, monthPayment, yearPayment, monthlyAmount, impressionsCounter,
-                quantityPrints, excessValuePrints, amountPrinter, expirationDate,
-                paymentDate, paymentStatus, printingFranchise, invoiceNumber, ticketNumber ,customer);
+                id, monthPayment, yearPayment, monthlyAmount,
+                impressionsCounter, quantityPrints, excessValuePrints,
+                amountPrinter, invoiceNumber, ticketNumber,printingFranchise,
+                expirationDate, paymentDate, paymentStatus,customer);
     }
 }
