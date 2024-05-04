@@ -1,4 +1,4 @@
-package br.com.copyimagem.core.controllers;
+package br.com.copyimagem.infra.controllers;
 
 import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
 import br.com.copyimagem.core.usecases.interfaces.NaturalPersonCustomerService;
@@ -50,5 +50,9 @@ public class NaturalPersonCustomerController {
         log.info("[ INFO ] New NaturalPersonCustomer created with success.");
         return ResponseEntity.created(uri).build();
     }
+
+    //TODO Create Test and Update attributes individually in LegalPersonCustomer with PATCH method
+
+    //TODO Create Test and Update object LegalPersonCustomer with PUT method
 
 }

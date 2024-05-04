@@ -1,4 +1,4 @@
-package br.com.copyimagem.core.controllers;
+package br.com.copyimagem.infra.controllers;
 
 import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
 import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;

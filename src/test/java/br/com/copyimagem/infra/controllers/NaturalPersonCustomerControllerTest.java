@@ -1,11 +1,10 @@
-package br.com.copyimagem.core.controllers;
+package br.com.copyimagem.infra.controllers;
 
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
 import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.impl.ConvertObjectToObjectDTOService;
 import br.com.copyimagem.core.usecases.interfaces.NaturalPersonCustomerService;
-import br.com.copyimagem.infra.repositories.NaturalPersonCustomerRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
