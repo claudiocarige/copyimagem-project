@@ -1,6 +1,7 @@
 package br.com.copyimagem.infra.controllers;
 
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
+import br.com.copyimagem.core.exceptions.IllegalArgumentException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,10 +17,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
+import java.util.Objects;
+
 import static br.com.copyimagem.core.domain.builders.CustomerResponseDTOBuilder.oneCustomerResponseDTO;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -90,10 +93,32 @@ class CustomerControllerTest {
         ResponseEntity<CustomerResponseDTO> responseEntity = customerController.searchCliente(CPF_PARAM, CPF);
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertNull(responseEntity.getBody());
-        RuntimeException exception = assertThrows(NoSuchElementException.class, () -> customerService.searchCliente(CPF_PARAM, CPF));
+        RuntimeException exception = assertThrows(NoSuchElementException.class,
+                () -> customerService.searchCliente(CPF_PARAM, CPF));
         assertEquals(CUSTOMER_NOT_FOUND, exception.getMessage());
 
         verify(customerService, Mockito.times(2)).searchCliente(CPF_PARAM, CPF);
+    }
+
+    @Test
+    @DisplayName("Must return all customers by FinancialSituation")
+    void mustReturnAllCustomersByFinancialSituation(){
+        String situation = "PAGO";
+        when(customerService.searchFinancialSituation(situation)).thenReturn(List.of(customerResponseDTO));
+        ResponseEntity<List<CustomerResponseDTO>> responseEntity =
+                customerController.searchFinancialSituation(situation);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(CustomerResponseDTO.class, Objects.requireNonNull(responseEntity.getBody()).get(0).getClass());
+        assertEquals(1, responseEntity.getBody().size());
+    }
+    @Test
+    @DisplayName("Must return a exception when param invalid")
+    void mustReturnAExceptionWhenParamInvalidByFinancialSituation(){
+        String situation = "INVALID";
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                                              () ->customerController.searchFinancialSituation(situation));
+        assertEquals("The argument is not correct", exception.getMessage());
+        verify(customerService, never()).searchFinancialSituation(situation);
     }
 
     private void start() {
