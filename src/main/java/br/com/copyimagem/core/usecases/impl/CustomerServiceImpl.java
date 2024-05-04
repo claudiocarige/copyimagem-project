@@ -1,13 +1,14 @@
 package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.Customer;
+import br.com.copyimagem.core.domain.enums.FinancialSituation;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.exceptions.IllegalArgumentException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.CustomerService;
 import br.com.copyimagem.core.usecases.interfaces.LegalPersonalCustomerService;
 import br.com.copyimagem.core.usecases.interfaces.NaturalPersonCustomerService;
-import br.com.copyimagem.infra.repositories.CustomerRepository;
+import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +52,14 @@ public class CustomerServiceImpl implements CustomerService {
         List<Customer> customerList = customerRepository.findAll();
         return customerList.stream()
                 .map(convertObjectToObjectDTOService::convertToCustomerResponseDTO).toList();
+    }
+
+    @Override
+    public List<CustomerResponseDTO> searchFinancialSituation(String situation) {
+        FinancialSituation financialSituation = FinancialSituation.valueOf(situation);
+        List<Customer> customerList = customerRepository.findAllByFinancialSituation(financialSituation);
+        return customerList.stream().
+                map(convertObjectToObjectDTOService::convertToCustomerResponseDTO).toList();
     }
 
     private CustomerResponseDTO findById(Long id) {

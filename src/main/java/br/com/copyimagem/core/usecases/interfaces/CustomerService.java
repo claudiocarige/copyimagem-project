@@ -9,4 +9,6 @@ public interface CustomerService {
     CustomerResponseDTO searchCliente(String type, String value);
 
     List<CustomerResponseDTO> searchClientAll();
+
+    List<CustomerResponseDTO> searchFinancialSituation(String situation);
 }
