@@ -11,6 +11,7 @@ import br.com.copyimagem.infra.repositories.CustomerRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Log4j2
@@ -39,8 +40,17 @@ public class CustomerServiceImpl implements CustomerService {
                 case "cpf" -> findByCpf(valueParam);
                 case "cnpj" -> findByCnpj(valueParam);
                 case "email" -> findByPrimaryEmail(valueParam);
+                //TODO Test and Case - Search by clientName
+                //TODO Test and Case - Search by clientPhone
                 default -> throw new IllegalArgumentException("Parameter [ " + typeParam + " ] type not accepted.");
             };
+    }
+
+    @Override
+    public List<CustomerResponseDTO> searchClientAll() {
+        List<Customer> customerList = customerRepository.findAll();
+        return customerList.stream()
+                .map(convertObjectToObjectDTOService::convertToCustomerResponseDTO).toList();
     }
 
     private CustomerResponseDTO findById(Long id) {
