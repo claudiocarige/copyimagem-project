@@ -28,8 +28,8 @@ class CustomerControllerTest {
     public static final String CUSTOMER_NOT_FOUND = "Customer not found";
     public static final String NUMBER_1 = "1";
     public static final String CPF = "156.258.240-29";
-    public static final String CPF_STRING = "cpf";
-    public static final String ID_TYPEPARAM = "id";
+    public static final String CPF_PARAM = "cpf";
+    public static final String ID_TYPE_PARAM = "id";
     private CustomerResponseDTO customerResponseDTO;
     @Mock
     private CustomerService customerService;
@@ -47,10 +47,10 @@ class CustomerControllerTest {
     @Test
     @DisplayName("Must return a customer by id")
     void mustReturnACustomerById() throws Exception {
-        when(customerService.searchCliente(ID_TYPEPARAM, NUMBER_1)).thenReturn(
+        when(customerService.searchCliente(ID_TYPE_PARAM, NUMBER_1)).thenReturn(
                 customerResponseDTO);
         mockMvc.perform(get("/api/v1/customers/search-client")
-                        .param("typeParam", ID_TYPEPARAM)
+                        .param("typeParam", ID_TYPE_PARAM)
                         .param("valueParam", NUMBER_1)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -60,10 +60,10 @@ class CustomerControllerTest {
     @Test
     @DisplayName("Must return a exception when customer not found.")
     void mustReturnAExceptionWhenCustomerNotFound() throws Exception {
-        when(customerService.searchCliente(ID_TYPEPARAM, NUMBER_1))
+        when(customerService.searchCliente(ID_TYPE_PARAM, NUMBER_1))
                 .thenThrow(new NoSuchElementException("Customer not found"));
         mockMvc.perform(get("/api/v1/customers/search-client")
-                        .param("typeParam", ID_TYPEPARAM)
+                        .param("typeParam", ID_TYPE_PARAM)
                         .param("valueParam", NUMBER_1)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -71,30 +71,29 @@ class CustomerControllerTest {
 
     @Test
     @DisplayName("Must return a customer by CPF")
-    void mustReturnACustomerByCPF() throws Exception {
-        when(customerService.searchCliente(CPF_STRING, CPF)).thenReturn(
+    void mustReturnACustomerByCPF(){
+        when(customerService.searchCliente(CPF_PARAM, CPF)).thenReturn(
                 customerResponseDTO);
 
-        ResponseEntity<CustomerResponseDTO> responseEntity = customerController.searchCliente(CPF_STRING, CPF);
+        ResponseEntity<CustomerResponseDTO> responseEntity = customerController.searchCliente(CPF_PARAM, CPF);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(customerResponseDTO, responseEntity.getBody());
-        assertEquals(customerResponseDTO.getCpfOrCnpj(), responseEntity.getBody().getCpfOrCnpj());
     }
 
     @Test
     @DisplayName("Must return a exception when customer not found.")
-    void mustReturnAExceptionWhenCustomerNotFoundByCPF() throws Exception {
-        when(customerService.searchCliente(CPF_STRING, CPF))
+    void mustReturnAExceptionWhenCustomerNotFoundByCPF(){
+        when(customerService.searchCliente(CPF_PARAM, CPF))
                 .thenThrow(new NoSuchElementException(CUSTOMER_NOT_FOUND));
 
-        ResponseEntity<CustomerResponseDTO> responseEntity = customerController.searchCliente(CPF_STRING, CPF);
+        ResponseEntity<CustomerResponseDTO> responseEntity = customerController.searchCliente(CPF_PARAM, CPF);
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertNull(responseEntity.getBody());
-        RuntimeException exception = assertThrows(NoSuchElementException.class, () -> customerService.searchCliente(CPF_STRING, CPF));
+        RuntimeException exception = assertThrows(NoSuchElementException.class, () -> customerService.searchCliente(CPF_PARAM, CPF));
         assertEquals(CUSTOMER_NOT_FOUND, exception.getMessage());
 
-        verify(customerService, Mockito.times(2)).searchCliente(CPF_STRING, CPF);
+        verify(customerService, Mockito.times(2)).searchCliente(CPF_PARAM, CPF);
     }
 
     private void start() {
