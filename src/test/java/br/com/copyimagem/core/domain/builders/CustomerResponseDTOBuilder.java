@@ -13,6 +13,7 @@ public class CustomerResponseDTOBuilder {
     private String phoneNumber;
     private Adress address;
     private String cpfOrCnpj;
+    private String financialSituation;
 
     private CustomerResponseDTOBuilder(){}
 
@@ -29,6 +30,7 @@ public class CustomerResponseDTOBuilder {
         builder.phoneNumber = "7132104567";
         builder.address = oneAdress().now();
         builder.cpfOrCnpj = "";
+        builder.financialSituation = "PAGO";
     }
 
     public CustomerResponseDTOBuilder withId(Long id) {
@@ -61,6 +63,11 @@ public class CustomerResponseDTOBuilder {
         return this;
     }
 
+    public CustomerResponseDTOBuilder withFinancialSituation(String financialSituation) {
+        this.financialSituation = financialSituation;
+        return this;
+    }
+
     public CustomerResponseDTO now() {
         CustomerResponseDTO customerResponseDTO = new CustomerResponseDTO();
         customerResponseDTO.setId(id);
@@ -69,6 +76,7 @@ public class CustomerResponseDTOBuilder {
         customerResponseDTO.setPhoneNumber(phoneNumber);
         customerResponseDTO.setAddress(address);
         customerResponseDTO.setCpfOrCnpj(cpfOrCnpj);
+        customerResponseDTO.setFinancialSituation(financialSituation);
         return customerResponseDTO;
     }
 }

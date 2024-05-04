@@ -12,5 +12,5 @@ public class CustomerResponseDTO {
     private String phoneNumber;
     private Adress address;
     private String cpfOrCnpj;
-
+    private String financialSituation;
 }
