@@ -7,7 +7,7 @@ import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
-import br.com.copyimagem.infra.repositories.CustomerRepository;
+import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +21,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class CustomerServiceTest {
@@ -146,6 +147,21 @@ public class CustomerServiceTest {
         assertEquals(1, customerResponseDTO.size());
         assertEquals(legalPersonalCustomer.getId(), customerResponseDTO.get(0).getId());
         assertEquals(CustomerResponseDTO.class, customerResponseDTO.get(0).getClass());
+    }
+
+    @Test
+    @DisplayName("Must return all customers by FinancialSituation")
+    void mustReturnAllCustomersByFinancialSituation() {
+        String situation = "PAGO";
+        when(customerRepository.findAllByFinancialSituation(any())).
+                thenReturn(Collections.singletonList(legalPersonalCustomer));
+        when(convertObjectToObjectDTOService.convertToCustomerResponseDTO(legalPersonalCustomer))
+                .thenReturn(customerResponseDTOPJ);
+        List<CustomerResponseDTO> customerResponseDTO = customerService.searchFinancialSituation(situation);
+        assertEquals(1, customerResponseDTO.size());
+        assertEquals(legalPersonalCustomer.getId(), customerResponseDTO.get(0).getId());
+        assertEquals(CustomerResponseDTO.class, customerResponseDTO.get(0).getClass());
+        assertEquals(situation, customerResponseDTO.get(0).getFinancialSituation());
     }
 
     private void start() {
