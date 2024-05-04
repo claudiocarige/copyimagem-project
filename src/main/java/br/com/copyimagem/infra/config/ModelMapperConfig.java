@@ -26,7 +26,7 @@ public class ModelMapperConfig {
         });
         modelMapper.addMappings(new PropertyMap<NaturalPersonCustomer, CustomerResponseDTO>() {
             @Override
-            protected void configure() {
+            protected void configure(){
                 map().setCpfOrCnpj(source.getCpf());
                 map().setAddress(source.getAdress());
             }
