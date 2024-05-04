@@ -15,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -127,13 +129,23 @@ public class CustomerServiceTest {
         assertEquals(customerResponseDTO.getCpfOrCnpj(), customerResponseDTOPF.getCpfOrCnpj());
     }
     @Test
-    @DisplayName("Muts retun a not found Customer by Email")
+    @DisplayName("Muts return a not found Customer by Email")
     void mustReturnAEmptyWhenCustomerNotFoundByEmail() {
         when(customerRepository.findByPrimaryEmail(EMAIL)).thenReturn(Optional.empty());
         String message = assertThrows(NoSuchElementException.class,
                 () -> customerService.searchCliente("email", EMAIL)).getMessage();
         assertEquals("Customer not found", message);
 
+    }
+    @Test
+    @DisplayName("Must return all customers")
+    void mustReturnAllCustomers() {
+        when(customerRepository.findAll()).thenReturn(Collections.singletonList(legalPersonalCustomer));
+        when(convertObjectToObjectDTOService.convertToCustomerResponseDTO(legalPersonalCustomer)).thenReturn(customerResponseDTOPJ);
+        List<CustomerResponseDTO> customerResponseDTO = customerService.searchClientAll();
+        assertEquals(1, customerResponseDTO.size());
+        assertEquals(legalPersonalCustomer.getId(), customerResponseDTO.get(0).getId());
+        assertEquals(CustomerResponseDTO.class, customerResponseDTO.get(0).getClass());
     }
 
     private void start() {
