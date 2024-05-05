@@ -3,13 +3,13 @@ package br.com.copyimagem.core.domain.builders;
 import java.util.List;
 import java.util.Arrays;
 import java.time.LocalDate;
-import br.com.copyimagem.core.domain.entities.Adress;
+import br.com.copyimagem.core.domain.entities.Address;
 import br.com.copyimagem.core.domain.entities.MonthlyPayment;
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.domain.enums.FinancialSituation;
 import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
 
-import static br.com.copyimagem.core.domain.builders.AdressBuilder.oneAdress;
+import static br.com.copyimagem.core.domain.builders.AddressBuilder.oneAddress;
 import static br.com.copyimagem.core.domain.builders.MonthlyPaymentBuilder.oneMonthlyPayment;
 import static br.com.copyimagem.core.domain.builders.MultiPrinterBuilder.oneMultiPrinter;
 
@@ -22,7 +22,7 @@ public class LegalPersonalCustomerDTOBuilder {
     private String phoneNumber;
     private String whatsapp;
     private String bankCode;
-    private Adress adress;
+    private Address address;
     private LocalDate startContract;
     private String financialSituation;
     private byte payDay;
@@ -46,7 +46,7 @@ public class LegalPersonalCustomerDTOBuilder {
         builder.phoneNumber = "7132104567";
         builder.whatsapp = "71998987878";
         builder.bankCode = "123";
-        builder.adress = oneAdress().now();
+        builder.address = oneAddress().now();
         builder.startContract = LocalDate.of(2022, 1, 1);
         builder.financialSituation = FinancialSituation.PAGO.toString();
         builder.payDay = 5;
@@ -94,8 +94,8 @@ public class LegalPersonalCustomerDTOBuilder {
         return this;
     }
 
-    public LegalPersonalCustomerDTOBuilder withAdress(Adress adress) {
-        this.adress = adress;
+    public LegalPersonalCustomerDTOBuilder withAddress(Address adress) {
+        this.address = adress;
         return this;
     }
 
@@ -134,7 +134,7 @@ public class LegalPersonalCustomerDTOBuilder {
         customerDTO.setPhoneNumber(phoneNumber);
         customerDTO.setWhatsapp(whatsapp);
         customerDTO.setBankCode(bankCode);
-        customerDTO.setAdress(adress);
+        customerDTO.setAddress(address);
         customerDTO.setStartContract(startContract);
         customerDTO.setFinancialSituation(financialSituation);
         customerDTO.setPayDay(payDay);

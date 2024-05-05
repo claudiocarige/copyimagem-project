@@ -1,6 +1,6 @@
 package br.com.copyimagem.core.dtos;
 
-import br.com.copyimagem.core.domain.entities.Adress;
+import br.com.copyimagem.core.domain.entities.Address;
 import lombok.Data;
 
 @Data
@@ -10,7 +10,7 @@ public class CustomerResponseDTO {
     private String clientName;
     private String primaryEmail;
     private String phoneNumber;
-    private Adress address;
+    private Address address;
     private String cpfOrCnpj;
     private String financialSituation;
 }

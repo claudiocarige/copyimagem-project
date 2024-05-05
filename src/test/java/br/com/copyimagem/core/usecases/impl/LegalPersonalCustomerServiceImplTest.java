@@ -6,7 +6,7 @@ import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
-import br.com.copyimagem.infra.persistence.repositories.AdressRepository;
+import br.com.copyimagem.infra.persistence.repositories.AddressRepository;
 import br.com.copyimagem.infra.persistence.repositories.LegalPersonalCustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,7 +42,7 @@ class LegalPersonalCustomerServiceImplTest {
     private ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
 
     @Mock
-    private AdressRepository adressRepository;
+    private AddressRepository addressRepository;
 
     @InjectMocks
     private LegalPersonalCustomerServiceImpl legalPersonalCustomerService;
@@ -121,7 +121,7 @@ class LegalPersonalCustomerServiceImplTest {
         when(legalPersonalCustomerRepository.save(customerPj)).thenReturn(customerPj);
         when(convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(customerPj)).thenReturn(customerPjDTO);
         when(convertObjectToObjectDTOService.convertToLegalPersonalCustomer(customerPjDTO)).thenReturn(customerPj);
-        when(adressRepository.save(customerPj.getAdress())).thenReturn(customerPjDTO.getAdress());
+        when(addressRepository.save(customerPj.getAddress())).thenReturn(customerPjDTO.getAddress());
         LegalPersonalCustomerDTO legalPersonalCustomerDTO = legalPersonalCustomerService
                 .saveLegalPersonalCustomer(customerPjDTO);
         assertAll("LegalPersonalCustomer",
@@ -161,7 +161,7 @@ class LegalPersonalCustomerServiceImplTest {
         customerResponseDTO.setId(ID1L);
         customerResponseDTO.setCpfOrCnpj(CNPJ);
         customerResponseDTO.setClientName(customerPj.getClientName());
-        customerResponseDTO.setAddress(customerPj.getAdress());
+        customerResponseDTO.setAddress(customerPj.getAddress());
         when(legalPersonalCustomerRepository.findByCnpj(CNPJ)).thenReturn(Optional.of(customerPj));
         when(convertObjectToObjectDTOService.convertToCustomerResponseDTO(customerPj)).thenReturn(customerResponseDTO);
         CustomerResponseDTO responseDTO = legalPersonalCustomerService.findByCnpj(CNPJ);
@@ -215,7 +215,7 @@ class LegalPersonalCustomerServiceImplTest {
         customerPjDTO.setPrimaryEmail(customerPj.getPrimaryEmail());
         customerPjDTO.setEmailList(customerPj.getEmailList());
         customerPjDTO.setPhoneNumber(customerPj.getPhoneNumber());
-        customerPjDTO.setAdress(customerPj.getAdress());
+        customerPjDTO.setAddress(customerPj.getAddress());
         customerPjDTO.setClientName(customerPj.getClientName());
         customerPjDTO.setBankCode(customerPj.getBankCode());
         customerPjDTO.setFinancialSituation(customerPj.getFinancialSituation().toString());

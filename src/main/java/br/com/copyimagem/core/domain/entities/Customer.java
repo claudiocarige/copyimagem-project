@@ -39,7 +39,7 @@ public abstract class Customer implements Serializable {
     private String bankCode;
     @OneToOne
     @JoinColumn(name = "adress_id")
-    private Adress adress;
+    private Address address;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate startContract;
     @Enumerated(EnumType.STRING)

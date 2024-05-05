@@ -24,7 +24,7 @@ import java.time.LocalDate;
 import java.util.List;
 import org.springframework.http.MediaType;
 
-import static br.com.copyimagem.core.domain.builders.AdressBuilder.oneAdress;
+import static br.com.copyimagem.core.domain.builders.AddressBuilder.oneAddress;
 import static br.com.copyimagem.core.domain.builders.NaturalPersonCustomerBuilder.oneCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -130,7 +130,7 @@ class NaturalPersonCustomerControllerTest {
         requestDTO.setPhoneNumber("71991125697");
         requestDTO.setWhatsapp("71991125697");
         requestDTO.setBankCode("123");
-        requestDTO.setAdress(oneAdress().now());
+        requestDTO.setAdress(oneAddress().now());
         requestDTO.setStartContract(LocalDate.of(2023, 1, 1));
         requestDTO.setFinancialSituation("PAGO");
         requestDTO.setPayDay((byte) 5);

@@ -1,13 +1,13 @@
 package br.com.copyimagem.core.usecases.impl;
 
-import br.com.copyimagem.core.domain.entities.Adress;
+import br.com.copyimagem.core.domain.entities.Address;
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
 import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.NaturalPersonCustomerService;
-import br.com.copyimagem.infra.persistence.repositories.AdressRepository;
+import br.com.copyimagem.infra.persistence.repositories.AddressRepository;
 import br.com.copyimagem.infra.persistence.repositories.NaturalPersonCustomerRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -21,15 +21,15 @@ import java.util.Optional;
 public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerService {
 
     private final NaturalPersonCustomerRepository naturalPersonCustomerRepository;
-    private final AdressRepository adressRepository;
+    private final AddressRepository addressRepository;
 
     private final ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
 
     public NaturalPersonCustomerServiceImpl(
             NaturalPersonCustomerRepository naturalPersonCustomerRepository,
-            AdressRepository adressRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
+            AddressRepository addressRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
         this.naturalPersonCustomerRepository = naturalPersonCustomerRepository;
-        this.adressRepository = adressRepository;
+        this.addressRepository = addressRepository;
         this.convertObjectToObjectDTOService = convertObjectToObjectDTOService;
     }
 
@@ -53,8 +53,8 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
     public NaturalPersonCustomerDTO saveNaturalPersonCustomer(NaturalPersonCustomerDTO naturalPersonCustomerDTO) {
         log.info("[ INFO ] Saving customer. {}", naturalPersonCustomerDTO.getClass());
         naturalPersonCustomerDTO.setId(null);
-        Adress adress = adressRepository.save(naturalPersonCustomerDTO.getAdress());
-        naturalPersonCustomerDTO.setAdress(adress);
+        Address address = addressRepository.save(naturalPersonCustomerDTO.getAdress());
+        naturalPersonCustomerDTO.setAdress(address);
         checkEmail(naturalPersonCustomerDTO);
         checkCpf(naturalPersonCustomerDTO);
         NaturalPersonCustomer savedNaturalCustomer = naturalPersonCustomerRepository.save(convertObjectToObjectDTOService.convertToNaturalPersonCustomer(naturalPersonCustomerDTO));

@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AdressTest {
+class AddressTest {
 
-    private Adress adress;
+    private Address adress;
 
     @BeforeEach
     void setUp() {
@@ -25,12 +25,12 @@ class AdressTest {
                 () -> assertEquals("Cidade 1", adress.getCity()),
                 () -> assertEquals("Estado 1", adress.getState()),
                 () -> assertEquals("12345678", adress.getCountry()),
-                () -> assertEquals(Adress.class, adress.getClass())
+                () -> assertEquals(Address.class, adress.getClass())
         );
     }
 
     private void startAdress(){
-        adress = new Adress();
+        adress = new Address();
         adress.setId(1L);
         adress.setStreet("123");
         adress.setNumber("Bairro 1");

@@ -14,7 +14,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Adress implements Serializable {
+public class Address implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -34,7 +34,7 @@ public class Adress implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Adress adress = (Adress) o;
+        Address adress = (Address) o;
         return Objects.equals(id, adress.id) && Objects.equals(street, adress.street);
     }
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static br.com.copyimagem.core.domain.builders.AdressBuilder.oneAdress;
+import static br.com.copyimagem.core.domain.builders.AddressBuilder.oneAddress;
 import static br.com.copyimagem.core.domain.builders.MonthlyPaymentBuilder.oneMonthlyPayment;
 import static br.com.copyimagem.core.domain.builders.MultiPrinterBuilder.oneMultiPrinter;
 
@@ -24,7 +24,7 @@ public class LegalPersonalCustomerBuilder implements Serializable {
     private String phoneNumber;
     private String whatsapp;
     private String bankCode;
-    private Adress adress;
+    private Address address;
     private LocalDate startContract;
     private FinancialSituation financialSituation;
     private byte payDay;
@@ -48,7 +48,7 @@ public class LegalPersonalCustomerBuilder implements Serializable {
         builder.phoneNumber = "7132104567";
         builder.whatsapp = "71998987878";
         builder.bankCode = "123";
-        builder.adress = oneAdress().now();
+        builder.address = oneAddress().now();
         builder.startContract = LocalDate.of(2022, 1, 1);
         builder.financialSituation = FinancialSituation.PAGO;
         builder.payDay = 5;
@@ -92,8 +92,8 @@ public class LegalPersonalCustomerBuilder implements Serializable {
         return this;
     }
 
-    public LegalPersonalCustomerBuilder withAdress(Adress adress) {
-        this.adress = adress;
+    public LegalPersonalCustomerBuilder withAdress(Address adress) {
+        this.address = adress;
         return this;
     }
 
@@ -136,7 +136,7 @@ public class LegalPersonalCustomerBuilder implements Serializable {
         customer.setPhoneNumber(phoneNumber);
         customer.setWhatsapp(whatsapp);
         customer.setBankCode(bankCode);
-        customer.setAdress(adress);
+        customer.setAddress(address);
         customer.setStartContract(startContract);
         customer.setFinancialSituation(financialSituation);
         customer.setPayDay(payDay);

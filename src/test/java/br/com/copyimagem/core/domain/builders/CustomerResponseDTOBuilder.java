@@ -1,17 +1,17 @@
 package br.com.copyimagem.core.domain.builders;
 
-import br.com.copyimagem.core.domain.entities.Adress;
+import br.com.copyimagem.core.domain.entities.Address;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 
 
-import static br.com.copyimagem.core.domain.builders.AdressBuilder.oneAdress;
+import static br.com.copyimagem.core.domain.builders.AddressBuilder.oneAddress;
 
 public class CustomerResponseDTOBuilder {
     private Long id;
     private String clientName;
     private String primaryEmail;
     private String phoneNumber;
-    private Adress address;
+    private Address address;
     private String cpfOrCnpj;
     private String financialSituation;
 
@@ -28,7 +28,7 @@ public class CustomerResponseDTOBuilder {
         builder.clientName = "Claudio Carigé";
         builder.primaryEmail = "carige@mail.com";
         builder.phoneNumber = "7132104567";
-        builder.address = oneAdress().now();
+        builder.address = oneAddress().now();
         builder.cpfOrCnpj = "";
         builder.financialSituation = "PAGO";
     }
@@ -53,7 +53,7 @@ public class CustomerResponseDTOBuilder {
         return this;
     }
 
-    public CustomerResponseDTOBuilder withAddress(Adress address) {
+    public CustomerResponseDTOBuilder withAddress(Address address) {
         this.address = address;
         return this;
     }

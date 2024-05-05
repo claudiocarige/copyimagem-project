@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.time.LocalDate;
 import java.util.List;
 
-import static br.com.copyimagem.core.domain.builders.AdressBuilder.oneAdress;
+import static br.com.copyimagem.core.domain.builders.AddressBuilder.oneAddress;
 import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -131,7 +131,7 @@ class LegalPersonalCustomerControllerTest {
         newObj.setPhoneNumber("71991125697");
         newObj.setWhatsapp("71991125697");
         newObj.setBankCode("123");
-        newObj.setAdress(oneAdress().now());
+        newObj.setAddress(oneAddress().now());
         newObj.setStartContract(LocalDate.of(2023, 1, 1));
         newObj.setFinancialSituation("PAGO");
         newObj.setPayDay((byte) 5);

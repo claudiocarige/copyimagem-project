@@ -9,7 +9,7 @@ import br.com.copyimagem.core.domain.entities.*;
 import br.com.copyimagem.core.domain.enums.FinancialSituation;
 import java.time.LocalDate;
 
-import static br.com.copyimagem.core.domain.builders.AdressBuilder.oneAdress;
+import static br.com.copyimagem.core.domain.builders.AddressBuilder.oneAddress;
 import static br.com.copyimagem.core.domain.builders.MonthlyPaymentBuilder.oneMonthlyPayment;
 import static br.com.copyimagem.core.domain.builders.MultiPrinterBuilder.oneMultiPrinter;
 
@@ -23,7 +23,7 @@ public class NaturalPersonCustomerBuilder implements Serializable {
     private String phoneNumber;
     private String whatsapp;
     private String bankCode;
-    private Adress adress;
+    private Address address;
     private LocalDate startContract;
     private FinancialSituation financialSituation;
     private byte payDay;

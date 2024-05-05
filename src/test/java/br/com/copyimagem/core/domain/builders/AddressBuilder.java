@@ -1,7 +1,7 @@
 package br.com.copyimagem.core.domain.builders;
-import br.com.copyimagem.core.domain.entities.Adress;
+import br.com.copyimagem.core.domain.entities.Address;
 
-public class AdressBuilder {
+public class AddressBuilder {
     private Long id;
     private String street;
     private String number;
@@ -9,15 +9,15 @@ public class AdressBuilder {
     private String state;
     private String country;
 
-    private AdressBuilder(){}
+    private AddressBuilder(){}
 
-    public static AdressBuilder oneAdress() {
-        AdressBuilder builder = new AdressBuilder();
+    public static AddressBuilder oneAddress() {
+        AddressBuilder builder = new AddressBuilder();
         initializeDefaultData(builder);
         return builder;
     }
 
-    private static void initializeDefaultData(AdressBuilder builder) {
+    private static void initializeDefaultData(AddressBuilder builder) {
         builder.id = 1L;
         builder.street = "Rua Estevam Barbosa Alves";
         builder.number = "12";
@@ -26,37 +26,37 @@ public class AdressBuilder {
         builder.country = "Brasil";
     }
 
-    public AdressBuilder withId(Long id) {
+    public AddressBuilder withId(Long id) {
         this.id = id;
         return this;
     }
 
-    public AdressBuilder withStreet(String street) {
+    public AddressBuilder withStreet(String street) {
         this.street = street;
         return this;
     }
 
-    public AdressBuilder withNumber(String number) {
+    public AddressBuilder withNumber(String number) {
         this.number = number;
         return this;
     }
 
-    public AdressBuilder withCity(String city) {
+    public AddressBuilder withCity(String city) {
         this.city = city;
         return this;
     }
 
-    public AdressBuilder withState(String state) {
+    public AddressBuilder withState(String state) {
         this.state = state;
         return this;
     }
 
-    public AdressBuilder withCountry(String country) {
+    public AddressBuilder withCountry(String country) {
         this.country = country;
         return this;
     }
 
-    public Adress now() {
-        return new Adress(id, street, number, city, state, country);
+    public Address now() {
+        return new Address(id, street, number, city, state, country);
     }
 }

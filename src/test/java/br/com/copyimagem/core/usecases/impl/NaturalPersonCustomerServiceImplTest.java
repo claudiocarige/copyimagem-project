@@ -5,7 +5,7 @@ import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
 import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
-import br.com.copyimagem.infra.persistence.repositories.AdressRepository;
+import br.com.copyimagem.infra.persistence.repositories.AddressRepository;
 import br.com.copyimagem.infra.persistence.repositories.NaturalPersonCustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +35,7 @@ class NaturalPersonCustomerServiceImplTest {
     private NaturalPersonCustomerRepository naturalPersonCustomerRepository;
 
     @Mock
-    private AdressRepository adressRepository;
+    private AddressRepository addressRepository;
 
     @Mock
     private ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
@@ -105,7 +105,7 @@ class NaturalPersonCustomerServiceImplTest {
         when(naturalPersonCustomerRepository.findByCpf(customerPfDTO.getCpf())).thenReturn(Optional.empty());
         when(naturalPersonCustomerRepository.save(customerPf)).thenReturn(customerPf);
         when(convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(customerPf)).thenReturn(customerPfDTO);
-        when(adressRepository.save(customerPf.getAdress())).thenReturn(customerPfDTO.getAdress());
+        when(addressRepository.save(customerPf.getAddress())).thenReturn(customerPfDTO.getAdress());
         NaturalPersonCustomerDTO natural = naturalPersonCustomerService.saveNaturalPersonCustomer(customerPfDTO);
         assertAll("NaturalPersonCustomerDTO",
                 () -> assertNotNull(natural),
@@ -146,7 +146,7 @@ class NaturalPersonCustomerServiceImplTest {
         customerResponseDTO.setId(ID1L);
         customerResponseDTO.setCpfOrCnpj(CPF);
         customerResponseDTO.setClientName(customerPf.getClientName());
-        customerResponseDTO.setAddress(customerPf.getAdress());
+        customerResponseDTO.setAddress(customerPf.getAddress());
         when(naturalPersonCustomerRepository.findByCpf(customerPf.getCpf()))
                 .thenReturn(Optional.of(customerPf));
         when(convertObjectToObjectDTOService.convertToCustomerResponseDTO(customerPf))
@@ -194,7 +194,7 @@ class NaturalPersonCustomerServiceImplTest {
         customerPfDTO.setPrimaryEmail(customerPf.getPrimaryEmail());
         customerPfDTO.setEmailList(customerPf.getEmailList());
         customerPfDTO.setPhoneNumber(customerPf.getPhoneNumber());
-        customerPfDTO.setAdress(customerPf.getAdress());
+        customerPfDTO.setAdress(customerPf.getAddress());
         customerPfDTO.setClientName(customerPf.getClientName());
         customerPfDTO.setBankCode(customerPf.getBankCode());
         customerPfDTO.setFinancialSituation(customerPf.getFinancialSituation().toString());

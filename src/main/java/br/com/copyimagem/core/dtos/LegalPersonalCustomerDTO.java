@@ -1,6 +1,6 @@
 package br.com.copyimagem.core.dtos;
 
-import br.com.copyimagem.core.domain.entities.Adress;
+import br.com.copyimagem.core.domain.entities.Address;
 import br.com.copyimagem.core.domain.entities.MonthlyPayment;
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -44,7 +44,7 @@ public class LegalPersonalCustomerDTO implements Serializable{
     private String whatsapp;
 
     private String bankCode;
-    private Adress adress;
+    private Address address;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate startContract;
