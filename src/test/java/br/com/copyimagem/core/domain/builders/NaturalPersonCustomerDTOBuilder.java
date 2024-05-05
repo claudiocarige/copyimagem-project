@@ -134,7 +134,7 @@ public class NaturalPersonCustomerDTOBuilder {
         customerDTO.setPhoneNumber(phoneNumber);
         customerDTO.setWhatsapp(whatsapp);
         customerDTO.setBankCode(bankCode);
-        customerDTO.setAdress(address);
+        customerDTO.setAddress(address);
         customerDTO.setStartContract(startContract);
         customerDTO.setFinancialSituation(financialSituation);
         customerDTO.setPayDay(payDay);

@@ -105,7 +105,7 @@ class NaturalPersonCustomerServiceImplTest {
         when(naturalPersonCustomerRepository.findByCpf(customerPfDTO.getCpf())).thenReturn(Optional.empty());
         when(naturalPersonCustomerRepository.save(customerPf)).thenReturn(customerPf);
         when(convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(customerPf)).thenReturn(customerPfDTO);
-        when(addressRepository.save(customerPf.getAddress())).thenReturn(customerPfDTO.getAdress());
+        when(addressRepository.save(customerPf.getAddress())).thenReturn(customerPfDTO.getAddress());
         NaturalPersonCustomerDTO natural = naturalPersonCustomerService.saveNaturalPersonCustomer(customerPfDTO);
         assertAll("NaturalPersonCustomerDTO",
                 () -> assertNotNull(natural),
@@ -194,7 +194,7 @@ class NaturalPersonCustomerServiceImplTest {
         customerPfDTO.setPrimaryEmail(customerPf.getPrimaryEmail());
         customerPfDTO.setEmailList(customerPf.getEmailList());
         customerPfDTO.setPhoneNumber(customerPf.getPhoneNumber());
-        customerPfDTO.setAdress(customerPf.getAddress());
+        customerPfDTO.setAddress(customerPf.getAddress());
         customerPfDTO.setClientName(customerPf.getClientName());
         customerPfDTO.setBankCode(customerPf.getBankCode());
         customerPfDTO.setFinancialSituation(customerPf.getFinancialSituation().toString());

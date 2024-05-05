@@ -47,7 +47,7 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         builder.phoneNumber = "7132104567";
         builder.whatsapp = "71998987878";
         builder.bankCode = "123";
-        builder.adress = oneAdress().now();
+        builder.address = oneAddress().now();
         builder.startContract = LocalDate.of(2022, 1, 1);
         builder.financialSituation = FinancialSituation.PAGO;
         builder.payDay = 5;
@@ -91,8 +91,8 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         return this;
     }
 
-    public NaturalPersonCustomerBuilder withAdress(Adress adress) {
-        this.adress = adress;
+    public NaturalPersonCustomerBuilder withAddress(Address adress) {
+        this.address = adress;
         return this;
     }
 
@@ -135,7 +135,7 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         customer.setPhoneNumber(phoneNumber);
         customer.setWhatsapp(whatsapp);
         customer.setBankCode(bankCode);
-        customer.setAdress(adress);
+        customer.setAddress(address);
         customer.setStartContract(startContract);
         customer.setFinancialSituation(financialSituation);
         customer.setPayDay(payDay);

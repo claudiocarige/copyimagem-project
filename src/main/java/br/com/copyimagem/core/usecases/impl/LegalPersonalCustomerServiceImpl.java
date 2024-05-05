@@ -1,6 +1,6 @@
 package br.com.copyimagem.core.usecases.impl;
 
-import br.com.copyimagem.core.domain.entities.Adress;
+import br.com.copyimagem.core.domain.entities.Address;
 import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
@@ -29,7 +29,7 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
 
     public LegalPersonalCustomerServiceImpl(
             LegalPersonalCustomerRepository legalPersonalCustomerRepository,
-            AddressRepository addressRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService, CustomerRepository customerRepository) {
+            AddressRepository addressRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
         this.legalPersonalCustomerRepository = legalPersonalCustomerRepository;
         this.addressRepository = addressRepository;
         this.convertObjectToObjectDTOService = convertObjectToObjectDTOService;

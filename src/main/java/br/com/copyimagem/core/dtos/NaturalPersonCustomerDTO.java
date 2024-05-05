@@ -46,7 +46,7 @@ public class NaturalPersonCustomerDTO implements Serializable{
     private String whatsapp;
 
     private String bankCode;
-    private Address adress;
+    private Address address;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate startContract;

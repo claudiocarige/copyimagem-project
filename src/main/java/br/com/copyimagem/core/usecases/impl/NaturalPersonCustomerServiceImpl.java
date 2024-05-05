@@ -53,8 +53,8 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
     public NaturalPersonCustomerDTO saveNaturalPersonCustomer(NaturalPersonCustomerDTO naturalPersonCustomerDTO) {
         log.info("[ INFO ] Saving customer. {}", naturalPersonCustomerDTO.getClass());
         naturalPersonCustomerDTO.setId(null);
-        Address address = addressRepository.save(naturalPersonCustomerDTO.getAdress());
-        naturalPersonCustomerDTO.setAdress(address);
+        Address address = addressRepository.save(naturalPersonCustomerDTO.getAddress());
+        naturalPersonCustomerDTO.setAddress(address);
         checkEmail(naturalPersonCustomerDTO);
         checkCpf(naturalPersonCustomerDTO);
         NaturalPersonCustomer savedNaturalCustomer = naturalPersonCustomerRepository.save(convertObjectToObjectDTOService.convertToNaturalPersonCustomer(naturalPersonCustomerDTO));
