@@ -8,7 +8,6 @@ import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.LegalPersonalCustomerService;
 import br.com.copyimagem.infra.persistence.repositories.AddressRepository;
-import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
 import br.com.copyimagem.infra.persistence.repositories.LegalPersonalCustomerRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -47,7 +46,7 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
 
     @Override
     public List<LegalPersonalCustomerDTO> findAllLegalPersonalCustomer() {
-        log.info("[ INFO ] Finding all LegalPersonalCustomers");
+        log.info("[ INFO ] Finding all LegalPersonalCustomers.");
         List<LegalPersonalCustomer> legalPersonalCustumerList = legalPersonalCustomerRepository.findAll();
         return legalPersonalCustumerList.stream()
                 .map(convertObjectToObjectDTOService::convertToLegalPersonalCustomerDTO).toList();
@@ -55,7 +54,7 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
     @Transactional
     @Override
     public LegalPersonalCustomerDTO saveLegalPersonalCustomer(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
-        log.info("[ INFO ] Saving LegalPersonalCustomer. {}", legalPersonalCustomerDTO.getClass());
+        log.info("[ INFO ] Saving LegalPersonalCustomer");
         legalPersonalCustomerDTO.setId(null);
         Address address = addressRepository.save(legalPersonalCustomerDTO.getAddress());
         legalPersonalCustomerDTO.setAddress(address);
@@ -69,9 +68,10 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
 
     @Override
     public CustomerResponseDTO findByCnpj(String cnpj) {
+        log.info("[ INFO ] Finding LegalPersonalCustomer by CNPJ.");
         Optional<LegalPersonalCustomer> legalPersonalCustomer = legalPersonalCustomerRepository.findByCnpj(cnpj);
         if (legalPersonalCustomer.isEmpty()) {
-            log.error("[ ERROR ] Exception :  {}.", NoSuchElementException.class);
+            log.error("[ ERROR ] Exception : Customer not found :  {}.", NoSuchElementException.class);
             throw new NoSuchElementException("Customer not found");
         }
         return convertObjectToObjectDTOService.convertToCustomerResponseDTO(legalPersonalCustomer.get());
@@ -81,17 +81,17 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
         log.info("[ INFO ] Checking if the email already exists.");
         if (legalPersonalCustomerRepository.findByPrimaryEmail(
                 legalPersonalCustomerDTO.getPrimaryEmail()).isPresent()) {
-            log.error("[ ERROR ] Exception :  {}.", DataIntegrityViolationException.class);
+            log.error("[ ERROR ] Exception : Email already exists!: {}.", DataIntegrityViolationException.class);
             throw new DataIntegrityViolationException("Email already exists!");
         }
     }
 
     private void checkCnpj(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
-        log.info("[ INFO ] Checking if the CPF already exists.");
+        log.info("[ INFO ] Checking if the CNPJ already exists." );
         if ( legalPersonalCustomerRepository.findByCnpj(
                 legalPersonalCustomerDTO.getCnpj()).isPresent()) {
-            log.error("[ ERROR ] Exception :  {}.", DataIntegrityViolationException.class);
-            throw new DataIntegrityViolationException("CPF already exists!");
+            log.error("[ ERROR ] Exception : CNPJ already exists! : {}.", DataIntegrityViolationException.class);
+            throw new DataIntegrityViolationException("CNPJ already exists!");
         }
     }
 }
