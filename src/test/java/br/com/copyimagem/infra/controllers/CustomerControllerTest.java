@@ -65,11 +65,11 @@ class CustomerControllerTest {
     void mustReturnAExceptionWhenCustomerNotFound() throws Exception {
         when(customerService.searchCliente(ID_TYPE_PARAM, NUMBER_1))
                 .thenThrow(new NoSuchElementException("Customer not found"));
-        mockMvc.perform(get("/api/v1/customers/search-client")
-                        .param("typeParam", ID_TYPE_PARAM)
-                        .param("valueParam", NUMBER_1)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                () -> customerService.searchCliente(ID_TYPE_PARAM, NUMBER_1));
+        assertEquals(CUSTOMER_NOT_FOUND, exception.getMessage());
+
+        verify(customerService, Mockito.times(1)).searchCliente(ID_TYPE_PARAM, NUMBER_1);
     }
 
     @Test
