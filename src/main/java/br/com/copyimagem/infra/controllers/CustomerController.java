@@ -27,15 +27,12 @@ public class CustomerController {
     public ResponseEntity<CustomerResponseDTO> searchCliente(
             @RequestParam("typeParam") String typeParam,
             @RequestParam("valueParam") String valueParam) {
-        log.info(String.format("[ INFO ] Search for customers by :{ %s } -- with value : { %s } --- { %s }", typeParam, valueParam, CustomerController.class));
-        try{
+        log.info(String.format("[ INFO ] Search for customers by : %s -- with value : %s.",
+                                                                            typeParam.toUpperCase(), valueParam));
             CustomerResponseDTO response = customerService.searchCliente(typeParam, valueParam);
             return ResponseEntity.ok().body(response);
-        }catch (NoSuchElementException ex){
-            log.error("[ ERROR ] Exception (searchCliente() method in CustomerController class):  {}.", ex.getMessage());
-            return ResponseEntity.notFound().build();
-        }
     }
+
     @GetMapping(value = "/search-client-all")
     public ResponseEntity<List<CustomerResponseDTO>> searchClientAll() {
         log.info(String.format("[ INFO ] Search for all customers --- { %s }", CustomerController.class));
