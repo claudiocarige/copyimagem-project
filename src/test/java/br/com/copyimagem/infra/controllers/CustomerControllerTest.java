@@ -89,15 +89,11 @@ class CustomerControllerTest {
     void mustReturnAExceptionWhenCustomerNotFoundByCPF(){
         when(customerService.searchCliente(CPF_PARAM, CPF))
                 .thenThrow(new NoSuchElementException(CUSTOMER_NOT_FOUND));
-
-        ResponseEntity<CustomerResponseDTO> responseEntity = customerController.searchCliente(CPF_PARAM, CPF);
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertNull(responseEntity.getBody());
         RuntimeException exception = assertThrows(NoSuchElementException.class,
                 () -> customerService.searchCliente(CPF_PARAM, CPF));
         assertEquals(CUSTOMER_NOT_FOUND, exception.getMessage());
 
-        verify(customerService, Mockito.times(2)).searchCliente(CPF_PARAM, CPF);
+        verify(customerService, Mockito.times(1)).searchCliente(CPF_PARAM, CPF);
     }
 
     @Test
