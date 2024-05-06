@@ -6,6 +6,7 @@ import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
 import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
+import br.com.copyimagem.core.dtos.UpdateCustomerDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +39,11 @@ public class ConvertObjectToObjectDTOService {
         return modelMapper.map(customer, CustomerResponseDTO.class);
     }
 
+    UpdateCustomerDTO convertToUpdateCustomerDTO(Customer customer) {
+        return modelMapper.map(customer, UpdateCustomerDTO.class);
+    }
 
+    public Customer convertToCustomer(UpdateCustomerDTO updateCustomerDTO) {
+        return modelMapper.map(updateCustomerDTO, Customer.class);
+    }
 }
