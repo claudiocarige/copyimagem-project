@@ -3,6 +3,7 @@ package br.com.copyimagem.infra.config;
 import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
+import br.com.copyimagem.core.dtos.UpdateCustomerDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
@@ -27,7 +28,19 @@ public class ModelMapperConfig {
             @Override
             protected void configure(){
                 map().setCpfOrCnpj(source.getCpf());
-                map().setAddress(source.getAdress());
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<LegalPersonalCustomer, UpdateCustomerDTO>() {
+            @Override
+            protected void configure(){
+                map().setCpfOrCnpj(source.getCnpj());
+            }
+        });
+        modelMapper.addMappings(new PropertyMap<NaturalPersonCustomer, UpdateCustomerDTO>() {
+            @Override
+            protected void configure(){
+                map().setCpfOrCnpj(source.getCpf());
             }
         });
         return modelMapper;
