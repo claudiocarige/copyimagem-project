@@ -1,11 +1,11 @@
 package br.com.copyimagem.core.usecases.impl;
 
-import br.com.copyimagem.core.domain.builders.CustomerResponseDTOBuilder;
-import br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder;
-import br.com.copyimagem.core.domain.builders.NaturalPersonCustomerBuilder;
+import br.com.copyimagem.core.domain.entities.Customer;
 import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
+import br.com.copyimagem.core.dtos.UpdateCustomerDTO;
+import br.com.copyimagem.core.exceptions.IllegalArgumentException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,14 +15,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static br.com.copyimagem.core.domain.builders.CustomerResponseDTOBuilder.oneCustomerResponseDTO;
+import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneLegalPersonalCustomer;
+
+import static br.com.copyimagem.core.domain.builders.NaturalPersonCustomerBuilder.oneNaturalPersonCustomer;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class CustomerServiceTest {
 
@@ -30,10 +31,12 @@ public class CustomerServiceTest {
     public static final String CNPJ = "14.124.420/0001-94";
     public static final String CPF = "156.258.240-29";
     public static final String EMAIL = "claudio@mail.com.br";
+    private Customer customer;
     private LegalPersonalCustomer legalPersonalCustomer;
     private NaturalPersonCustomer naturalPersonCustomer;
     private CustomerResponseDTO customerResponseDTOPJ;
     private CustomerResponseDTO customerResponseDTOPF;
+    private UpdateCustomerDTO updateCustomerDTO;
 
     @Mock
     private CustomerRepository customerRepository;
@@ -164,10 +167,68 @@ public class CustomerServiceTest {
         assertEquals(situation, customerResponseDTO.get(0).getFinancialSituation());
     }
 
+    @Test
+    @DisplayName("Must update the Customer by attribute")
+    void mustUpdateTheCustomerByAttribute(){
+        String attribute = "cnpj";
+        when(customerRepository.findById(ID1L)).thenReturn(Optional.of(customer));
+        when(customerRepository.save(legalPersonalCustomer)).thenReturn(legalPersonalCustomer);
+        when(convertObjectToObjectDTOService.convertToUpdateCustomerDTO(customer)).thenReturn(updateCustomerDTO);
+        UpdateCustomerDTO updateCustomerResultDTO = customerService.updateCustomerAttribute(attribute, CNPJ, ID1L);
+
+        assertEquals(ID1L, updateCustomerDTO.getId());
+        assertEquals(CNPJ, updateCustomerDTO.getCpfOrCnpj());
+        assertEquals(EMAIL, updateCustomerDTO.getPrimaryEmail());
+        assertEquals(UpdateCustomerDTO.class, updateCustomerDTO.getClass());
+        assertEquals(updateCustomerDTO, updateCustomerResultDTO);
+    }
+
+    @Test
+    @DisplayName("must return true when the attribute is in the list")
+    void mustReturnTrueWhenTheAttributeIsInTheList() {
+        String attribute = "emailList";
+        when(customerRepository.findById(ID1L)).thenReturn(Optional.of(customer));
+        String message = assertThrows(IllegalArgumentException.class, () -> customerService.updateCustomerAttribute(attribute, "mail@mail.com", ID1L)).getMessage();
+        assertEquals("This attribute cannot be changed on this endpoint.", message);
+    }
+    @Test
+    @DisplayName("Must return a exception when attribute not found")
+    void mustReturnAExceptionWhenAttributeNotFound(){
+        String attribute = "homeNumber";
+        when(customerRepository.findById(ID1L)).thenReturn(Optional.of(customer));
+
+        String message = assertThrows(IllegalArgumentException.class,
+                        () -> customerService.updateCustomerAttribute(attribute, "5", ID1L)).getMessage();
+        assertEquals("Attribute not found.", message);
+    }
+
+    @Test
+    @DisplayName("Must return a exception when Attributes are invalid")
+    void mustReturnAExceptionWhenAttributesAreInvalid(){
+        String [] attributes = {"primaryEmail", "cnpj", "cpf"};
+        String [] messages = {"Email format is invalid", "CNPJ format is invalid", "CPF format is invalid"};
+        String value = "il.123.com/1234-br";
+        when(customerRepository.findById(ID1L)).thenReturn(Optional.of(customer));
+
+        for (int i=0; i<attributes.length;i++) {
+            int final_i = i;
+            String message = assertThrows(IllegalArgumentException.class,
+                    () -> customerService.updateCustomerAttribute(attributes[final_i], value, ID1L)).getMessage();
+            assertEquals(messages[final_i], message);
+        }
+        verify(customerRepository, times(3)).findById(ID1L);
+    }
+
+
     private void start() {
-        legalPersonalCustomer = LegalPersonalCustomerBuilder.oneCustomer().nowCustomerPJ();
-        naturalPersonCustomer = NaturalPersonCustomerBuilder.oneCustomer().nowCustomerPF();
-        customerResponseDTOPJ = CustomerResponseDTOBuilder.oneCustomerResponseDTO().withCpfOrCnpj(CNPJ).now();
-        customerResponseDTOPF = CustomerResponseDTOBuilder.oneCustomerResponseDTO().withCpfOrCnpj(CPF).now();
+        customer = oneLegalPersonalCustomer().nowCustomerPJ();
+        legalPersonalCustomer = oneLegalPersonalCustomer().nowCustomerPJ();
+        naturalPersonCustomer = oneNaturalPersonCustomer().nowCustomerPF();
+        customerResponseDTOPJ = oneCustomerResponseDTO().withCpfOrCnpj(CNPJ).now();
+        customerResponseDTOPF = oneCustomerResponseDTO().withCpfOrCnpj(CPF).now();
+        updateCustomerDTO = new UpdateCustomerDTO();
+        updateCustomerDTO.setPrimaryEmail(EMAIL);
+        updateCustomerDTO.setId(ID1L);
+        updateCustomerDTO.setCpfOrCnpj(CNPJ);
     }
 }
