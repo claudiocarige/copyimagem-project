@@ -25,7 +25,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static br.com.copyimagem.core.domain.builders.AddressBuilder.oneAddress;
-import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneCustomer;
+import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneLegalPersonalCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -145,8 +145,8 @@ class LegalPersonalCustomerControllerTest {
     }
 
     private void start() {
-        customerPj = oneCustomer().withId(ID1L).withCnpj(CNPJ).nowCustomerPJ();
+        customerPj = oneLegalPersonalCustomer().withId(ID1L).withCnpj(CNPJ).nowCustomerPJ();
         customerPjDTO = convertObjectToObjectDTOService
-                .convertToLegalPersonalCustomerDTO(oneCustomer().withId(1L).withCnpj(CNPJ).nowCustomerPJ());
+                .convertToLegalPersonalCustomerDTO(oneLegalPersonalCustomer().withId(1L).withCnpj(CNPJ).nowCustomerPJ());
     }
 }

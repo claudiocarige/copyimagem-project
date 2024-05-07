@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneCustomer;
+import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneLegalPersonalCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LegalPersonalCustomerTest {
@@ -40,12 +40,12 @@ class LegalPersonalCustomerTest {
     @DisplayName("You must reject a user without a CNPJ")
     void youMustRejectALegalPersonalCustomerWithoutACPF(){
         assertAll("NaturalPersonCustomer NULL CNPJ",
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> oneCustomer().withCnpj(null).nowCustomerPJ()
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> oneLegalPersonalCustomer().withCnpj(null).nowCustomerPJ()
         ));
     }
 
     private void startLegalPersonalCustomer() {
-        legalPersonalCustomer = oneCustomer()
+        legalPersonalCustomer = oneLegalPersonalCustomer()
                 .withCnpj("12.123.123/0001-12")
                 .withClientName("Copy")
                 .nowCustomerPJ();

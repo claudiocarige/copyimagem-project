@@ -34,7 +34,7 @@ public class LegalPersonalCustomerBuilder implements Serializable {
 
     private LegalPersonalCustomerBuilder(){}
 
-    public static LegalPersonalCustomerBuilder oneCustomer() {
+    public static LegalPersonalCustomerBuilder oneLegalPersonalCustomer() {
         LegalPersonalCustomerBuilder builder = new LegalPersonalCustomerBuilder();
         initializeDefaultData(builder);
         return builder;

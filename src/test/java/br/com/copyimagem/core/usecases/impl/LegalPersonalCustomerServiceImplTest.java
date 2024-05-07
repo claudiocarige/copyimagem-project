@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneCustomer;
+import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneLegalPersonalCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -194,7 +194,7 @@ class LegalPersonalCustomerServiceImplTest {
     @MethodSource(value = "mandatoryscenarios")
     void mustValidateMandatoryFieldsWhenSaving(Long id, String cnpj, String message) {
             String exMessage = assertThrows(IllegalArgumentException.class, () -> {
-            LegalPersonalCustomer legalPersonalCustomer = oneCustomer().withId(id).withCnpj(cnpj).nowCustomerPJ();
+            LegalPersonalCustomer legalPersonalCustomer = oneLegalPersonalCustomer().withId(id).withCnpj(cnpj).nowCustomerPJ();
             LegalPersonalCustomerDTO legalPersonalCustomerDTO  =  convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(legalPersonalCustomer);
             legalPersonalCustomerService.saveLegalPersonalCustomer(legalPersonalCustomerDTO);
         }).getMessage();
@@ -208,7 +208,7 @@ class LegalPersonalCustomerServiceImplTest {
     }
 
     private void start() {
-        customerPj = oneCustomer().withId(ID1L).withCnpj(CNPJ).withPrimaryEmail("carige@mail.com").nowCustomerPJ();
+        customerPj = oneLegalPersonalCustomer().withId(ID1L).withCnpj(CNPJ).withPrimaryEmail("carige@mail.com").nowCustomerPJ();
         customerPjDTO = new LegalPersonalCustomerDTO();
         customerPjDTO.setId(ID1L);
         customerPjDTO.setCnpj(CNPJ);
