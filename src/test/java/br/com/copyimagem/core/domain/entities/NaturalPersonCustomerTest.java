@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static br.com.copyimagem.core.domain.builders.NaturalPersonCustomerBuilder.oneCustomer;
+import static br.com.copyimagem.core.domain.builders.NaturalPersonCustomerBuilder.oneNaturalPersonCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 
 class NaturalPersonCustomerTest {
@@ -35,10 +35,10 @@ class NaturalPersonCustomerTest {
     @DisplayName("You must reject a user without a CPF")
     void youMustRejectANaturalPersonCustomerWithoutACPF(){
         assertAll("NaturalPersonCustomer NULL CPF",
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> oneCustomer().withCpf(null).nowCustomerPF()));
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> oneNaturalPersonCustomer().withCpf(null).nowCustomerPF()));
     }
 
     private void startNaturalPersonCustomer() {
-        naturalPersonCustomer = oneCustomer().withCpf("123.456.789-01").nowCustomerPF();
+        naturalPersonCustomer = oneNaturalPersonCustomer().withCpf("123.456.789-01").nowCustomerPF();
     }
 }

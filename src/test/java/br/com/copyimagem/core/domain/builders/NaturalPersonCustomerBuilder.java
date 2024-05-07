@@ -33,7 +33,7 @@ public class NaturalPersonCustomerBuilder implements Serializable {
 
     private NaturalPersonCustomerBuilder(){}
 
-    public static NaturalPersonCustomerBuilder oneCustomer() {
+    public static NaturalPersonCustomerBuilder oneNaturalPersonCustomer() {
         NaturalPersonCustomerBuilder builder = new NaturalPersonCustomerBuilder();
         initializeDefaultData(builder);
         return builder;

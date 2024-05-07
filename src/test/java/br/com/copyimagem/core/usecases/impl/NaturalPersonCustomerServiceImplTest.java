@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static br.com.copyimagem.core.domain.builders.NaturalPersonCustomerBuilder.oneCustomer;
+import static br.com.copyimagem.core.domain.builders.NaturalPersonCustomerBuilder.oneNaturalPersonCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -173,7 +173,7 @@ class NaturalPersonCustomerServiceImplTest {
     @MethodSource(value = "mandatoryscenarios")
     void mustValidateMandatoryFieldsWhenSaving(Long id, String cpf, String message) {
         String exMessage = assertThrows(IllegalArgumentException.class, () -> {
-            NaturalPersonCustomer naturalPersonCustomer = oneCustomer().withId(id).withCpf(cpf).nowCustomerPF();
+            NaturalPersonCustomer naturalPersonCustomer = oneNaturalPersonCustomer().withId(id).withCpf(cpf).nowCustomerPF();
             NaturalPersonCustomerDTO naturalPersonCustomerDTO  =  convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(naturalPersonCustomer);
             naturalPersonCustomerService.saveNaturalPersonCustomer(naturalPersonCustomerDTO);
         }).getMessage();
@@ -187,7 +187,7 @@ class NaturalPersonCustomerServiceImplTest {
     }
 
     private void start() {
-        customerPf = oneCustomer().withId(ID1L).withCpf(CPF).withPrimaryEmail("carige@mail.com").nowCustomerPF();
+        customerPf = oneNaturalPersonCustomer().withId(ID1L).withCpf(CPF).withPrimaryEmail("carige@mail.com").nowCustomerPF();
         customerPfDTO = new NaturalPersonCustomerDTO();
         customerPfDTO.setId(ID1L);
         customerPfDTO.setCpf(CPF);

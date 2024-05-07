@@ -25,7 +25,7 @@ import java.util.List;
 import org.springframework.http.MediaType;
 
 import static br.com.copyimagem.core.domain.builders.AddressBuilder.oneAddress;
-import static br.com.copyimagem.core.domain.builders.NaturalPersonCustomerBuilder.oneCustomer;
+import static br.com.copyimagem.core.domain.builders.NaturalPersonCustomerBuilder.oneNaturalPersonCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -144,9 +144,9 @@ class NaturalPersonCustomerControllerTest {
     }
 
     private void start() {
-        customerPf = oneCustomer().withId(ID1L).withCpf(CPF).nowCustomerPF();
+        customerPf = oneNaturalPersonCustomer().withId(ID1L).withCpf(CPF).nowCustomerPF();
         customerPfDTO = convertObjectToObjectDTOService
-                .convertToNaturalPersonCustomerDTO(oneCustomer()
+                .convertToNaturalPersonCustomerDTO(oneNaturalPersonCustomer()
                                         .withId(1L).withCpf(CPF).nowCustomerPF());
     }
 }
