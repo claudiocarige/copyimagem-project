@@ -1,6 +1,7 @@
 package br.com.copyimagem.infra.controllers;
 
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
+import br.com.copyimagem.core.dtos.UpdateCustomerDTO;
 import br.com.copyimagem.core.exceptions.IllegalArgumentException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.CustomerService;
@@ -23,6 +24,7 @@ import java.util.Objects;
 import static br.com.copyimagem.core.domain.builders.CustomerResponseDTOBuilder.oneCustomerResponseDTO;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.boot.context.annotation.Configurations.getClasses;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -34,6 +36,7 @@ class CustomerControllerTest {
     public static final String CPF_PARAM = "cpf";
     public static final String ID_TYPE_PARAM = "id";
     private CustomerResponseDTO customerResponseDTO;
+    private UpdateCustomerDTO updateCustomerDTO;
     @Mock
     private CustomerService customerService;
     private MockMvc mockMvc;
@@ -62,7 +65,7 @@ class CustomerControllerTest {
 
     @Test
     @DisplayName("Must return a exception when customer not found.")
-    void mustReturnAExceptionWhenCustomerNotFound() throws Exception {
+    void mustReturnAExceptionWhenCustomerNotFound(){
         when(customerService.searchCliente(ID_TYPE_PARAM, NUMBER_1))
                 .thenThrow(new NoSuchElementException("Customer not found"));
         NoSuchElementException exception = assertThrows(NoSuchElementException.class,
@@ -117,7 +120,25 @@ class CustomerControllerTest {
         verify(customerService, never()).searchFinancialSituation(situation);
     }
 
+    @Test
+    @DisplayName("Must return a ResponseEntity from UpdateCustomerDTO")
+    void mustReturnAResponseEntityFromUpdateCustomerDTO(){
+
+        String attribute = "cnpj";
+        String value = "123.456.789-10";
+        when(customerService.updateCustomerAttribute(attribute, value, 1L)).thenReturn(updateCustomerDTO);
+        ResponseEntity<UpdateCustomerDTO> responseEntity =
+                customerController.updateCustomerAttribute(attribute, value, 1L);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(UpdateCustomerDTO.class, responseEntity.getBody().getClass());
+        assertEquals(customerResponseDTO.getId(), responseEntity.getBody().getId());
+    }
+
     private void start() {
         customerResponseDTO = oneCustomerResponseDTO().withCpfOrCnpj(CPF).now();
+        updateCustomerDTO = new UpdateCustomerDTO();
+        updateCustomerDTO.setPrimaryEmail("ccarige@gmail.com");
+        updateCustomerDTO.setId(1L);
+        updateCustomerDTO.setCpfOrCnpj("14.124.420/0001-94");
     }
 }
