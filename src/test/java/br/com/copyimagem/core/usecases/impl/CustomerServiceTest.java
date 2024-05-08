@@ -11,6 +11,8 @@ import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -167,18 +169,22 @@ public class CustomerServiceTest {
         assertEquals(situation, customerResponseDTO.get(0).getFinancialSituation());
     }
 
-    @Test
+    @ParameterizedTest
+    @CsvSource(value = {
+            "cnpj, 14.124.420/0001-94",
+            "cpf, 156.258.240-29",
+            "primaryEmail, claudio@gmail.com"
+    })
     @DisplayName("Must update the Customer by attribute")
-    void mustUpdateTheCustomerByAttribute(){
-        String attribute = "cnpj";
+    void mustUpdateTheCustomerByAttribute(String attribute, String val){
         when(customerRepository.findById(ID1L)).thenReturn(Optional.of(customer));
         when(customerRepository.save(legalPersonalCustomer)).thenReturn(legalPersonalCustomer);
         when(convertObjectToObjectDTOService.convertToUpdateCustomerDTO(customer)).thenReturn(updateCustomerDTO);
-        UpdateCustomerDTO updateCustomerResultDTO = customerService.updateCustomerAttribute(attribute, CNPJ, ID1L);
+        UpdateCustomerDTO updateCustomerResultDTO = customerService.updateCustomerAttribute(attribute, val, ID1L);
 
         assertEquals(ID1L, updateCustomerDTO.getId());
-        assertEquals(CNPJ, updateCustomerDTO.getCpfOrCnpj());
-        assertEquals(EMAIL, updateCustomerDTO.getPrimaryEmail());
+        assertEquals(val, updateCustomerDTO.getCpfOrCnpj());
+        assertEquals(val, updateCustomerDTO.getPrimaryEmail());
         assertEquals(UpdateCustomerDTO.class, updateCustomerDTO.getClass());
         assertEquals(updateCustomerDTO, updateCustomerResultDTO);
     }
@@ -202,21 +208,18 @@ public class CustomerServiceTest {
         assertEquals("Attribute not found.", message);
     }
 
-    @Test
+    @ParameterizedTest
+    @CsvSource(value = {
+            "primaryEmail,Email format is invalid,ccarige.mail ",
+            "cnpj, CNPJ format is invalid, il.123.com/1234-br",
+            "cpf, CPF format is invalid, 894.965.31-02"})
     @DisplayName("Must return a exception when Attributes are invalid")
-    void mustReturnAExceptionWhenAttributesAreInvalid(){
-        String [] attributes = {"primaryEmail", "cnpj", "cpf"};
-        String [] messages = {"Email format is invalid", "CNPJ format is invalid", "CPF format is invalid"};
-        String value = "il.123.com/1234-br";
+    void mustReturnAExceptionWhenAttributesAreInvalid(String attribute,String messages, String val ){
         when(customerRepository.findById(ID1L)).thenReturn(Optional.of(customer));
-
-        for (int i=0; i<attributes.length;i++) {
-            int final_i = i;
-            String message = assertThrows(IllegalArgumentException.class,
-                    () -> customerService.updateCustomerAttribute(attributes[final_i], value, ID1L)).getMessage();
-            assertEquals(messages[final_i], message);
-        }
-        verify(customerRepository, times(3)).findById(ID1L);
+        String message = assertThrows(IllegalArgumentException.class,
+                () -> customerService.updateCustomerAttribute(attribute, val, ID1L)).getMessage();
+        assertEquals(messages, message);
+        verify(customerRepository, times(1)).findById(ID1L);
     }
 
 
