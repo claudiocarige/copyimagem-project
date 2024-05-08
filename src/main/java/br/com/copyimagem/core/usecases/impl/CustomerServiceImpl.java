@@ -95,11 +95,23 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public UpdateCustomerDTO updateCustomerAttribute(String attribute, String value, Long id) {
         log.info("[ INFO ] Updating LegalPersonalCustomer attribute : {}", attribute);
+        isNotNull(attribute, value);
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Customer not found"));
-        iscontainsAnyOfTheAttributes(attribute);
+        isContainsAnyOfTheAttributes(attribute);
         needsValidations(attribute, value);
         return getUpdateCustomerAttribute(attribute, value, customer);
+    }
+
+    private void isNotNull(String attribute, String value){
+        String [] attributes = {"cpf", "cnpj", "primaryEmail", "phoneNumber", "clientName", "whatsapp"};
+        for (String attribute1 : attributes) {
+            if(attribute1.equals(attribute)){
+                if(value == null){
+                    throw new IllegalArgumentException(attribute.toUpperCase() +" cannot be null.");
+                }
+            }
+        }
     }
 
     private UpdateCustomerDTO getUpdateCustomerAttribute(String attribute, String value, Customer customer) {
@@ -166,7 +178,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    private void iscontainsAnyOfTheAttributes(String attribute) {
+    private void isContainsAnyOfTheAttributes(String attribute) {
         if(List.of("emailList", "multiPrinterList", "monthlyPaymentList").contains(attribute)) {
             throw new IllegalArgumentException("This attribute cannot be changed on this endpoint.");
         }
