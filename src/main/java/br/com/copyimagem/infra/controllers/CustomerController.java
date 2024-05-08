@@ -1,8 +1,8 @@
 package br.com.copyimagem.infra.controllers;
 
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
+import br.com.copyimagem.core.dtos.UpdateCustomerDTO;
 import br.com.copyimagem.core.exceptions.IllegalArgumentException;
-import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.CustomerService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +46,14 @@ public class CustomerController {
         }
         log.info(String.format("[ INFO ] Search for all defaulting customers --- { %s }", CustomerController.class));
         return ResponseEntity.ok().body(customerService.searchFinancialSituation(situation));
+    }
+
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<UpdateCustomerDTO> updateCustomerAttribute(
+            @RequestParam(name = "attribute") String attribute,
+            @RequestParam(name = "value") String value, @PathVariable Long id){
+        UpdateCustomerDTO dto = customerService
+                .updateCustomerAttribute(attribute, value, id);
+        return ResponseEntity.ok().body(dto);
     }
 }
