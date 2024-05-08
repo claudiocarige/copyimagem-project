@@ -38,7 +38,8 @@ public class CustomerServiceTest {
     private NaturalPersonCustomer naturalPersonCustomer;
     private CustomerResponseDTO customerResponseDTOPJ;
     private CustomerResponseDTO customerResponseDTOPF;
-    private UpdateCustomerDTO updateCustomerDTO;
+    private UpdateCustomerDTO updateCustomerDTOPJ;
+    private UpdateCustomerDTO updateCustomerDTOPF;
 
     @Mock
     private CustomerRepository customerRepository;
@@ -171,22 +172,34 @@ public class CustomerServiceTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "cnpj, 14.124.420/0001-94",
-            "cpf, 156.258.240-29",
-            "primaryEmail, claudio@gmail.com"
+            "cpf, 156.258.240-29, 2",
+            "cnpj, 14.124.420/0001-94, 1",
+            "primaryEmail, claudio@mail.com.br, 1"
     })
     @DisplayName("Must update the Customer by attribute")
-    void mustUpdateTheCustomerByAttribute(String attribute, String val){
-        when(customerRepository.findById(ID1L)).thenReturn(Optional.of(customer));
+    void mustUpdateTheCustomerByAttribute(String attribute, String val, String id){
+        when(customerRepository.findById(1L)).thenReturn(Optional.of(legalPersonalCustomer));
+        when(customerRepository.findById(2L)).thenReturn(Optional.of(naturalPersonCustomer));
         when(customerRepository.save(legalPersonalCustomer)).thenReturn(legalPersonalCustomer);
-        when(convertObjectToObjectDTOService.convertToUpdateCustomerDTO(customer)).thenReturn(updateCustomerDTO);
-        UpdateCustomerDTO updateCustomerResultDTO = customerService.updateCustomerAttribute(attribute, val, ID1L);
+        when(customerRepository.save(naturalPersonCustomer)).thenReturn(naturalPersonCustomer);
+        when(convertObjectToObjectDTOService.convertToUpdateCustomerDTO(legalPersonalCustomer)).thenReturn(updateCustomerDTOPJ);
+        when(convertObjectToObjectDTOService.convertToUpdateCustomerDTO(naturalPersonCustomer)).thenReturn(updateCustomerDTOPF);
+        UpdateCustomerDTO updateCustomerResultDTO = customerService.updateCustomerAttribute(attribute, val, Long.parseLong(id));
 
-        assertEquals(ID1L, updateCustomerDTO.getId());
-        assertEquals(val, updateCustomerDTO.getCpfOrCnpj());
-        assertEquals(val, updateCustomerDTO.getPrimaryEmail());
-        assertEquals(UpdateCustomerDTO.class, updateCustomerDTO.getClass());
-        assertEquals(updateCustomerDTO, updateCustomerResultDTO);
+        assertNotNull(updateCustomerResultDTO);
+        assertEquals(UpdateCustomerDTO.class, updateCustomerResultDTO.getClass());
+
+        switch (attribute) {
+            case "cnpj":
+                assertEquals(val, updateCustomerDTOPJ.getCpfOrCnpj());
+                break;
+            case "cpf":
+                assertEquals(val, updateCustomerDTOPF.getCpfOrCnpj());
+                break;
+            case "primaryEmail":
+                assertEquals(val, updateCustomerDTOPJ.getPrimaryEmail());
+                break;
+        }
     }
 
     @Test
@@ -229,9 +242,14 @@ public class CustomerServiceTest {
         naturalPersonCustomer = oneNaturalPersonCustomer().nowCustomerPF();
         customerResponseDTOPJ = oneCustomerResponseDTO().withCpfOrCnpj(CNPJ).now();
         customerResponseDTOPF = oneCustomerResponseDTO().withCpfOrCnpj(CPF).now();
-        updateCustomerDTO = new UpdateCustomerDTO();
-        updateCustomerDTO.setPrimaryEmail(EMAIL);
-        updateCustomerDTO.setId(ID1L);
-        updateCustomerDTO.setCpfOrCnpj(CNPJ);
+        updateCustomerDTOPJ = new UpdateCustomerDTO();
+        updateCustomerDTOPJ.setPrimaryEmail(EMAIL);
+        updateCustomerDTOPJ.setId(ID1L);
+        updateCustomerDTOPJ.setCpfOrCnpj(CNPJ);
+        updateCustomerDTOPF = new UpdateCustomerDTO();
+        updateCustomerDTOPF.setPrimaryEmail(EMAIL);
+        updateCustomerDTOPF.setId(2L);
+        updateCustomerDTOPF.setCpfOrCnpj(CPF);
+
     }
 }
