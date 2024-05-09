@@ -34,9 +34,9 @@ public class CustomerController {
     }
 
     @GetMapping(value = "/search-client-all")
-    public ResponseEntity<List<CustomerResponseDTO>> searchClientAll() {
+    public ResponseEntity<List<CustomerResponseDTO>> searchAllCustomers() {
         log.info(String.format("[ INFO ] Search for all customers --- { %s }", CustomerController.class));
-        return ResponseEntity.ok().body(customerService.searchClientAll());
+        return ResponseEntity.ok().body(customerService.searchAllCustomers());
     }
 
     @GetMapping(value="/search-financial-situation")
