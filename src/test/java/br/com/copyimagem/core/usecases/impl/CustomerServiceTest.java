@@ -183,7 +183,14 @@ public class CustomerServiceTest {
     @CsvSource(value = {
             "cpf, 156.258.240-29, 2",
             "cnpj, 14.124.420/0001-94, 1",
-            "primaryEmail, claudio@mail.com.br, 1"
+            "primaryEmail, claudio@mail.com.br, 1",
+            "clientName, Claudio Carigé, 1",
+            "phoneNumber, 7132104567, 1",
+            "whatsapp, 71998987878, 1",
+            "bankCode, 123, 1",
+            "startContract, 2022-01-01, 1",
+            "payDay, 5, 1",
+            "financialSituation, PAGO, 1",
     })
     @DisplayName("Must update the Customer by attribute")
     void mustUpdateTheCustomerByAttribute(String attribute, String val, String id){
@@ -199,15 +206,16 @@ public class CustomerServiceTest {
         assertEquals(UpdateCustomerDTO.class, updateCustomerResultDTO.getClass());
 
         switch (attribute) {
-            case "cnpj":
-                assertEquals(val, updateCustomerDTOPJ.getCpfOrCnpj());
-                break;
-            case "cpf":
-                assertEquals(val, updateCustomerDTOPF.getCpfOrCnpj());
-                break;
-            case "primaryEmail":
-                assertEquals(val, updateCustomerDTOPJ.getPrimaryEmail());
-                break;
+            case "cnpj" -> assertEquals(val, updateCustomerDTOPJ.getCpfOrCnpj());
+            case "cpf" -> assertEquals(val, updateCustomerDTOPF.getCpfOrCnpj());
+            case "primaryEmail" -> assertEquals(val, updateCustomerDTOPJ.getPrimaryEmail());
+            case "clienteName" -> assertEquals(val, updateCustomerDTOPJ.getClientName());
+            case "phoneNumber" -> assertEquals(val, updateCustomerDTOPJ.getPhoneNumber());
+            case "whatsapp" -> assertEquals(val, updateCustomerDTOPJ.getWhatsapp());
+            case "bankCode" -> assertEquals(val, updateCustomerDTOPJ.getBankCode());
+            case "startContract" -> assertEquals(LocalDate.of(2022,1,1), updateCustomerDTOPJ.getStartContract());
+            case "payDay" -> assertEquals(Byte.parseByte(val), updateCustomerDTOPJ.getPayDay());
+            case "financialSituation" -> assertEquals(val, updateCustomerDTOPJ.getFinancialSituation());
         }
     }
 
