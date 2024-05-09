@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public interface CustomerService {
-    CustomerResponseDTO searchCliente(String type, String value);
+    CustomerResponseDTO searchCustomer(String type, String value);
 
     List<CustomerResponseDTO> searchClientAll();
 

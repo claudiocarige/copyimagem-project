@@ -29,7 +29,7 @@ public class CustomerController {
             @RequestParam("valueParam") String valueParam) {
         log.info(String.format("[ INFO ] Search for customers by : %s -- with value : %s.",
                                                                             typeParam.toUpperCase(), valueParam));
-            CustomerResponseDTO response = customerService.searchCliente(typeParam, valueParam);
+            CustomerResponseDTO response = customerService.searchCustomer(typeParam, valueParam);
             return ResponseEntity.ok().body(response);
     }
 

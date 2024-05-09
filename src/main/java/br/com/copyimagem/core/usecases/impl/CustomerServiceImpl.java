@@ -44,7 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponseDTO searchCliente(String typeParam, String valueParam) {
+    public CustomerResponseDTO searchCustomer(String typeParam, String valueParam) {
         return
             switch (typeParam.toLowerCase()) {
                 case "id" -> findById(Long.parseLong(valueParam));
