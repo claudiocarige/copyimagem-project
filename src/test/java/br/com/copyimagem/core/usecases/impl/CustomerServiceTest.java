@@ -156,6 +156,15 @@ public class CustomerServiceTest {
     }
 
     @Test
+    @DisplayName("Must return exception when typeParam is not accepted")
+    void mustReturnExceptionWhenTypeParamIsNotAccepted() {
+        String typeParam = "teste";
+        String message = assertThrows(IllegalArgumentException.class,
+                () -> customerService.searchCustomer(typeParam, "teste")).getMessage();
+        assertEquals("Parameter [ "+ typeParam + " ] type not accepted.", message);
+    }
+
+    @Test
     @DisplayName("Must return all customers by FinancialSituation")
     void mustReturnAllCustomersByFinancialSituation() {
         String situation = "PAGO";
