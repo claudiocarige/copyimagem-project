@@ -81,7 +81,7 @@ class CustomerControllerTest {
         when(customerService.searchCliente(CPF_PARAM, CPF)).thenReturn(
                 customerResponseDTO);
 
-        ResponseEntity<CustomerResponseDTO> responseEntity = customerController.searchCliente(CPF_PARAM, CPF);
+        ResponseEntity<CustomerResponseDTO> responseEntity = customerController.searchCustomerByParams(CPF_PARAM, CPF);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(customerResponseDTO, responseEntity.getBody());

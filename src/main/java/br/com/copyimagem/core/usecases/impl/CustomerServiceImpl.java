@@ -44,7 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponseDTO searchCliente(String typeParam, String valueParam){
+    public CustomerResponseDTO searchCliente(String typeParam, String valueParam) {
         return
             switch (typeParam.toLowerCase()) {
                 case "id" -> findById(Long.parseLong(valueParam));
@@ -58,7 +58,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<CustomerResponseDTO> searchClientAll() {
+    public List<CustomerResponseDTO> searchAllCustomers() {
         List<Customer> customerList = customerRepository.findAll();
         return customerList.stream()
                 .map(convertObjectToObjectDTOService::convertToCustomerResponseDTO).toList();

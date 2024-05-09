@@ -24,7 +24,7 @@ public class CustomerController {
     }
 
     @GetMapping(value = "/search-client")
-    public ResponseEntity<CustomerResponseDTO> searchCliente(
+    public ResponseEntity<CustomerResponseDTO> searchCustomerByParams(
             @RequestParam("typeParam") String typeParam,
             @RequestParam("valueParam") String valueParam) {
         log.info(String.format("[ INFO ] Search for customers by : %s -- with value : %s.",
