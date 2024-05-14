@@ -5,6 +5,7 @@ import br.com.copyimagem.core.domain.entities.MonthlyPayment;
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
+import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.infra.persistence.repositories.AddressRepository;
 import br.com.copyimagem.infra.persistence.repositories.LegalPersonalCustomerRepository;
@@ -114,7 +115,7 @@ class LegalPersonalCustomerServiceImplTest {
 
     @Test
     @DisplayName("should save a LegalPersonalCustomer")
-    void shouldSaveALegalPersonalCustomer() {
+    void shouldSaveALegalPersonalCustomer() throws NoSuchMethodException {
         when(legalPersonalCustomerRepository.findByPrimaryEmail(customerPjDTO.getPrimaryEmail()))
                 .thenReturn(Optional.empty());
         when(legalPersonalCustomerRepository.findByCnpj(CNPJ)).thenReturn(Optional.empty());
@@ -152,6 +153,25 @@ class LegalPersonalCustomerServiceImplTest {
         verify(legalPersonalCustomerRepository, times(1))
                 .findByPrimaryEmail(customerPjDTO.getPrimaryEmail());
         verify(legalPersonalCustomerRepository, times(1)).findByCnpj(customerPj.getCnpj());
+    }
+    @Test
+    @DisplayName("Must check Email")
+    void mustCheckEmail(){
+        when(legalPersonalCustomerRepository.findByPrimaryEmail(customerPjDTO.getPrimaryEmail()))
+                .thenReturn(Optional.of(customerPj));
+        String message = assertThrows(DataIntegrityViolationException.class,
+                () -> legalPersonalCustomerService.saveLegalPersonalCustomer(customerPjDTO)).getMessage();
+        assertEquals("Email already exists!", message);
+    }
+
+    @Test
+    @DisplayName("Must check Cnpj")
+    void mustCheckCnpj(){
+        when(legalPersonalCustomerRepository.findByCnpj(customerPjDTO.getCnpj()))
+                .thenReturn(Optional.of(customerPj));
+        String message = assertThrows(DataIntegrityViolationException.class,
+                () -> legalPersonalCustomerService.saveLegalPersonalCustomer(customerPjDTO)).getMessage();
+        assertEquals("CNPJ already exists!", message);
     }
 
     @Test
