@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Log4j2
 @Service
@@ -53,13 +54,12 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
     }
     @Transactional
     @Override
-    public LegalPersonalCustomerDTO saveLegalPersonalCustomer(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
+    public LegalPersonalCustomerDTO saveLegalPersonalCustomer(LegalPersonalCustomerDTO legalPersonalCustomerDTO) throws NoSuchMethodException {
         log.info("[ INFO ] Saving LegalPersonalCustomer");
         legalPersonalCustomerDTO.setId(null);
         Address address = addressRepository.save(legalPersonalCustomerDTO.getAddress());
         legalPersonalCustomerDTO.setAddress(address);
-        checkEmail(legalPersonalCustomerDTO);
-        checkCnpj(legalPersonalCustomerDTO);
+        validateCnpjAndEmail(legalPersonalCustomerDTO);
         legalPersonalCustomerDTO.setStartContract(LocalDate.now(ZoneId.of("America/Sao_Paulo")));
         LegalPersonalCustomer saveLegalPersonalCustomer = legalPersonalCustomerRepository
                 .save(convertObjectToObjectDTOService.convertToLegalPersonalCustomer(legalPersonalCustomerDTO));
@@ -77,21 +77,22 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
         return convertObjectToObjectDTOService.convertToCustomerResponseDTO(legalPersonalCustomer.get());
     }
 
-    private void checkEmail(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
-        log.info("[ INFO ] Checking if the email already exists.");
-        if (legalPersonalCustomerRepository.findByPrimaryEmail(
-                legalPersonalCustomerDTO.getPrimaryEmail()).isPresent()) {
-            log.error("[ ERROR ] Exception : Email already exists!: {}.", DataIntegrityViolationException.class);
-            throw new DataIntegrityViolationException("Email already exists!");
-        }
+
+    private void validateCnpjAndEmail(LegalPersonalCustomerDTO legalPersonalCustomerDTO) throws NoSuchMethodException {
+        validateField(legalPersonalCustomerDTO.getCnpj(),
+                       legalPersonalCustomerRepository::findByCnpj,
+                 "CNPJ already exists!");
+        validateField(legalPersonalCustomerDTO.getPrimaryEmail(),
+                        legalPersonalCustomerRepository::findByPrimaryEmail,
+                  "Email already exists!");
     }
 
-    private void checkCnpj(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
-        log.info("[ INFO ] Checking if the CNPJ already exists." );
-        if ( legalPersonalCustomerRepository.findByCnpj(
-                legalPersonalCustomerDTO.getCnpj()).isPresent()) {
-            log.error("[ ERROR ] Exception : CNPJ already exists! : {}.", DataIntegrityViolationException.class);
-            throw new DataIntegrityViolationException("CNPJ already exists!");
+    private <T> void validateField(
+            T field, Function<T, Optional<LegalPersonalCustomer>> buscaRepositorio, String message) throws NoSuchMethodException {
+        log.info("[ INFO ] Checking if the " + field.toString().toUpperCase() + " " + buscaRepositorio.getClass().getMethod("apply", Object.class).getParameters()[0].getName() + " already exists.");
+        if(buscaRepositorio.apply(field).isPresent()){
+            log.error("[ ERROR ] Exception : {} : {}.", message, DataIntegrityViolationException.class);
+            throw new DataIntegrityViolationException(message);
         }
     }
 }
