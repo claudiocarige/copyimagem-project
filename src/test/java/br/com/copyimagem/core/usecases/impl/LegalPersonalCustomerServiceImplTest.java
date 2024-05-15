@@ -8,6 +8,7 @@ import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
 import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.infra.persistence.repositories.AddressRepository;
+import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
 import br.com.copyimagem.infra.persistence.repositories.LegalPersonalCustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,6 +39,9 @@ class LegalPersonalCustomerServiceImplTest {
     private LegalPersonalCustomerDTO customerPjDTO;
     @Mock
     private LegalPersonalCustomerRepository legalPersonalCustomerRepository;
+
+    @Mock
+    private CustomerRepository customerRepository;
 
     @Mock
     private ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
@@ -115,10 +119,10 @@ class LegalPersonalCustomerServiceImplTest {
 
     @Test
     @DisplayName("should save a LegalPersonalCustomer")
-    void shouldSaveALegalPersonalCustomer() throws NoSuchMethodException {
-        when(legalPersonalCustomerRepository.findByPrimaryEmail(customerPjDTO.getPrimaryEmail()))
-                .thenReturn(Optional.empty());
-        when(legalPersonalCustomerRepository.findByCnpj(CNPJ)).thenReturn(Optional.empty());
+    void shouldSaveALegalPersonalCustomer() {
+        when(customerRepository.existsCustomerByPrimaryEmail(customerPjDTO.getPrimaryEmail()))
+                .thenReturn(false);
+        when(legalPersonalCustomerRepository.existsLegalPersonalCustomerByCnpj(CNPJ)).thenReturn(false);
         when(legalPersonalCustomerRepository.save(customerPj)).thenReturn(customerPj);
         when(convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(customerPj)).thenReturn(customerPjDTO);
         when(convertObjectToObjectDTOService.convertToLegalPersonalCustomer(customerPjDTO)).thenReturn(customerPj);
@@ -150,25 +154,25 @@ class LegalPersonalCustomerServiceImplTest {
                 .convertToLegalPersonalCustomerDTO(customerPj);
         verify(convertObjectToObjectDTOService, times(1))
                 .convertToLegalPersonalCustomer(customerPjDTO);
-        verify(legalPersonalCustomerRepository, times(1))
-                .findByPrimaryEmail(customerPjDTO.getPrimaryEmail());
-        verify(legalPersonalCustomerRepository, times(1)).findByCnpj(customerPj.getCnpj());
+        verify(customerRepository, times(1))
+                .existsCustomerByPrimaryEmail(customerPjDTO.getPrimaryEmail());
+        verify(legalPersonalCustomerRepository, times(1)).existsLegalPersonalCustomerByCnpj(customerPj.getCnpj());
     }
     @Test
-    @DisplayName("Must check Email")
-    void mustCheckEmail(){
-        when(legalPersonalCustomerRepository.findByPrimaryEmail(customerPjDTO.getPrimaryEmail()))
-                .thenReturn(Optional.of(customerPj));
+    @DisplayName("Must return exception when Email exist")
+    void mustReturnExceptionWhenEmailExist(){
+        when(customerRepository.existsCustomerByPrimaryEmail(customerPjDTO.getPrimaryEmail()))
+                .thenReturn(true);
         String message = assertThrows(DataIntegrityViolationException.class,
                 () -> legalPersonalCustomerService.saveLegalPersonalCustomer(customerPjDTO)).getMessage();
         assertEquals("Email already exists!", message);
     }
 
     @Test
-    @DisplayName("Must check Cnpj")
-    void mustCheckCnpj(){
-        when(legalPersonalCustomerRepository.findByCnpj(customerPjDTO.getCnpj()))
-                .thenReturn(Optional.of(customerPj));
+    @DisplayName("Must return exception when Cnpj exist")
+    void mustReturnExceptionWhenCnpjExist(){
+        when(legalPersonalCustomerRepository.existsLegalPersonalCustomerByCnpj(customerPjDTO.getCnpj()))
+                .thenReturn(true);
         String message = assertThrows(DataIntegrityViolationException.class,
                 () -> legalPersonalCustomerService.saveLegalPersonalCustomer(customerPjDTO)).getMessage();
         assertEquals("CNPJ already exists!", message);
