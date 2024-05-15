@@ -24,7 +24,6 @@ import java.util.Objects;
 import static br.com.copyimagem.core.domain.builders.CustomerResponseDTOBuilder.oneCustomerResponseDTO;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.boot.context.annotation.Configurations.getClasses;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -121,6 +120,17 @@ class CustomerControllerTest {
     }
 
     @Test
+    @DisplayName("Must return all customers")
+    void mustReturnAllCustomers(){
+        when(customerService.searchAllCustomers()).thenReturn(List.of(customerResponseDTO));
+        ResponseEntity<List<CustomerResponseDTO>> responseEntity =
+                customerController.searchAllCustomers();
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(CustomerResponseDTO.class, Objects.requireNonNull(responseEntity.getBody()).get(0).getClass());
+        assertEquals(1, responseEntity.getBody().size());
+    }
+
+    @Test
     @DisplayName("Must return a ResponseEntity from UpdateCustomerDTO")
     void mustReturnAResponseEntityFromUpdateCustomerDTO(){
 
@@ -130,7 +140,7 @@ class CustomerControllerTest {
         ResponseEntity<UpdateCustomerDTO> responseEntity =
                 customerController.updateCustomerAttribute(attribute, value, 1L);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(UpdateCustomerDTO.class, responseEntity.getBody().getClass());
+        assertEquals(UpdateCustomerDTO.class, Objects.requireNonNull(responseEntity.getBody()).getClass());
         assertEquals(customerResponseDTO.getId(), responseEntity.getBody().getId());
     }
 
