@@ -5,5 +5,5 @@ import br.com.copyimagem.core.dtos.MultiPrinterDTO;
 
 public interface MultiPrinterService {
 
-    MultiPrinter findMultiPrinterById(Integer id);
+    MultiPrinterDTO findMultiPrinterById(Integer id);
 }
