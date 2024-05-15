@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static br.com.copyimagem.core.domain.builders.CustomerResponseDTOBuilder.oneCustomerResponseDTO;
@@ -144,12 +145,25 @@ public class CustomerServiceTest {
         assertEquals("Customer not found", message);
 
     }
+
+    @Test
+    @DisplayName("Must return a Customer by clientName")
+    void mustReturnACustomerByClientName(){
+        when(customerRepository.findByClientName(customer.getClientName())).thenReturn(Optional.of(customer));
+        when(convertObjectToObjectDTOService.convertToCustomerResponseDTO(customer)).thenReturn(customerResponseDTOPJ);
+        CustomerResponseDTO customerResponseDTO = customerService.searchCustomer("clientName", "Claudio Carigé");
+        assertEquals(customerResponseDTOPJ, customerResponseDTO);
+        assertEquals(CustomerResponseDTO.class, customerResponseDTO.getClass());
+        assertEquals(customer.getClientName(), customerResponseDTO.getClientName());
+    }
+
+
     @Test
     @DisplayName("Must return all customers")
     void mustReturnAllCustomers() {
         when(customerRepository.findAll()).thenReturn(Collections.singletonList(legalPersonalCustomer));
         when(convertObjectToObjectDTOService.convertToCustomerResponseDTO(legalPersonalCustomer)).thenReturn(customerResponseDTOPJ);
-        List<CustomerResponseDTO> customerResponseDTO = customerService.searchClientAll();
+        List<CustomerResponseDTO> customerResponseDTO = customerService.searchAllCustomers();
         assertEquals(1, customerResponseDTO.size());
         assertEquals(legalPersonalCustomer.getId(), customerResponseDTO.get(0).getId());
         assertEquals(CustomerResponseDTO.class, customerResponseDTO.get(0).getClass());
@@ -220,6 +234,15 @@ public class CustomerServiceTest {
     }
 
     @Test
+    @DisplayName("Must return  a exception when the attribute is null")
+    void mustReturnAExceptionWhenTheAttributeIsNull() {
+        String attribute = "clientName";
+        String message = assertThrows(IllegalArgumentException.class,
+                () -> customerService.updateCustomerAttribute(attribute, null, ID1L)).getMessage();
+        assertEquals(attribute.toUpperCase() +" cannot be null.", message);
+    }
+
+    @Test
     @DisplayName("must return true when the attribute is in the list")
     void mustReturnTrueWhenTheAttributeIsInTheList() {
         String attribute = "emailList";
@@ -263,6 +286,23 @@ public class CustomerServiceTest {
         updateCustomerDTOPJ.setPrimaryEmail(EMAIL);
         updateCustomerDTOPJ.setId(ID1L);
         updateCustomerDTOPJ.setCpfOrCnpj(CNPJ);
+        updateCustomerDTOPJ.setClientName("Claudio Carigé");
+        updateCustomerDTOPJ.setPhoneNumber("7132104567");
+        updateCustomerDTOPJ.setWhatsapp("71998987878");
+        updateCustomerDTOPJ.setBankCode("123");
+        updateCustomerDTOPJ.setStartContract(LocalDate.of(2022, 1, 1));
+        updateCustomerDTOPJ.setPayDay(Byte.parseByte("5"));
+        updateCustomerDTOPJ.setFinancialSituation("PAGO");
+        //"cpf, 156.258.240-29, 2",
+          //      "cnpj, 14.124.420/0001-94, 1",
+            //    "primaryEmail, claudio@mail.com.br, 1",
+              //  "clientName, Claudio Carigé, 1",
+                //"phoneNumber, 7132104567, 1",
+                //"whatsapp, 71998987878, 1",
+               // "bankCode, 123, 1",
+                //"startContract, 2022/01/01",
+                //"payDay, 5, 1",
+                //"financialSituation, PAGO, 1",
         updateCustomerDTOPF = new UpdateCustomerDTO();
         updateCustomerDTOPF.setPrimaryEmail(EMAIL);
         updateCustomerDTOPF.setId(2L);
