@@ -144,20 +144,41 @@ A arquitetura da aplicação seguirá o padrão composto de camadas distintas pa
           - <span style="color:yellow; font-weight: bold">core</span>
               - <span style="color:blue; font-weight: bold">domain</span>
                   - entities
+                    - Customer
+                    - LegalPesonalCustomer
+                    - NaturalPersonCustomer
+                    - Address
+                    - MonthlyPayment
+                    - MultiPrinter
                   - enums
-                      - TipoLocacao.java
+                      - FinancialSituation.java
+                      - MachineStatus.java
+                      - PaymentStatus
               - <span style="color:blue; font-weight: bold">dto</span>
-                - LocacaoDTO.java
+                - CustomerResponseDTO
+                - LegalPersonalCustomerDTO
+                - NaturalPersonCustomrDTO
+                - UpdateCustometDTO
               - <span style="color:red; font-weight: bold">exceptions</span>
+                - GlobalExceptionHandler
+                - DataIntegrityViolationException
+                - IllegalArgumentException
+                - NoSuchElementException
+                - StandardError
               - <span style="color:blue; font-weight: bold">usecases</span>
-                  - contracts
-                      - RealizarLocacaoService.java
+                  - interfaces
+                      - CustomerService.java
+                      - LegalPersonalCustomerService.java
+                      - NaturalPersonCustomerService.java
                   - impl
-                      - RealizarLocacaoServiceImpl.java
-                      - DevolverLocacaoServiceImpl.java
-                      - ListarLocacoesServiceImpl.java
+                      - CustomerServiceImpl.java
+                      - LegalPersonalCustomerServiceImpl.java
+                      - NaturalPersonCustomerServiceImpl.java
           - <span style="color:yellow; font-weight: bold">infra</span>
               - <span style="color:blue; font-weight: bold">controllers</span>
+                  - CustomerController
+                  - LegalPersonalController
+                  - NaturalPersonController
               - <span style="color:blue; font-weight: bold">adaptors
                   - apiexterna
                       - ApiExternaAdapter.java
@@ -166,12 +187,16 @@ A arquitetura da aplicação seguirá o padrão composto de camadas distintas pa
                       - MensageriaAdapter.java
                       - MensageriaAdapterInterface.java
             - <span style="color:blue; font-weight: bold">config</span>
+                - ModelMapperConfig
                 - SecurityConfig.java
                 - security
                     - JwtTokenProvider.java  // Provedor JWT
             - <span style="color:blue; font-weight: bold">persistence
                 - repositorios
-                    - LocacaoRepository.java
+                    - AddressRepository.java
+                    - CustomerRepository.java
+                    - LegalPersonalCustomerRepository.java
+                    - NaturalPersonCustomerRepository.java
 
 - **Gerenciamento de Dependências**:
     - Utilizar uma ferramenta de gerenciamento de dependências, como Maven ou Gradle.
