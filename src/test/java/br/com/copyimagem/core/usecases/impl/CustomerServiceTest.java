@@ -157,6 +157,17 @@ public class CustomerServiceTest {
         assertEquals(customer.getClientName(), customerResponseDTO.getClientName());
     }
 
+    @Test
+    @DisplayName("Must return a Customer by PhoneNumber")
+    void mustReturnACustomerByPhoneNumber(){
+        when(customerRepository.findByPhoneNumber(customer.getPhoneNumber())).thenReturn(Optional.of(customer));
+        when(convertObjectToObjectDTOService.convertToCustomerResponseDTO(customer)).thenReturn(customerResponseDTOPJ);
+        CustomerResponseDTO customerResponseDTO = customerService.searchCustomer("phoneNumber", "11987654321");
+        assertEquals(customerResponseDTOPJ, customerResponseDTO);
+        assertEquals(CustomerResponseDTO.class, customerResponseDTO.getClass());
+        assertEquals(customer.getPhoneNumber(), customerResponseDTO.getPhoneNumber());
+    }
+
 
     @Test
     @DisplayName("Must return all customers")
