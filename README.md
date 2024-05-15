@@ -16,34 +16,30 @@ clientes, máquinas e mensalidades.
 
 A arquitetura da aplicação seguirá o padrão composto de camadas distintas para facilitar a manutenção e escalabilidade.
 
-#### a. Camada CORE da aplicação:
+#### 1. Camada CORE da aplicação:
 
 - Utilizará o Spring MVC para lidar com as requisições HTTP.
 - Autenticação e autorização serão gerenciadas pelo Spring Security, utilizando JWT para token de autenticação.
 - A documentação da API será gerada automaticamente pelo Swagger/OpenAPI.
 
-##### Camada de Negócios (usecases):
+##### a. Camada de Negócios (usecases):
 
 - Implementará a lógica de negócios da aplicação.
 - Fará uso do Spring Boot para criar serviços transacionais.
 - Fará Integração com o banco de dados PostgreSQL.
 
-##### Camada de Modelo (domain):
+##### b. Camada de Modelo (domain):
 
 - Esta camada será responsável por entidades de domínio e enumeradores.
 - Representará as entidades do domínio usando anotações JPA.
 - Onde ficarão os enumeradores.
 - Lombok será utilizado para reduzir a verbosidade.
 
-##### Camada de Controle (controllers):
-
-- Será responsável por receber as entradas dos usuários, coordenar as ações necessárias e chamar os casos de uso (use cases) apropriados.
-
-##### Camada de Exceções (exceptions):
+##### c. Camada de Exceções (exceptions):
 
 - Ficará responsável pelo tratamento das exceções personalizadas da aplicação.
 
-##### Camada DTO (representationDTO):
+##### d. Camada DTO (representationDTO):
 
 - Esta camada terá a responsabilidade de transferir os dados entre as camadas da aplicação, sobretudo quando são expostas para o externo.
 
@@ -54,6 +50,11 @@ A arquitetura da aplicação seguirá o padrão composto de camadas distintas pa
 - Responsável por lidar com as configurações da aplicação.
 
 ##### b. Camada Adapter (adapter):
+
+
+##### c. Camada de Controle (controllers):
+
+- Será responsável por receber as entradas dos usuários, coordenar as ações necessárias e chamar os casos de uso (use cases) apropriados.
 
 - Terá a responsabilidade de traduzir os dados entre os casos de uso da aplicação e os detalhes da implementação externa, com frameworks, bibliotecas, APIs ou sistemas.
 
@@ -116,12 +117,13 @@ A arquitetura da aplicação seguirá o padrão composto de camadas distintas pa
 
 ### 5. Padrões de Codificação e Convenções:
 
+- **Padrões de Commits e Versionamento**:
+    - (detalhado na seção)
 - Exemplo: 
   - [ topico ] : "**descrição do commit**"
-  - <span style="color:green; font-weight: bold"> - [ addition ] : First commit</span>
-  
+  - <span style="color:green; font-weight: bold"> [ addition ] : First commit</span>
 
-- **Tópicos de Commit:**
+  - **Tópicos de Commit:**
     1. addition / inclusion: Usado especificamente para adicionar novos elementos ao código, como atributos, métodos, classes, etc.
     2. feature: Usado para adicionar uma nova funcionalidade ao código.
     3. refactor: Usado para fazer alterações no código para melhorar sua estrutura, legibilidade ou desempenho sem alterar seu comportamento externo.
@@ -134,11 +136,7 @@ A arquitetura da aplicação seguirá o padrão composto de camadas distintas pa
     10. test refactor: Usado para informar alterações no código dos testes.
     11. build: Usado para modificações nos arquivos de Build.
 
-- **Padrões de Commits e Versionamento**:
-    - (detalhado na seção)
-
 ### 6. Arquitetura do Projeto Backend:
-
     
 - **src**
     - main
@@ -174,9 +172,6 @@ A arquitetura da aplicação seguirá o padrão composto de camadas distintas pa
             - <span style="color:blue; font-weight: bold">persistence
                 - repositorios
                     - LocacaoRepository.java
-
-
-
 
 - **Gerenciamento de Dependências**:
     - Utilizar uma ferramenta de gerenciamento de dependências, como Maven ou Gradle.
