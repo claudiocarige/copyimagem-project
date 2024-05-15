@@ -162,11 +162,22 @@ public class CustomerServiceTest {
     void mustReturnACustomerByPhoneNumber(){
         when(customerRepository.findByPhoneNumber(customer.getPhoneNumber())).thenReturn(Optional.of(customer));
         when(convertObjectToObjectDTOService.convertToCustomerResponseDTO(customer)).thenReturn(customerResponseDTOPJ);
-        CustomerResponseDTO customerResponseDTO = customerService.searchCustomer("phoneNumber", "11987654321");
+        CustomerResponseDTO customerResponseDTO = customerService
+                                                .searchCustomer("phoneNumber", "7132104567");
         assertEquals(customerResponseDTOPJ, customerResponseDTO);
         assertEquals(CustomerResponseDTO.class, customerResponseDTO.getClass());
         assertEquals(customer.getPhoneNumber(), customerResponseDTO.getPhoneNumber());
     }
+
+    @Test
+    @DisplayName("Must return a Exception when not found Customer by PhoneNumber")
+    void mustReturnAExceptionWhenNotFoundCustomerByPhoneNumber(){
+        when(customerRepository.findByPhoneNumber(customer.getPhoneNumber())).thenReturn(Optional.empty());
+        String message = assertThrows(NoSuchElementException.class,
+                () -> customerService.searchCustomer("phoneNumber", "7132100000")).getMessage();
+        assertEquals("Customer not found", message);
+    }
+
 
 
     @Test
