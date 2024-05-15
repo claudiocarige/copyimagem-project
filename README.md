@@ -107,12 +107,13 @@ A arquitetura da aplicação seguirá o padrão composto de camadas distintas pa
 
 ### 5. Padrões de Codificação e Convenções:
 
+- **Padrões de Commits e Versionamento**:
+    - (detalhado na seção)
 - Exemplo: 
   - [ topico ] : "**descrição do commit**"
-  - <span style="color:green; font-weight: bold"> - [ addition ] : First commit</span>
-  
+  - <span style="color:green; font-weight: bold"> [ addition ] : First commit</span>
 
-- **Tópicos de Commit:**
+  - **Tópicos de Commit:**
     1. addition / inclusion: Usado especificamente para adicionar novos elementos ao código, como atributos, métodos, classes, etc.
     2. feature: Usado para adicionar uma nova funcionalidade ao código.
     3. refactor: Usado para fazer alterações no código para melhorar sua estrutura, legibilidade ou desempenho sem alterar seu comportamento externo.
@@ -125,11 +126,7 @@ A arquitetura da aplicação seguirá o padrão composto de camadas distintas pa
     10. test refactor: Usado para informar alterações no código dos testes.
     11. build: Usado para modificações nos arquivos de Build.
 
-- **Padrões de Commits e Versionamento**:
-    - (detalhado na seção)
-
 ### 6. Arquitetura do Projeto Backend:
-
     
 - **src**
     - main
@@ -165,9 +162,6 @@ A arquitetura da aplicação seguirá o padrão composto de camadas distintas pa
             - <span style="color:blue; font-weight: bold">persistence
                 - repositorios
                     - LocacaoRepository.java
-
-
-
 
 - **Gerenciamento de Dependências**:
     - Utilizar uma ferramenta de gerenciamento de dependências, como Maven ou Gradle.
