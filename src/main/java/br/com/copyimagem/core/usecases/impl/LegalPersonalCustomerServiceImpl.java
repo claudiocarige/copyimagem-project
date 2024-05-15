@@ -8,6 +8,7 @@ import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.LegalPersonalCustomerService;
 import br.com.copyimagem.infra.persistence.repositories.AddressRepository;
+import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
 import br.com.copyimagem.infra.persistence.repositories.LegalPersonalCustomerRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 @Log4j2
 @Service
@@ -25,14 +25,17 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
 
     private final LegalPersonalCustomerRepository legalPersonalCustomerRepository;
 
+    private final CustomerRepository customerRepository;
+
     private final AddressRepository addressRepository;
 
     private final ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
 
     public LegalPersonalCustomerServiceImpl(
             LegalPersonalCustomerRepository legalPersonalCustomerRepository,
-            AddressRepository addressRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
+            CustomerRepository customerRepository, AddressRepository addressRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
         this.legalPersonalCustomerRepository = legalPersonalCustomerRepository;
+        this.customerRepository = customerRepository;
         this.addressRepository = addressRepository;
         this.convertObjectToObjectDTOService = convertObjectToObjectDTOService;
     }
@@ -52,14 +55,15 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
         return legalPersonalCustumerList.stream()
                 .map(convertObjectToObjectDTOService::convertToLegalPersonalCustomerDTO).toList();
     }
+
     @Transactional
     @Override
-    public LegalPersonalCustomerDTO saveLegalPersonalCustomer(LegalPersonalCustomerDTO legalPersonalCustomerDTO) throws NoSuchMethodException {
+    public LegalPersonalCustomerDTO saveLegalPersonalCustomer(LegalPersonalCustomerDTO legalPersonalCustomerDTO){
         log.info("[ INFO ] Saving LegalPersonalCustomer");
         legalPersonalCustomerDTO.setId(null);
         Address address = addressRepository.save(legalPersonalCustomerDTO.getAddress());
         legalPersonalCustomerDTO.setAddress(address);
-        validateCnpjAndEmail(legalPersonalCustomerDTO);
+        existsCnpjOrEmail(legalPersonalCustomerDTO);
         legalPersonalCustomerDTO.setStartContract(LocalDate.now(ZoneId.of("America/Sao_Paulo")));
         LegalPersonalCustomer saveLegalPersonalCustomer = legalPersonalCustomerRepository
                 .save(convertObjectToObjectDTOService.convertToLegalPersonalCustomer(legalPersonalCustomerDTO));
@@ -77,22 +81,13 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
         return convertObjectToObjectDTOService.convertToCustomerResponseDTO(legalPersonalCustomer.get());
     }
 
-
-    private void validateCnpjAndEmail(LegalPersonalCustomerDTO legalPersonalCustomerDTO) throws NoSuchMethodException {
-        validateField(legalPersonalCustomerDTO.getCnpj(),
-                       legalPersonalCustomerRepository::findByCnpj,
-                 "CNPJ already exists!");
-        validateField(legalPersonalCustomerDTO.getPrimaryEmail(),
-                        legalPersonalCustomerRepository::findByPrimaryEmail,
-                  "Email already exists!");
-    }
-
-    private <T> void validateField(
-            T field, Function<T, Optional<LegalPersonalCustomer>> buscaRepositorio, String message) throws NoSuchMethodException {
-        log.info("[ INFO ] Checking if the " + field.toString().toUpperCase() + " " + buscaRepositorio.getClass().getMethod("apply", Object.class).getParameters()[0].getName() + " already exists.");
-        if(buscaRepositorio.apply(field).isPresent()){
-            log.error("[ ERROR ] Exception : {} : {}.", message, DataIntegrityViolationException.class);
-            throw new DataIntegrityViolationException(message);
+    private void existsCnpjOrEmail(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
+        if(customerRepository.existsCustomerByPrimaryEmail(legalPersonalCustomerDTO.getPrimaryEmail())){
+            log.error("[ ERROR ] Exception : Email already exists! : {}.", customerRepository.existsCustomerByPrimaryEmail(legalPersonalCustomerDTO.getPrimaryEmail()));
+            throw new DataIntegrityViolationException("Email already exists!");
+        } else if (legalPersonalCustomerRepository.existsLegalPersonalCustomerByCnpj(legalPersonalCustomerDTO.getCnpj())) {
+            log.error("[ ERROR ] Exception : CNPJ already exists! : {}.", DataIntegrityViolationException.class);
+            throw new DataIntegrityViolationException("CNPJ already exists!");
         }
     }
 }
