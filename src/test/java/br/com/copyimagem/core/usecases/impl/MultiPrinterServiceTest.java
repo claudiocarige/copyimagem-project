@@ -1,44 +1,47 @@
 package br.com.copyimagem.core.usecases.impl;
 
-import br.com.copyimagem.core.domain.builders.MultiPrinterBuilder;
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
+import br.com.copyimagem.infra.persistence.repositories.MultiPrinterRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
+import static br.com.copyimagem.core.domain.builders.MultiPrinterBuilder.oneMultiPrinter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 public class MultiPrinterServiceTest {
 
     private MultiPrinter multiPrinter;
-    private MultiPrinterBuilder multiPrinterBuilder;
     @Mock
     private MultiPrinterRepository multiPrinterRepository;
 
     @InjectMocks
-    private MultiPrinterService multiPrinterService;
+    private MultiPrinterServiceImpl multiPrinterServiceImpl;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        start();
     }
 
     @Test
     @DisplayName("Must return a MultiPrinter by Id")
     void mustReturnMultiPrinterById(){
-        Mockito.when(multiPrinterRepository.findById(1L)).thenReturn(Optional.of(multiPrinter));
-        Optional<MultiPrinter> multiPrinterDto = multiPrinterService.findById(1L);
+        when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
+        MultiPrinter multiPrinterDto = multiPrinterServiceImpl.findMultiPrinterById(1);
 
-        assertTrue(multiPrinterDto.isPresent());
-        assertEquals(multiPrinter, multiPrinterDto.get());
-        assertEquals(multiPrinter.getId(), multiPrinterDto.get().getId());
-        assertEquals(MultiPrinter.class, multiPrinterDto.get().getClass());
+        assertEquals(multiPrinter, multiPrinterDto);
+        assertEquals(multiPrinter.getId(), multiPrinterDto.getId());
+        assertEquals(MultiPrinter.class, multiPrinterDto.getClass());
+    }
+
+    void start(){
+        multiPrinter = oneMultiPrinter().now();
     }
 }
