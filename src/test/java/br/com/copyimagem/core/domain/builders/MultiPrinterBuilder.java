@@ -11,6 +11,8 @@ public class MultiPrinterBuilder {
     private String serialNumber;
     private Double machineValue;
     private MachineStatus machineStatus;
+
+    private Integer impressionCounter;
     private Customer customer;
 
     private MultiPrinterBuilder(){}
@@ -28,6 +30,7 @@ public class MultiPrinterBuilder {
         builder.serialNumber = "x1x2x3";
         builder.machineValue = 1000.0;
         builder.machineStatus = MachineStatus.DISPONIVEL;
+        builder.impressionCounter = 1000;
     }
 
 
@@ -61,12 +64,17 @@ public class MultiPrinterBuilder {
         return this;
     }
 
+    public MultiPrinterBuilder withImpressionCounter(Integer impressionCounter) {
+        this.impressionCounter = impressionCounter;
+        return this;
+    }
+
     public MultiPrinterBuilder withCustomer(Customer customer) {
         this.customer = customer;
         return this;
     }
 
     public MultiPrinter now() {
-        return new MultiPrinter(id, brand, model, serialNumber, machineValue, machineStatus, customer);
+        return new MultiPrinter(id, brand, model, serialNumber, machineValue, machineStatus, impressionCounter, customer);
     }
 }
