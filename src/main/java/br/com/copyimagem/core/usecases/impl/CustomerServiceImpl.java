@@ -52,7 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
                     case "cnpj" -> findByCnpj(valueParam);
                     case "email" -> findByPrimaryEmail(valueParam);
                     case "clientname" -> findByClientName(valueParam);
-                    //TODO Test and Case - Search by phoneNumber
+                    case "phonenumber" -> findByPhoneNumber(valueParam);
                     default -> throw new IllegalArgumentException("Parameter [ " + typeParam + " ] type not accepted.");
                 };
     }
@@ -92,6 +92,16 @@ public class CustomerServiceImpl implements CustomerService {
         Optional<Customer> customerOptional = customerRepository.findByPrimaryEmail(email);
         if (customerOptional.isEmpty()) {
             log.error("[ ERROR ] Exception (findByPrimaryEmail() method in CustomerServiceImpl class) :  {}.",
+                    NoSuchElementException.class);
+            throw new NoSuchElementException("Customer not found");
+        }
+        return convertObjectToObjectDTOService.convertToCustomerResponseDTO(customerOptional.get());
+    }
+
+    private CustomerResponseDTO findByPhoneNumber(String phoneNumber) {
+        Optional<Customer> customerOptional = customerRepository.findByPhoneNumber(phoneNumber);
+        if (customerOptional.isEmpty()) {
+            log.error("[ ERROR ] Exception (findByPhoneNumber() method in CustomerServiceImpl class) :  {}.",
                     NoSuchElementException.class);
             throw new NoSuchElementException("Customer not found");
         }
