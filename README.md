@@ -6,34 +6,30 @@
 
 A arquitetura da aplicação seguirá o padrão composto de camadas distintas para facilitar a manutenção e escalabilidade.
 
-#### a. Camada CORE da aplicação:
+#### 1. Camada CORE da aplicação:
 
 - Utilizará o Spring MVC para lidar com as requisições HTTP.
 - Autenticação e autorização serão gerenciadas pelo Spring Security, utilizando JWT para token de autenticação.
 - A documentação da API será gerada automaticamente pelo Swagger/OpenAPI.
 
-##### Camada de Negócios (usecases):
+##### a. Camada de Negócios (usecases):
 
 - Implementará a lógica de negócios da aplicação.
 - Fará uso do Spring Boot para criar serviços transacionais.
 - Fará Integração com o banco de dados PostgreSQL.
 
-##### Camada de Modelo (domain):
+##### b. Camada de Modelo (domain):
 
 - Esta camada será responsável por entidades de domínio e enumeradores.
 - Representará as entidades do domínio usando anotações JPA.
 - Onde ficarão os enumeradores.
 - Lombok será utilizado para reduzir a verbosidade.
 
-##### Camada de Controle (controllers):
-
-- Será responsável por receber as entradas dos usuários, coordenar as ações necessárias e chamar os casos de uso (use cases) apropriados.
-
-##### Camada de Exceções (exceptions):
+##### c. Camada de Exceções (exceptions):
 
 - Ficará responsável pelo tratamento das exceções personalizadas da aplicação.
 
-##### Camada DTO (representationDTO):
+##### d. Camada DTO (representationDTO):
 
 - Esta camada terá a responsabilidade de transferir os dados entre as camadas da aplicação, sobretudo quando são expostas para o externo.
 
@@ -44,6 +40,11 @@ A arquitetura da aplicação seguirá o padrão composto de camadas distintas pa
 - Responsável por lidar com as configurações da aplicação.
 
 ##### b. Camada Adapter (adapter):
+
+
+##### c. Camada de Controle (controllers):
+
+- Será responsável por receber as entradas dos usuários, coordenar as ações necessárias e chamar os casos de uso (use cases) apropriados.
 
 - Terá a responsabilidade de traduzir os dados entre os casos de uso da aplicação e os detalhes da implementação externa, com frameworks, bibliotecas, APIs ou sistemas.
 
