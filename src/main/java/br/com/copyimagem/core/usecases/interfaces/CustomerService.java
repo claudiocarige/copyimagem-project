@@ -9,7 +9,7 @@ import java.util.List;
 public interface CustomerService {
     CustomerResponseDTO searchCustomer(String type, String value);
 
-    List<CustomerResponseDTO> searchClientAll();
+    List<CustomerResponseDTO> searchAllCustomers();
 
     List<CustomerResponseDTO> searchFinancialSituation(String situation);
 
