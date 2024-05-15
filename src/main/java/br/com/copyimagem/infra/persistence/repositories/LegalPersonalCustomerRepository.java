@@ -9,4 +9,6 @@ public interface LegalPersonalCustomerRepository extends JpaRepository<LegalPers
     Optional<LegalPersonalCustomer> findByPrimaryEmail(String primaryEmail);
 
     Optional<LegalPersonalCustomer> findByCnpj(String cpf);
+
+    boolean existsLegalPersonalCustomerByCnpj(String cnpj);
 }
