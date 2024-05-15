@@ -46,15 +46,21 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponseDTO searchCustomer(String typeParam, String valueParam) {
         return
-            switch (typeParam.toLowerCase()) {
-                case "id" -> findById(Long.parseLong(valueParam));
-                case "cpf" -> findByCpf(valueParam);
-                case "cnpj" -> findByCnpj(valueParam);
-                case "email" -> findByPrimaryEmail(valueParam);
-                //TODO Test and Case - Search by clientName
-                //TODO Test and Case - Search by clientPhone
-                default -> throw new IllegalArgumentException("Parameter [ " + typeParam + " ] type not accepted.");
-            };
+                switch (typeParam.toLowerCase()) {
+                    case "id" -> findById(Long.parseLong(valueParam));
+                    case "cpf" -> findByCpf(valueParam);
+                    case "cnpj" -> findByCnpj(valueParam);
+                    case "email" -> findByPrimaryEmail(valueParam);
+                    case "clientname" -> findByClientName(valueParam);
+                    //TODO Test and Case - Search by phoneNumber
+                    default -> throw new IllegalArgumentException("Parameter [ " + typeParam + " ] type not accepted.");
+                };
+    }
+
+    private CustomerResponseDTO findByClientName(String valueParam) {
+        return customerRepository.findByClientName(valueParam)
+                .map(convertObjectToObjectDTOService::convertToCustomerResponseDTO)
+                .orElseThrow(() -> new NoSuchElementException("Customer not found"));
     }
 
     @Override
@@ -74,19 +80,19 @@ public class CustomerServiceImpl implements CustomerService {
 
     private CustomerResponseDTO findById(Long id) {
         Optional<Customer> customerOptional = customerRepository.findById(id);
-        if (customerOptional.isEmpty()){
+        if (customerOptional.isEmpty()) {
             log.error("[ ERROR ] Exception (findById() method in CustomerServiceImpl class):  {}.",
-                                                                                NoSuchElementException.class);
+                    NoSuchElementException.class);
             throw new NoSuchElementException("Customer not found");
         }
         return convertObjectToObjectDTOService.convertToCustomerResponseDTO(customerOptional.get());
     }
 
-    private CustomerResponseDTO  findByPrimaryEmail(String email) {
+    private CustomerResponseDTO findByPrimaryEmail(String email) {
         Optional<Customer> customerOptional = customerRepository.findByPrimaryEmail(email);
-        if (customerOptional.isEmpty()){
+        if (customerOptional.isEmpty()) {
             log.error("[ ERROR ] Exception (findByPrimaryEmail() method in CustomerServiceImpl class) :  {}.",
-                                                                                NoSuchElementException.class);
+                    NoSuchElementException.class);
             throw new NoSuchElementException("Customer not found");
         }
         return convertObjectToObjectDTOService.convertToCustomerResponseDTO(customerOptional.get());
@@ -94,7 +100,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public UpdateCustomerDTO updateCustomerAttribute(String attribute, String value, Long id) {
-        log.info("[ INFO ] Updating LegalPersonalCustomer attribute : {}", attribute);
+        log.info("[ INFO ] Updating Customer attribute : {}", attribute);
         isNotNull(attribute, value);
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Customer not found"));
@@ -103,12 +109,12 @@ public class CustomerServiceImpl implements CustomerService {
         return getUpdateCustomerAttribute(attribute, value, customer);
     }
 
-    private void isNotNull(String attribute, String value){
-        String [] attributes = {"cpf", "cnpj", "primaryEmail", "phoneNumber", "clientName", "whatsapp"};
+    private void isNotNull(String attribute, String value) {
+        String[] attributes = {"cpf", "cnpj", "primaryEmail", "phoneNumber", "clientName", "whatsapp"};
         for (String attribute1 : attributes) {
-            if(attribute1.equals(attribute)){
-                if(value == null){
-                    throw new IllegalArgumentException(attribute.toUpperCase() +" cannot be null.");
+            if (attribute1.equals(attribute)) {
+                if (value == null) {
+                    throw new IllegalArgumentException(attribute.toUpperCase() + " cannot be null.");
                 }
             }
         }
@@ -172,14 +178,14 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    private void needsValidations(String attribute,String value) {
-        if(List.of("cpf", "cnpj", "primaryEmail").contains(attribute)){
+    private void needsValidations(String attribute, String value) {
+        if (List.of("cpf", "cnpj", "primaryEmail").contains(attribute)) {
             validateAttribute(attribute, value);
         }
     }
 
     private void isContainsAnyOfTheAttributes(String attribute) {
-        if(List.of("emailList", "multiPrinterList", "monthlyPaymentList").contains(attribute)) {
+        if (List.of("emailList", "multiPrinterList", "monthlyPaymentList").contains(attribute)) {
             throw new IllegalArgumentException("This attribute cannot be changed on this endpoint.");
         }
     }

@@ -11,4 +11,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findByPrimaryEmail(String email);
 
     List<Customer> findAllByFinancialSituation(FinancialSituation financialSituation);
+
+    Boolean existsCustomerByPrimaryEmail(String email);
 }
