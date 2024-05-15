@@ -6,6 +6,7 @@ import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
 import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.infra.persistence.repositories.AddressRepository;
+import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
 import br.com.copyimagem.infra.persistence.repositories.NaturalPersonCustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,6 +34,9 @@ class NaturalPersonCustomerServiceImplTest {
     private NaturalPersonCustomerDTO customerPfDTO;
     @Mock
     private NaturalPersonCustomerRepository naturalPersonCustomerRepository;
+
+    @Mock
+    private CustomerRepository customerRepository;
 
     @Mock
     private AddressRepository addressRepository;
@@ -101,8 +105,8 @@ class NaturalPersonCustomerServiceImplTest {
     @DisplayName("Must save a NaturalPersonCustomer")
     void youMustSaveANaturalPersonCustomer(){
         when(convertObjectToObjectDTOService.convertToNaturalPersonCustomer(customerPfDTO)).thenReturn(customerPf);
-        when(naturalPersonCustomerRepository.findByPrimaryEmail(customerPfDTO.getPrimaryEmail())).thenReturn(Optional.empty());
-        when(naturalPersonCustomerRepository.findByCpf(customerPfDTO.getCpf())).thenReturn(Optional.empty());
+        when(customerRepository.existsCustomerByPrimaryEmail(customerPfDTO.getPrimaryEmail())).thenReturn(false);
+        when(naturalPersonCustomerRepository.existsNaturalPersonCustomerByCpf(customerPfDTO.getCpf())).thenReturn(false);
         when(naturalPersonCustomerRepository.save(customerPf)).thenReturn(customerPf);
         when(convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(customerPf)).thenReturn(customerPfDTO);
         when(addressRepository.save(customerPf.getAddress())).thenReturn(customerPfDTO.getAddress());
@@ -115,28 +119,29 @@ class NaturalPersonCustomerServiceImplTest {
                 () ->  assertEquals(customerPfDTO.getClass(), natural.getClass())
         );
         verify(convertObjectToObjectDTOService, times(1)).convertToNaturalPersonCustomer(customerPfDTO);
-        verify(naturalPersonCustomerRepository, times(1)).findByPrimaryEmail(customerPfDTO.getPrimaryEmail());
-        verify(naturalPersonCustomerRepository, times(1)).findByCpf(customerPfDTO.getCpf());
+        verify(customerRepository, times(1)).existsCustomerByPrimaryEmail(customerPfDTO.getPrimaryEmail());
+        verify(naturalPersonCustomerRepository, times(1)).existsNaturalPersonCustomerByCpf(customerPfDTO.getCpf());
         verify(naturalPersonCustomerRepository, times(1)).save(customerPf);
     }
     @Test
-    @DisplayName("Must throw return NoSuchElementException when EMAIL already exists")
-    void youMustReturnThrowNoSuchElementExceptionWhenEmailAlreadyExists() {
-        when(naturalPersonCustomerRepository.findByPrimaryEmail(customerPf.getPrimaryEmail()))
-                .thenReturn(Optional.of(customerPf));
+    @DisplayName("Must throw Exceptionn return when EMAIL already exists")
+    void mustReturnThrowExceptionWhenEmailAlreadyExists() {
+        when(customerRepository.existsCustomerByPrimaryEmail(customerPfDTO.getPrimaryEmail()))
+                .thenReturn(true);
         DataIntegrityViolationException dataException = assertThrows(DataIntegrityViolationException.class,() ->
                 naturalPersonCustomerService.saveNaturalPersonCustomer(customerPfDTO));
         assertTrue(dataException.getMessage().startsWith("Email"));
     }
 
     @Test
-    @DisplayName("Must throw return NoSuchElementException when CPF already exists")
-    void youMustReturnThrowNoSuchElementExceptionWhenCpfAlreadyExists() {
-        when(naturalPersonCustomerRepository.findByCpf(customerPf.getCpf()))
-                .thenReturn(Optional.of(customerPf));
-        DataIntegrityViolationException dataException = assertThrows(DataIntegrityViolationException.class,() ->
-                naturalPersonCustomerService.saveNaturalPersonCustomer(customerPfDTO));
-        assertTrue(dataException.getMessage().startsWith("CPF"));
+    @DisplayName("Must throw return Exception when CPF already exists")
+    void mustReturnThrowExceptionWhenCpfAlreadyExists() {
+        when(naturalPersonCustomerRepository.existsNaturalPersonCustomerByCpf(customerPfDTO.getCpf()))
+                .thenReturn(true);
+        String dataException = assertThrows(DataIntegrityViolationException.class,() ->
+                naturalPersonCustomerService.saveNaturalPersonCustomer(customerPfDTO)).getMessage();
+        assertTrue(dataException.startsWith("CPF"));
+        assertEquals("CPF already exists!", dataException);
     }
 
     @Test
