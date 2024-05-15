@@ -8,6 +8,7 @@ import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.NaturalPersonCustomerService;
 import br.com.copyimagem.infra.persistence.repositories.AddressRepository;
+import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
 import br.com.copyimagem.infra.persistence.repositories.NaturalPersonCustomerRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -21,14 +22,15 @@ import java.util.Optional;
 public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerService {
 
     private final NaturalPersonCustomerRepository naturalPersonCustomerRepository;
+    private final CustomerRepository customerRepository;
     private final AddressRepository addressRepository;
-
     private final ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
 
     public NaturalPersonCustomerServiceImpl(
             NaturalPersonCustomerRepository naturalPersonCustomerRepository,
-            AddressRepository addressRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
+            CustomerRepository customerRepository, AddressRepository addressRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
         this.naturalPersonCustomerRepository = naturalPersonCustomerRepository;
+        this.customerRepository = customerRepository;
         this.addressRepository = addressRepository;
         this.convertObjectToObjectDTOService = convertObjectToObjectDTOService;
     }
@@ -55,9 +57,9 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
         naturalPersonCustomerDTO.setId(null);
         Address address = addressRepository.save(naturalPersonCustomerDTO.getAddress());
         naturalPersonCustomerDTO.setAddress(address);
-        checkEmail(naturalPersonCustomerDTO);
-        checkCpf(naturalPersonCustomerDTO);
-        NaturalPersonCustomer savedNaturalCustomer = naturalPersonCustomerRepository.save(convertObjectToObjectDTOService.convertToNaturalPersonCustomer(naturalPersonCustomerDTO));
+        existsCpfOrEmail(naturalPersonCustomerDTO);
+        NaturalPersonCustomer savedNaturalCustomer = naturalPersonCustomerRepository
+                    .save(convertObjectToObjectDTOService.convertToNaturalPersonCustomer(naturalPersonCustomerDTO));
         return convertObjectToObjectDTOService.convertToNaturalPersonCustomerDTO(savedNaturalCustomer);
     }
 
@@ -71,20 +73,12 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
         return convertObjectToObjectDTOService.convertToCustomerResponseDTO(naturalPersonCustomer.get());
     }
 
-    private void checkEmail(NaturalPersonCustomerDTO naturalPersonCustomerDTO) {
-        log.info("[ INFO ] Checking if the email already exists.");
-        if (naturalPersonCustomerRepository.findByPrimaryEmail(
-                naturalPersonCustomerDTO.getPrimaryEmail()).isPresent()) {
-            log.error("[ ERROR ] Exception :  {}.", DataIntegrityViolationException.class);
+    private void existsCpfOrEmail(NaturalPersonCustomerDTO naturalPersonCustomerDTO) {
+        if(customerRepository.existsCustomerByPrimaryEmail(naturalPersonCustomerDTO.getPrimaryEmail())){
+            log.error("[ ERROR ] Exception : Email already exists! : {}.", DataIntegrityViolationException.class);
             throw new DataIntegrityViolationException("Email already exists!");
-        }
-    }
-
-    private void checkCpf(NaturalPersonCustomerDTO naturalPersonCustomerDTO) {
-        log.info("[ INFO ] Checking if the CPF already exists.");
-        if ( naturalPersonCustomerRepository.findByCpf(
-                naturalPersonCustomerDTO.getCpf()).isPresent()) {
-            log.error("[ ERROR ] Exception :  {}.", DataIntegrityViolationException.class);
+        } else if (naturalPersonCustomerRepository.existsNaturalPersonCustomerByCpf(naturalPersonCustomerDTO.getCpf())) {
+            log.error("[ ERROR ] Exception : CPF already exists! : {}.", DataIntegrityViolationException.class);
             throw new DataIntegrityViolationException("CPF already exists!");
         }
     }
