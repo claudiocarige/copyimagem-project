@@ -51,11 +51,11 @@ public class MultiPrinterServiceTest {
         assertEquals(MultiPrinterDTO.class, multiPrinterDto.getClass());
     }
     @Test
-    @DisplayName("Must retunr a List of MultiPrinterDTO")
+    @DisplayName("Must return a List of MultiPrinterDTO")
     void mustReturnListOfMultiPrinterDTO(){
         when(multiPrinterRepository.findAll()).thenReturn(Collections.singletonList(multiPrinter));
         when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
-        List<MultiPrinterDTO> listMultiPrinterDto = multiPrinterServiceImpl.findAllMultiPrinter();
+        List<MultiPrinterDTO> listMultiPrinterDto = multiPrinterServiceImpl.findAllMultiPrinters();
 
         assertEquals(multiPrinterDTO, listMultiPrinterDto.get(0));
         assertEquals(multiPrinterDTO.getId(), listMultiPrinterDto.get(0).getId());
