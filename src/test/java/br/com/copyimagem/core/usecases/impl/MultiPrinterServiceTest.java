@@ -10,6 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static br.com.copyimagem.core.domain.builders.MultiPrinterBuilder.oneMultiPrinter;
@@ -46,6 +49,17 @@ public class MultiPrinterServiceTest {
         assertEquals(multiPrinterDTO, multiPrinterDto);
         assertEquals(multiPrinterDTO.getId(), multiPrinterDto.getId());
         assertEquals(MultiPrinterDTO.class, multiPrinterDto.getClass());
+    }
+    @Test
+    @DisplayName("Must retunr a List of MultiPrinterDTO")
+    void mustReturnListOfMultiPrinterDTO(){
+        when(multiPrinterRepository.findAll()).thenReturn(Collections.singletonList(multiPrinter));
+        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
+        List<MultiPrinterDTO> listMultiPrinterDto = multiPrinterServiceImpl.findAllMultiPrinter();
+
+        assertEquals(multiPrinterDTO, listMultiPrinterDto.get(0));
+        assertEquals(multiPrinterDTO.getId(), listMultiPrinterDto.get(0).getId());
+        assertEquals(MultiPrinterDTO.class, listMultiPrinterDto.get(0).getClass());
     }
 
     void start(){
