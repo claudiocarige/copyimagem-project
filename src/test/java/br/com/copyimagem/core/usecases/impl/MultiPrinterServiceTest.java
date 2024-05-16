@@ -1,6 +1,7 @@
 package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
+import br.com.copyimagem.core.dtos.MultiPrinterDTO;
 import br.com.copyimagem.infra.persistence.repositories.MultiPrinterRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,8 +19,13 @@ import static org.mockito.Mockito.when;
 public class MultiPrinterServiceTest {
 
     private MultiPrinter multiPrinter;
+
+    private MultiPrinterDTO multiPrinterDTO;
     @Mock
     private MultiPrinterRepository multiPrinterRepository;
+
+    @Mock
+    private ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
 
     @InjectMocks
     private MultiPrinterServiceImpl multiPrinterServiceImpl;
@@ -34,14 +40,23 @@ public class MultiPrinterServiceTest {
     @DisplayName("Must return a MultiPrinter by Id")
     void mustReturnMultiPrinterById(){
         when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
-        MultiPrinter multiPrinterDto = multiPrinterServiceImpl.findMultiPrinterById(1);
+        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
+        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.findMultiPrinterById(1);
 
-        assertEquals(multiPrinter, multiPrinterDto);
-        assertEquals(multiPrinter.getId(), multiPrinterDto.getId());
-        assertEquals(MultiPrinter.class, multiPrinterDto.getClass());
+        assertEquals(multiPrinterDTO, multiPrinterDto);
+        assertEquals(multiPrinterDTO.getId(), multiPrinterDto.getId());
+        assertEquals(MultiPrinterDTO.class, multiPrinterDto.getClass());
     }
 
     void start(){
         multiPrinter = oneMultiPrinter().now();
+        multiPrinterDTO = new MultiPrinterDTO();
+        multiPrinterDTO.setId(multiPrinter.getId());
+        multiPrinterDTO.setBrand(multiPrinter.getBrand());
+        multiPrinterDTO.setModel(multiPrinter.getModel());
+        multiPrinterDTO.setSerialNumber(multiPrinter.getSerialNumber());
+        multiPrinterDTO.setMachineValue(multiPrinter.getMachineValue());
+        multiPrinterDTO.setMachineStatus(multiPrinter.getMachineStatus());
+        multiPrinterDTO.setImpressionCounter(multiPrinter.getImpressionCounter());
     }
 }
