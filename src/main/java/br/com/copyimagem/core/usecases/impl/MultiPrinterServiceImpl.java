@@ -7,6 +7,8 @@ import br.com.copyimagem.core.usecases.interfaces.MultiPrinterService;
 import br.com.copyimagem.infra.persistence.repositories.MultiPrinterRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class MultiPrinterServiceImpl implements MultiPrinterService {
@@ -24,5 +26,11 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
     public MultiPrinterDTO findMultiPrinterById(Integer id) {
         MultiPrinter multiPrint = multiPrinterRepository.findById(id).orElseThrow(() -> new NoSuchElementException("MultiPrint not found"));
         return convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrint);
+    }
+
+    @Override
+    public List<MultiPrinterDTO>  findAllMultiPrinters(){
+        List<MultiPrinter> multiPrinterList = multiPrinterRepository.findAll();
+        return multiPrinterList.stream().map(convertObjectToObjectDTOService::convertToMultiPrinterDTO).toList();
     }
 }
