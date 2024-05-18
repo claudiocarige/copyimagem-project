@@ -1,6 +1,5 @@
 package br.com.copyimagem.core.usecases.impl;
 
-import br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder;
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.dtos.MultiPrinterDTO;
 import br.com.copyimagem.core.exceptions.IllegalArgumentException;
@@ -104,7 +103,8 @@ public class MultiPrinterServiceTest {
         multiPrinterDTO.setCustomer(null);
         when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
         when(multiPrinterRepository.save(multiPrinter)).thenReturn(multiPrinter);
-        when(customerRepository.findById(1L)).thenReturn(Optional.ofNullable(oneLegalPersonalCustomer().nowCustomerPJ()));
+        when(customerRepository.findById(1L))
+                                    .thenReturn(Optional.ofNullable(oneLegalPersonalCustomer().nowCustomerPJ()));
         when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
         when(convertObjectToObjectDTOService.convertToMultiPrinter(multiPrinterDTO)).thenReturn(multiPrinter);
 
@@ -114,6 +114,20 @@ public class MultiPrinterServiceTest {
         assertEquals(MultiPrinterDTO.class, multiPrinterDto.getClass());
         assertEquals(multiPrinterDTO.getCustomer().getClientName(), multiPrinterDto.getCustomer().getClientName());
     }
+
+    @Test
+    @DisplayName("Must throw an exception with existing Custome")
+    void mustThrowAnExceptionWithExistingCustomerOnMultiPrinter(){
+        when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
+        when(customerRepository.findById(1L))
+                                    .thenReturn(Optional.ofNullable(oneLegalPersonalCustomer().nowCustomerPJ()));
+        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
+        when(convertObjectToObjectDTOService.convertToMultiPrinter(multiPrinterDTO)).thenReturn(multiPrinter);
+        String message = assertThrows(IllegalArgumentException.class,
+                () -> multiPrinterServiceImpl.setUpClientOnAMultiPrinter(1, 1L)).getMessage();
+        assertEquals("This printer is already Customer.", message);
+    }
+
 
     void start(){
         multiPrinter = oneMultiPrinter().withCustomer(oneLegalPersonalCustomer().nowCustomerPJ()).now();
