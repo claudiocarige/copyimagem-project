@@ -19,9 +19,8 @@ import java.util.Optional;
 
 import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneLegalPersonalCustomer;
 import static br.com.copyimagem.core.domain.builders.MultiPrinterBuilder.oneMultiPrinter;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class MultiPrinterServiceTest {
 
@@ -102,6 +101,7 @@ public class MultiPrinterServiceTest {
     @Test
     @DisplayName("Must set up a client on a MultiPrinter")
     void mustSetUpClientOnAMultiPrinter(){
+        multiPrinterDTO.setCustomer(null);
         when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
         when(multiPrinterRepository.save(multiPrinter)).thenReturn(multiPrinter);
         when(customerRepository.findById(1L)).thenReturn(Optional.ofNullable(oneLegalPersonalCustomer().nowCustomerPJ()));
@@ -115,8 +115,6 @@ public class MultiPrinterServiceTest {
         assertEquals(multiPrinterDTO.getCustomer().getClientName(), multiPrinterDto.getCustomer().getClientName());
     }
 
-    @Test
-    @DisplayName("Must save a MultiPrinter With insuccess")
     void start(){
         multiPrinter = oneMultiPrinter().withCustomer(oneLegalPersonalCustomer().nowCustomerPJ()).now();
         multiPrinterDTO = new MultiPrinterDTO();
