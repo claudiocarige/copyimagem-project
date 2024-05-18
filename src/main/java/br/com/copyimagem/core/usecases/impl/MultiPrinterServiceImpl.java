@@ -2,6 +2,7 @@ package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.Customer;
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
+import br.com.copyimagem.core.domain.enums.MachineStatus;
 import br.com.copyimagem.core.dtos.MultiPrinterDTO;
 import br.com.copyimagem.core.exceptions.IllegalArgumentException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
@@ -60,6 +61,7 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
             throw new IllegalArgumentException("This printer is already Customer.");
         }
         multiPrinterDTO.setCustomer(customer);
+        multiPrinterDTO.setMachineStatus(MachineStatus.LOCADA);
         saveMultiPrinter(multiPrinterDTO);
         return multiPrinterDTO;
     }
@@ -78,6 +80,7 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
     public MultiPrinterDTO deleteCustomerFromMultiPrinter(Integer id){
         MultiPrinterDTO multiPrinterDTO = findMultiPrinterById(id);
         multiPrinterDTO.setCustomer(null);
+        multiPrinterDTO.setMachineStatus(MachineStatus.DISPONIVEL);
         multiPrinterRepository.save(convertObjectToObjectDTOService.convertToMultiPrinter(multiPrinterDTO));
         return multiPrinterDTO;
     }
