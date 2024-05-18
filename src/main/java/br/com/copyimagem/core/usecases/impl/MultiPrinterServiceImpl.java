@@ -2,6 +2,7 @@ package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.dtos.MultiPrinterDTO;
+import br.com.copyimagem.core.exceptions.IllegalArgumentException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.MultiPrinterService;
 import br.com.copyimagem.infra.persistence.repositories.MultiPrinterRepository;
