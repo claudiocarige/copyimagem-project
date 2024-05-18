@@ -128,6 +128,14 @@ public class MultiPrinterServiceTest {
         assertEquals("This printer is already Customer.", message);
     }
 
+    @Test
+    @DisplayName("Must delete a MultiPrinter")
+    void mustDeleteAMultiPrinter(){
+        multiPrinter.setCustomer(null);
+        when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
+        multiPrinterServiceImpl.deleteMultiPrinter(1);
+        verify(multiPrinterRepository, times(1)).deleteById(1);
+    }
 
     void start(){
         multiPrinter = oneMultiPrinter().withCustomer(oneLegalPersonalCustomer().nowCustomerPJ()).now();
