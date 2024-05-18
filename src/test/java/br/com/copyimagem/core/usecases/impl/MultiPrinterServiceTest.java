@@ -10,11 +10,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneLegalPersonalCustomer;
 import static br.com.copyimagem.core.domain.builders.MultiPrinterBuilder.oneMultiPrinter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -62,8 +62,24 @@ public class MultiPrinterServiceTest {
         assertEquals(MultiPrinterDTO.class, listMultiPrinterDto.get(0).getClass());
     }
 
+    @Test
+    @DisplayName("Must save a MultiPrinter With success")
+    void mustSaveAMultiPrinterWithSuccess(){
+        multiPrinter.setCustomer(oneLegalPersonalCustomer().nowCustomerPJ());
+        when(multiPrinterRepository.existsBySerialNumber(multiPrinterDTO.getSerialNumber())).thenReturn(false);
+        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
+        when(convertObjectToObjectDTOService.convertToMultiPrinter(multiPrinterDTO)).thenReturn(multiPrinter);
+        when(multiPrinterRepository.save(multiPrinter)).thenReturn(multiPrinter);
+
+        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.saveMultiPrinter(multiPrinterDTO);
+        assertEquals(multiPrinterDTO, multiPrinterDto);
+        assertEquals(multiPrinterDTO.getId(), multiPrinterDto.getId());
+        assertEquals(MultiPrinterDTO.class, multiPrinterDto.getClass());
+        assertEquals(multiPrinterDTO.getCustomer().getClientName(),multiPrinterDto.getCustomer().getClientName());
+    }
+
     void start(){
-        multiPrinter = oneMultiPrinter().now();
+        multiPrinter = oneMultiPrinter().withCustomer(oneLegalPersonalCustomer().nowCustomerPJ()).now();
         multiPrinterDTO = new MultiPrinterDTO();
         multiPrinterDTO.setId(multiPrinter.getId());
         multiPrinterDTO.setBrand(multiPrinter.getBrand());
@@ -72,5 +88,6 @@ public class MultiPrinterServiceTest {
         multiPrinterDTO.setMachineValue(multiPrinter.getMachineValue());
         multiPrinterDTO.setMachineStatus(multiPrinter.getMachineStatus());
         multiPrinterDTO.setImpressionCounter(multiPrinter.getImpressionCounter());
+        multiPrinterDTO.setCustomer(multiPrinter.getCustomer());
     }
 }
