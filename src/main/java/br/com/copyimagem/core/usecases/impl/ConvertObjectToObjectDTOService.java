@@ -48,4 +48,7 @@ public class ConvertObjectToObjectDTOService {
     public MultiPrinterDTO convertToMultiPrinterDTO(MultiPrinter multiPrinter) {
         return modelMapper.map(multiPrinter, MultiPrinterDTO.class);
     }
+    public MultiPrinter convertToMultiPrinter(MultiPrinterDTO multiPrinterDTO) {
+        return modelMapper.map(multiPrinterDTO, MultiPrinter.class);
+    }
 }
