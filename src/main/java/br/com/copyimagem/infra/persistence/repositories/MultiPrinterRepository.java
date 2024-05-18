@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface MultiPrinterRepository extends JpaRepository<MultiPrinter, Integer>{
+    boolean existsBySerialNumber(String serialNumber);
 }
