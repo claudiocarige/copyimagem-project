@@ -8,4 +8,5 @@ public interface MultiPrinterService {
 
     MultiPrinterDTO findMultiPrinterById(Integer id);
     List<MultiPrinterDTO> findAllMultiPrinters();
+    MultiPrinterDTO saveMultiPrinter(MultiPrinterDTO multiPrinterDTO);
 }

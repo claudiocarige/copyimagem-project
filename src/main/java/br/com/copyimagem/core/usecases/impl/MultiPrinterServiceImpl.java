@@ -33,4 +33,18 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
         List<MultiPrinter> multiPrinterList = multiPrinterRepository.findAll();
         return multiPrinterList.stream().map(convertObjectToObjectDTOService::convertToMultiPrinterDTO).toList();
     }
+
+    @Override
+    public MultiPrinterDTO saveMultiPrinter(MultiPrinterDTO multiPrinterDTO) {
+        checkSerialNumber(multiPrinterDTO.getSerialNumber());
+        MultiPrinter multiPrinter = multiPrinterRepository.save(convertObjectToObjectDTOService
+                                                                    .convertToMultiPrinter(multiPrinterDTO));
+        return convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter);
+    }
+
+    private void checkSerialNumber(String serialNumber) {
+        if (multiPrinterRepository.existsBySerialNumber(serialNumber)) {
+            throw new IllegalArgumentException("Serial number already exists");
+        }
+    }
 }
