@@ -146,6 +146,22 @@ public class MultiPrinterServiceTest {
         assertEquals("This printer cannot be deleted.", message);
     }
 
+    @Test
+    @DisplayName("Must delete Customer From Multiprinter")
+    void mustDeleteCustomerFromMultiPrinter(){
+        when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
+        when(multiPrinterRepository.save(multiPrinter)).thenReturn(multiPrinter);
+        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
+        when(convertObjectToObjectDTOService.convertToMultiPrinter(multiPrinterDTO)).thenReturn(multiPrinter);
+        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.deleteCustomerFromMultiPrinter(1);
+        assertEquals(multiPrinterDTO, multiPrinterDto);
+        assertEquals(multiPrinterDTO.getId(), multiPrinterDto.getId());
+        assertEquals(MultiPrinterDTO.class, multiPrinterDto.getClass());
+        assertNull(multiPrinterDto.getCustomer());
+    }
+
+
+
     void start(){
         multiPrinter = oneMultiPrinter().withCustomer(oneLegalPersonalCustomer().nowCustomerPJ()).now();
         multiPrinterDTO = new MultiPrinterDTO();
