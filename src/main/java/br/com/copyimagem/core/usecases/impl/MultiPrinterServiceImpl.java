@@ -27,7 +27,8 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
 
     public MultiPrinterServiceImpl(MultiPrinterRepository multiPrinterRepository,
                                    CustomerService customerService,
-                                   CustomerRepository customerRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
+                                   CustomerRepository customerRepository,
+                                   ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
         this.multiPrinterRepository = multiPrinterRepository;
         this.customerService = customerService;
         this.customerRepository = customerRepository;
@@ -36,7 +37,8 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
 
     @Override
     public MultiPrinterDTO findMultiPrinterById(Integer id) {
-        MultiPrinter multiPrint = multiPrinterRepository.findById(id).orElseThrow(() -> new NoSuchElementException("MultiPrint not found"));
+        MultiPrinter multiPrint = multiPrinterRepository.findById(id)
+                                          .orElseThrow(() -> new NoSuchElementException("MultiPrint not found"));
         return convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrint);
     }
 
@@ -50,15 +52,18 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
     public MultiPrinterDTO saveMultiPrinter(MultiPrinterDTO multiPrinterDTO) {
         checkSerialNumber(multiPrinterDTO.getSerialNumber());
         MultiPrinter multiPrinter = multiPrinterRepository.save(convertObjectToObjectDTOService
-                                                                    .convertToMultiPrinter(multiPrinterDTO));
+                                                                       .convertToMultiPrinter(multiPrinterDTO));
         return convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter);
     }
 
     @Override
     public MultiPrinterDTO setUpClientOnAMultiPrinter(Integer id, Long customer_Id) {
         Customer customer = customerRepository.findById(customer_Id)
-                                    .orElseThrow(() -> new NoSuchElementException("Customer not found"));
+                                          .orElseThrow(() -> new NoSuchElementException("Customer not found"));
         MultiPrinterDTO multiPrinterDTO = findMultiPrinterById(id);
+        if (multiPrinterDTO.getCustomer() != null){
+            throw new IllegalArgumentException("This printer is already Customer.");
+        }
         multiPrinterDTO.setCustomer(customer);
         saveMultiPrinter(multiPrinterDTO);
         return multiPrinterDTO;
