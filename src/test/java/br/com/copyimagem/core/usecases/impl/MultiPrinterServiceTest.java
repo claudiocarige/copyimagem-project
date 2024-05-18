@@ -1,8 +1,10 @@
 package br.com.copyimagem.core.usecases.impl;
 
+import br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder;
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.dtos.MultiPrinterDTO;
 import br.com.copyimagem.core.exceptions.IllegalArgumentException;
+import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
 import br.com.copyimagem.infra.persistence.repositories.MultiPrinterRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +30,9 @@ public class MultiPrinterServiceTest {
     private MultiPrinterDTO multiPrinterDTO;
     @Mock
     private MultiPrinterRepository multiPrinterRepository;
+
+    @Mock
+    private CustomerRepository customerRepository;
 
     @Mock
     private ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
@@ -92,6 +97,22 @@ public class MultiPrinterServiceTest {
         String message = assertThrows(IllegalArgumentException.class,
                                    () -> multiPrinterServiceImpl.saveMultiPrinter(multiPrinterDTO)).getMessage();
         assertEquals("Serial number already exists", message);
+    }
+
+    @Test
+    @DisplayName("Must set up a client on a MultiPrinter")
+    void mustSetUpClientOnAMultiPrinter(){
+        when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
+        when(multiPrinterRepository.save(multiPrinter)).thenReturn(multiPrinter);
+        when(customerRepository.findById(1L)).thenReturn(Optional.ofNullable(oneLegalPersonalCustomer().nowCustomerPJ()));
+        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
+        when(convertObjectToObjectDTOService.convertToMultiPrinter(multiPrinterDTO)).thenReturn(multiPrinter);
+
+        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.setUpClientOnAMultiPrinter(1, 1L);
+        assertEquals(multiPrinterDTO, multiPrinterDto);
+        assertEquals(multiPrinterDTO.getId(), multiPrinterDto.getId());
+        assertEquals(MultiPrinterDTO.class, multiPrinterDto.getClass());
+        assertEquals(multiPrinterDTO.getCustomer().getClientName(), multiPrinterDto.getCustomer().getClientName());
     }
 
     @Test
