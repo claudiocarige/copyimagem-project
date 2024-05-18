@@ -5,7 +5,6 @@ import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.dtos.MultiPrinterDTO;
 import br.com.copyimagem.core.exceptions.IllegalArgumentException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
-import br.com.copyimagem.core.usecases.interfaces.CustomerService;
 import br.com.copyimagem.core.usecases.interfaces.MultiPrinterService;
 import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
 import br.com.copyimagem.infra.persistence.repositories.MultiPrinterRepository;
@@ -19,18 +18,14 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
 
     private final MultiPrinterRepository multiPrinterRepository;
 
-    private final CustomerService customerService;
-
     private final CustomerRepository customerRepository;
 
     private final ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
 
     public MultiPrinterServiceImpl(MultiPrinterRepository multiPrinterRepository,
-                                   CustomerService customerService,
                                    CustomerRepository customerRepository,
                                    ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
         this.multiPrinterRepository = multiPrinterRepository;
-        this.customerService = customerService;
         this.customerRepository = customerRepository;
         this.convertObjectToObjectDTOService = convertObjectToObjectDTOService;
     }
@@ -67,6 +62,16 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
         multiPrinterDTO.setCustomer(customer);
         saveMultiPrinter(multiPrinterDTO);
         return multiPrinterDTO;
+    }
+
+    @Override
+    public void deleteMultiPrinter(Integer id) {
+        MultiPrinter multiPrinter = multiPrinterRepository.findById(id)
+                                        .orElseThrow(() -> new NoSuchElementException("MultiPrint not found"));
+        if (multiPrinter.getCustomer() != null) {
+            throw new IllegalArgumentException("This printer cannot be deleted.");
+        }
+        multiPrinterRepository.deleteById(id);
     }
 
     private void checkSerialNumber(String serialNumber) {
