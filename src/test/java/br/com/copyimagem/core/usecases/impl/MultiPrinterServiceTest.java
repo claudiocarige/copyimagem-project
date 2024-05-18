@@ -2,6 +2,7 @@ package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.dtos.MultiPrinterDTO;
+import br.com.copyimagem.core.exceptions.IllegalArgumentException;
 import br.com.copyimagem.infra.persistence.repositories.MultiPrinterRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import static br.com.copyimagem.core.domain.builders.LegalPersonalCustomerBuilder.oneLegalPersonalCustomer;
 import static br.com.copyimagem.core.domain.builders.MultiPrinterBuilder.oneMultiPrinter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 public class MultiPrinterServiceTest {
@@ -78,6 +80,22 @@ public class MultiPrinterServiceTest {
         assertEquals(multiPrinterDTO.getCustomer().getClientName(),multiPrinterDto.getCustomer().getClientName());
     }
 
+    @Test
+    @DisplayName("You should not save a MultiPrint")
+    void mustNotSaveAMultiPrinter(){
+        multiPrinter.setCustomer(oneLegalPersonalCustomer().nowCustomerPJ());
+        when(multiPrinterRepository.existsBySerialNumber(multiPrinterDTO.getSerialNumber())).thenReturn(true);
+        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
+        when(convertObjectToObjectDTOService.convertToMultiPrinter(multiPrinterDTO)).thenReturn(multiPrinter);
+        when(multiPrinterRepository.save(multiPrinter)).thenReturn(multiPrinter);
+
+        String message = assertThrows(IllegalArgumentException.class,
+                                   () -> multiPrinterServiceImpl.saveMultiPrinter(multiPrinterDTO)).getMessage();
+        assertEquals("Serial number already exists", message);
+    }
+
+    @Test
+    @DisplayName("Must save a MultiPrinter With insuccess")
     void start(){
         multiPrinter = oneMultiPrinter().withCustomer(oneLegalPersonalCustomer().nowCustomerPJ()).now();
         multiPrinterDTO = new MultiPrinterDTO();
