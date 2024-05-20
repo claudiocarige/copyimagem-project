@@ -172,6 +172,17 @@ public class MultiPrinterServiceTest {
         assertEquals(MachineStatus.MANUTENCAO, multiPrinterDto.getMachineStatus());
     }
 
+    @Test
+    @DisplayName("Must SET Impression Counter")
+    void mustSetImpressionCounter(){
+        when(multiPrinterRepository.updateImpressionCounterById(1, 10000)).thenReturn(multiPrinter);
+        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
+        multiPrinterDTO.setImpressionCounter(10000);
+        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.setImpressionCounter(1, 10000);
+        assertEquals(multiPrinterDTO, multiPrinterDto);
+        assertEquals(10000, multiPrinterDto.getImpressionCounter());
+    }
+
     void start(){
         multiPrinter = oneMultiPrinter().withCustomer(oneLegalPersonalCustomer().nowCustomerPJ()).now();
         multiPrinterDTO = new MultiPrinterDTO();
