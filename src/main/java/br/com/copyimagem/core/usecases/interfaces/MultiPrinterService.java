@@ -13,4 +13,5 @@ public interface MultiPrinterService {
     void deleteMultiPrinter(Integer id);
     MultiPrinterDTO deleteCustomerFromMultiPrinter(Integer id);
     MultiPrinterDTO setMachineStatus(Integer id, String status);
+    MultiPrinterDTO setImpressionCounter(Integer id, Integer counter);
 }

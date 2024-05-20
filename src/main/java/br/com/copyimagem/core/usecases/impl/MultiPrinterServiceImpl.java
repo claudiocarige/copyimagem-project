@@ -97,6 +97,12 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
         return convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter);
     }
 
+    @Override
+    public MultiPrinterDTO setImpressionCounter(Integer id, Integer counter){
+        MultiPrinter multiPrinter = multiPrinterRepository.updateImpressionCounterById(id, counter);
+        return convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter);
+    }
+
     private void checkSerialNumber(String serialNumber) {
         if (multiPrinterRepository.existsBySerialNumber(serialNumber)) {
             throw new IllegalArgumentException("Serial number already exists");
