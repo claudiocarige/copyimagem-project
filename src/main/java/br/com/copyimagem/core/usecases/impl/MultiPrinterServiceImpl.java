@@ -85,6 +85,18 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
         return multiPrinterDTO;
     }
 
+    @Override
+    public MultiPrinterDTO setMachineStatus(Integer id, String status) {
+        MultiPrinter multiPrinter;
+        switch (status) {
+            case "DISPONIVEL", "MANUTENCAO", "LOCADA", "INATIVA" ->
+                    multiPrinter = multiPrinterRepository.updateMachineStatusById(id, MachineStatus.valueOf(status));
+            default ->
+                    throw new IllegalArgumentException("Invalid Status: " + status);
+        }
+        return convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter);
+    }
+
     private void checkSerialNumber(String serialNumber) {
         if (multiPrinterRepository.existsBySerialNumber(serialNumber)) {
             throw new IllegalArgumentException("Serial number already exists");
