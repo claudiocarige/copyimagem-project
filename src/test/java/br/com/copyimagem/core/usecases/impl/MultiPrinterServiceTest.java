@@ -1,6 +1,7 @@
 package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
+import br.com.copyimagem.core.domain.enums.MachineStatus;
 import br.com.copyimagem.core.dtos.MultiPrinterDTO;
 import br.com.copyimagem.core.exceptions.IllegalArgumentException;
 import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
@@ -160,7 +161,16 @@ public class MultiPrinterServiceTest {
         assertNull(multiPrinterDto.getCustomer());
     }
 
-
+    @Test
+    @DisplayName("Must SET Machine Status")
+    void mustSetMAchineStatus(){
+        when(multiPrinterRepository.updateMachineStatusById(1, MachineStatus.MANUTENCAO)).thenReturn(multiPrinter);
+        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
+        multiPrinterDTO.setMachineStatus(MachineStatus.MANUTENCAO);
+        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.setMachineStatus(1,"MANUTENCAO");
+        assertEquals(multiPrinterDTO, multiPrinterDto);
+        assertEquals(MachineStatus.MANUTENCAO, multiPrinterDto.getMachineStatus());
+    }
 
     void start(){
         multiPrinter = oneMultiPrinter().withCustomer(oneLegalPersonalCustomer().nowCustomerPJ()).now();
