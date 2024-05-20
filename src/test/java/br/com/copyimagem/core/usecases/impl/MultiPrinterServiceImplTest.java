@@ -22,7 +22,7 @@ import static br.com.copyimagem.core.domain.builders.MultiPrinterBuilder.oneMult
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class MultiPrinterServiceTest {
+public class MultiPrinterServiceImplTest {
 
     private MultiPrinter multiPrinter;
 
