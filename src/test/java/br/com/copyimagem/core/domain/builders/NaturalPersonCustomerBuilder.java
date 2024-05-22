@@ -25,6 +25,7 @@ public class NaturalPersonCustomerBuilder implements Serializable {
     private Address address;
     private FinancialSituation financialSituation;
     private byte payDay;
+    private List<CustomerContract> customerContractList = new ArrayList<>();
     private List<MultiPrinter> multiPrinterList = new ArrayList<>();
     private List<MonthlyPayment> monthlyPaymentList = new ArrayList<>();
     private String cpf;
@@ -48,6 +49,7 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         builder.address = oneAddress().now();
         builder.financialSituation = FinancialSituation.PAGO;
         builder.payDay = 5;
+        builder.customerContractList = Arrays.asList(CustomerContract.generateBasicContract());
         builder.multiPrinterList = Arrays.asList(oneMultiPrinter().now());
         builder.monthlyPaymentList = Arrays.asList(oneMonthlyPayment().now());
         builder.cpf = "156.258.240-29";
@@ -103,6 +105,11 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         return this;
     }
 
+    public NaturalPersonCustomerBuilder withCustomerContractList(CustomerContract... customerContractList) {
+        this.customerContractList = Arrays.asList(customerContractList);
+        return this;
+    }
+
     public NaturalPersonCustomerBuilder withMultiPrinterList(MultiPrinter... multiPrinterList) {
         this.multiPrinterList = Arrays.asList(multiPrinterList);
         return this;
@@ -130,9 +137,8 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         customer.setAddress(address);
         customer.setFinancialSituation(financialSituation);
         customer.setPayDay(payDay);
-        multiPrinterList.forEach(multiPrinter -> multiPrinter.setCustomer(customer));
+        customer.addCustomerContract(customerContractList);
         customer.addMultiPrinter(multiPrinterList);
-        monthlyPaymentList.forEach(monthlyPayment -> monthlyPayment.setCustomer(customer));
         customer.addMonthlyPayment(monthlyPaymentList);
         return customer;
     }

@@ -26,6 +26,8 @@ public class LegalPersonalCustomerBuilder implements Serializable {
     private Address address;
     private FinancialSituation financialSituation;
     private byte payDay;
+
+    private List<CustomerContract> customerContractList = new ArrayList<>();
     private List<MultiPrinter> multiPrinterList = new ArrayList<>();
     private List<MonthlyPayment> monthlyPaymentList = new ArrayList<>();
     private String cnpj;
@@ -49,6 +51,7 @@ public class LegalPersonalCustomerBuilder implements Serializable {
         builder.address = oneAddress().now();
         builder.financialSituation = FinancialSituation.PAGO;
         builder.payDay = 5;
+        builder.customerContractList = Arrays.asList(CustomerContract.generateBasicContract());
         builder.multiPrinterList = Arrays.asList(oneMultiPrinter().now());
         builder.monthlyPaymentList = Arrays.asList(oneMonthlyPayment().now());
         builder.cnpj = "14.124.420/0001-94";
@@ -104,6 +107,12 @@ public class LegalPersonalCustomerBuilder implements Serializable {
         return this;
     }
 
+    public LegalPersonalCustomerBuilder withCustomerContractList(List<CustomerContract> customerContractList) {
+        this.customerContractList = customerContractList;
+        return this;
+
+    }
+
     public LegalPersonalCustomerBuilder withListaMultiPrinterList(List<MultiPrinter> multiPrinterList) {
         this.multiPrinterList = multiPrinterList;
         return this;
@@ -131,9 +140,8 @@ public class LegalPersonalCustomerBuilder implements Serializable {
         customer.setAddress(address);
         customer.setFinancialSituation(financialSituation);
         customer.setPayDay(payDay);
-        multiPrinterList.forEach(multiPrinter -> multiPrinter.setCustomer(customer));
+        customer.addCustomerContract(customerContractList);
         customer.addMultiPrinter(multiPrinterList);
-        monthlyPaymentList.forEach(monthlyPayment -> monthlyPayment.setCustomer(customer));
         customer.addMonthlyPayment(monthlyPaymentList);
         return customer;
     }
