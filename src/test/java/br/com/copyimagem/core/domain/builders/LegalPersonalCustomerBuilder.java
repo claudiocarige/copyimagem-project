@@ -5,7 +5,6 @@ import br.com.copyimagem.core.domain.enums.FinancialSituation;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +24,6 @@ public class LegalPersonalCustomerBuilder implements Serializable {
     private String whatsapp;
     private String bankCode;
     private Address address;
-    private LocalDate startContract;
     private FinancialSituation financialSituation;
     private byte payDay;
     private List<MultiPrinter> multiPrinterList = new ArrayList<>();
@@ -49,7 +47,6 @@ public class LegalPersonalCustomerBuilder implements Serializable {
         builder.whatsapp = "71998987878";
         builder.bankCode = "123";
         builder.address = oneAddress().now();
-        builder.startContract = LocalDate.of(2022, 1, 1);
         builder.financialSituation = FinancialSituation.PAGO;
         builder.payDay = 5;
         builder.multiPrinterList = Arrays.asList(oneMultiPrinter().now());
@@ -97,11 +94,6 @@ public class LegalPersonalCustomerBuilder implements Serializable {
         return this;
     }
 
-    public LegalPersonalCustomerBuilder withStartContract(LocalDate startContract) {
-        this.startContract = startContract;
-        return this;
-    }
-
     public LegalPersonalCustomerBuilder withFinancialSituation(FinancialSituation financialSituation) {
         this.financialSituation = financialSituation;
         return this;
@@ -137,7 +129,6 @@ public class LegalPersonalCustomerBuilder implements Serializable {
         customer.setWhatsapp(whatsapp);
         customer.setBankCode(bankCode);
         customer.setAddress(address);
-        customer.setStartContract(startContract);
         customer.setFinancialSituation(financialSituation);
         customer.setPayDay(payDay);
         multiPrinterList.forEach(multiPrinter -> multiPrinter.setCustomer(customer));

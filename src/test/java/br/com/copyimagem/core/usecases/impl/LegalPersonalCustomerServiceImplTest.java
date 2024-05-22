@@ -244,7 +244,6 @@ class LegalPersonalCustomerServiceImplTest {
         customerPjDTO.setBankCode(customerPj.getBankCode());
         customerPjDTO.setFinancialSituation(customerPj.getFinancialSituation().toString());
         customerPjDTO.setPayDay(customerPj.getPayDay());
-        customerPjDTO.setStartContract(customerPj.getStartContract());
         customerPjDTO.setMonthlyPaymentList(customerPj.getMonthlyPaymentList());
         customerPjDTO.setMultiPrinterList(customerPj.getMultiPrinterList());
     }

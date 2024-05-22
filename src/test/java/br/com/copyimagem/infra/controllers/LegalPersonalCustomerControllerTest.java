@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static br.com.copyimagem.core.domain.builders.AddressBuilder.oneAddress;
@@ -132,7 +131,6 @@ class LegalPersonalCustomerControllerTest {
         newObj.setWhatsapp("71991125697");
         newObj.setBankCode("123");
         newObj.setAddress(oneAddress().now());
-        newObj.setStartContract(LocalDate.of(2023, 1, 1));
         newObj.setFinancialSituation("PAGO");
         newObj.setPayDay((byte) 5);
         return newObj;

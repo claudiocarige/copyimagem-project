@@ -7,7 +7,6 @@ import java.util.Arrays;
 
 import br.com.copyimagem.core.domain.entities.*;
 import br.com.copyimagem.core.domain.enums.FinancialSituation;
-import java.time.LocalDate;
 
 import static br.com.copyimagem.core.domain.builders.AddressBuilder.oneAddress;
 import static br.com.copyimagem.core.domain.builders.MonthlyPaymentBuilder.oneMonthlyPayment;
@@ -24,7 +23,6 @@ public class NaturalPersonCustomerBuilder implements Serializable {
     private String whatsapp;
     private String bankCode;
     private Address address;
-    private LocalDate startContract;
     private FinancialSituation financialSituation;
     private byte payDay;
     private List<MultiPrinter> multiPrinterList = new ArrayList<>();
@@ -48,7 +46,6 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         builder.whatsapp = "71998987878";
         builder.bankCode = "123";
         builder.address = oneAddress().now();
-        builder.startContract = LocalDate.of(2022, 1, 1);
         builder.financialSituation = FinancialSituation.PAGO;
         builder.payDay = 5;
         builder.multiPrinterList = Arrays.asList(oneMultiPrinter().now());
@@ -96,11 +93,6 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         return this;
     }
 
-    public NaturalPersonCustomerBuilder withStartContract(LocalDate startContract) {
-        this.startContract = startContract;
-        return this;
-    }
-
     public NaturalPersonCustomerBuilder withFinancialSituation(FinancialSituation financialSituation) {
         this.financialSituation = financialSituation;
         return this;
@@ -136,7 +128,6 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         customer.setWhatsapp(whatsapp);
         customer.setBankCode(bankCode);
         customer.setAddress(address);
-        customer.setStartContract(startContract);
         customer.setFinancialSituation(financialSituation);
         customer.setPayDay(payDay);
         multiPrinterList.forEach(multiPrinter -> multiPrinter.setCustomer(customer));

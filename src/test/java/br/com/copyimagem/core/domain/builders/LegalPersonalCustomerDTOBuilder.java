@@ -2,7 +2,6 @@ package br.com.copyimagem.core.domain.builders;
 
 import java.util.List;
 import java.util.Arrays;
-import java.time.LocalDate;
 import br.com.copyimagem.core.domain.entities.Address;
 import br.com.copyimagem.core.domain.entities.MonthlyPayment;
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
@@ -23,7 +22,6 @@ public class LegalPersonalCustomerDTOBuilder {
     private String whatsapp;
     private String bankCode;
     private Address address;
-    private LocalDate startContract;
     private String financialSituation;
     private byte payDay;
     private List<MultiPrinter> multiPrinterList;
@@ -47,7 +45,6 @@ public class LegalPersonalCustomerDTOBuilder {
         builder.whatsapp = "71998987878";
         builder.bankCode = "123";
         builder.address = oneAddress().now();
-        builder.startContract = LocalDate.of(2022, 1, 1);
         builder.financialSituation = FinancialSituation.PAGO.toString();
         builder.payDay = 5;
         builder.multiPrinterList = Arrays.asList(oneMultiPrinter().now());
@@ -99,11 +96,6 @@ public class LegalPersonalCustomerDTOBuilder {
         return this;
     }
 
-    public LegalPersonalCustomerDTOBuilder withStartContract(LocalDate startContract) {
-        this.startContract = startContract;
-        return this;
-    }
-
     public LegalPersonalCustomerDTOBuilder withFinancialSituation(String financialSituation) {
         this.financialSituation = financialSituation;
         return this;
@@ -135,7 +127,6 @@ public class LegalPersonalCustomerDTOBuilder {
         customerDTO.setWhatsapp(whatsapp);
         customerDTO.setBankCode(bankCode);
         customerDTO.setAddress(address);
-        customerDTO.setStartContract(startContract);
         customerDTO.setFinancialSituation(financialSituation);
         customerDTO.setPayDay(payDay);
         customerDTO.setMultiPrinterList(multiPrinterList);

@@ -204,7 +204,6 @@ class NaturalPersonCustomerServiceImplTest {
         customerPfDTO.setBankCode(customerPf.getBankCode());
         customerPfDTO.setFinancialSituation(customerPf.getFinancialSituation().toString());
         customerPfDTO.setPayDay(customerPf.getPayDay());
-        customerPfDTO.setStartContract(customerPf.getStartContract());
         customerPfDTO.setMonthlyPaymentList(customerPf.getMonthlyPaymentList());
         customerPfDTO.setMultiPrinterList(customerPf.getMultiPrinterList());
     }

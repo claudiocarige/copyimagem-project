@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDate;
 import java.util.*;
 
 import static br.com.copyimagem.core.domain.builders.CustomerResponseDTOBuilder.oneCustomerResponseDTO;
@@ -224,7 +223,6 @@ public class CustomerServiceImplTest {
             "phoneNumber, 7132104567, 1",
             "whatsapp, 71998987878, 1",
             "bankCode, 123, 1",
-            "startContract, 2022-01-01, 1",
             "payDay, 5, 1",
             "financialSituation, PAGO, 1",
     })
@@ -249,7 +247,6 @@ public class CustomerServiceImplTest {
             case "phoneNumber" -> assertEquals(val, updateCustomerDTOPJ.getPhoneNumber());
             case "whatsapp" -> assertEquals(val, updateCustomerDTOPJ.getWhatsapp());
             case "bankCode" -> assertEquals(val, updateCustomerDTOPJ.getBankCode());
-            case "startContract" -> assertEquals(LocalDate.of(2022,1,1), updateCustomerDTOPJ.getStartContract());
             case "payDay" -> assertEquals(Byte.parseByte(val), updateCustomerDTOPJ.getPayDay());
             case "financialSituation" -> assertEquals(val, updateCustomerDTOPJ.getFinancialSituation());
         }
@@ -312,19 +309,8 @@ public class CustomerServiceImplTest {
         updateCustomerDTOPJ.setPhoneNumber("7132104567");
         updateCustomerDTOPJ.setWhatsapp("71998987878");
         updateCustomerDTOPJ.setBankCode("123");
-        updateCustomerDTOPJ.setStartContract(LocalDate.of(2022, 1, 1));
         updateCustomerDTOPJ.setPayDay(Byte.parseByte("5"));
         updateCustomerDTOPJ.setFinancialSituation("PAGO");
-        //"cpf, 156.258.240-29, 2",
-          //      "cnpj, 14.124.420/0001-94, 1",
-            //    "primaryEmail, claudio@mail.com.br, 1",
-              //  "clientName, Claudio Carigé, 1",
-                //"phoneNumber, 7132104567, 1",
-                //"whatsapp, 71998987878, 1",
-               // "bankCode, 123, 1",
-                //"startContract, 2022/01/01",
-                //"payDay, 5, 1",
-                //"financialSituation, PAGO, 1",
         updateCustomerDTOPF = new UpdateCustomerDTO();
         updateCustomerDTOPF.setPrimaryEmail(EMAIL);
         updateCustomerDTOPF.setId(2L);
