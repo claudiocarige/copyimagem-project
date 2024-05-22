@@ -1,9 +1,9 @@
 package br.com.copyimagem.core.dtos;
 
 import br.com.copyimagem.core.domain.entities.Address;
+import br.com.copyimagem.core.domain.entities.CustomerContract;
 import br.com.copyimagem.core.domain.entities.MonthlyPayment;
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
@@ -11,7 +11,6 @@ import org.hibernate.validator.constraints.br.CNPJ;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,6 +47,8 @@ public class LegalPersonalCustomerDTO implements Serializable{
 
     private String financialSituation;
     private byte payDay;
+
+    private List<CustomerContract> customerContractList = new LinkedList<>();
 
     private List<MultiPrinter> multiPrinterList = new LinkedList<>();
 

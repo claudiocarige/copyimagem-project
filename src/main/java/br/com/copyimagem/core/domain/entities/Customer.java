@@ -1,7 +1,6 @@
 package br.com.copyimagem.core.domain.entities;
 
 import br.com.copyimagem.core.domain.enums.FinancialSituation;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +14,6 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -47,6 +45,11 @@ public abstract class Customer implements Serializable {
     @Setter(AccessLevel.NONE)
     @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer")
+    private List<CustomerContract> customerContractList = new ArrayList<>();
+
+    @Setter(AccessLevel.NONE)
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer")
     private List<MultiPrinter> multiPrinterList = new ArrayList<>();
 
     @Setter(AccessLevel.NONE)
@@ -54,6 +57,10 @@ public abstract class Customer implements Serializable {
     @OneToMany(fetch =FetchType.EAGER  ,mappedBy = "customer")
     private List<MonthlyPayment> monthlyPaymentList = new ArrayList<>();
 
+
+    public void addCustomerContract(List<CustomerContract> customerContractList){
+        this.customerContractList.addAll(customerContractList);
+    }
 
     public void addMultiPrinter(List<MultiPrinter> multiPrinter){
         multiPrinterList.addAll(multiPrinter);
