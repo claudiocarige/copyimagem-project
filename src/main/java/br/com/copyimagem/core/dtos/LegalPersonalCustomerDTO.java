@@ -46,9 +46,6 @@ public class LegalPersonalCustomerDTO implements Serializable{
     private String bankCode;
     private Address address;
 
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate startContract;
-
     private String financialSituation;
     private byte payDay;
 

@@ -20,7 +20,6 @@ import jakarta.validation.Validator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -176,11 +175,6 @@ public class CustomerServiceImpl implements CustomerService {
             }
             case "payDay" -> {
                 customer.setPayDay(Byte.parseByte(value));
-                return convertObjectToObjectDTOService
-                        .convertToUpdateCustomerDTO(customerRepository.save(customer));
-            }
-            case "startContract" -> {
-                customer.setStartContract(LocalDate.parse(value));
                 return convertObjectToObjectDTOService
                         .convertToUpdateCustomerDTO(customerRepository.save(customer));
             }

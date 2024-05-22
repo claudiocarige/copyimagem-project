@@ -8,7 +8,6 @@ import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,8 +39,7 @@ public abstract class Customer implements Serializable {
     @OneToOne
     @JoinColumn(name = "adress_id")
     private Address address;
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate startContract;
+
     @Enumerated(EnumType.STRING)
     private FinancialSituation financialSituation;
     private byte payDay;

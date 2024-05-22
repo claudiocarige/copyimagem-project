@@ -14,8 +14,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,7 +62,6 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
         Address address = addressRepository.save(legalPersonalCustomerDTO.getAddress());
         legalPersonalCustomerDTO.setAddress(address);
         existsCnpjOrEmail(legalPersonalCustomerDTO);
-        legalPersonalCustomerDTO.setStartContract(LocalDate.now(ZoneId.of("America/Sao_Paulo")));
         LegalPersonalCustomer saveLegalPersonalCustomer = legalPersonalCustomerRepository
                 .save(convertObjectToObjectDTOService.convertToLegalPersonalCustomer(legalPersonalCustomerDTO));
         return convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(saveLegalPersonalCustomer);
