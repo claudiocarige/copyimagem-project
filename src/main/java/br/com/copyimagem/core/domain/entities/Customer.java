@@ -57,16 +57,12 @@ public abstract class Customer implements Serializable {
     private List<MonthlyPayment> monthlyPaymentList = new ArrayList<>();
 
 
-    public void addCustomerContract(List<CustomerContract> customerContractList){
-        this.customerContractList.addAll(customerContractList);
+    public void addMultiPrinter(MultiPrinter multiPrinter){
+        multiPrinterList.add(multiPrinter);
     }
 
-    public void addMultiPrinter(List<MultiPrinter> multiPrinter){
-        multiPrinterList.addAll(multiPrinter);
-    }
-
-    public void addMonthlyPayment(List<MonthlyPayment> monthlyPayment){
-        monthlyPaymentList.addAll(monthlyPayment);
+    public void addMonthlyPayment(MonthlyPayment monthlyPayment){
+        monthlyPaymentList.add(monthlyPayment);
     }
 
 

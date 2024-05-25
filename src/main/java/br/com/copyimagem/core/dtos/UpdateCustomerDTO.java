@@ -1,14 +1,13 @@
 package br.com.copyimagem.core.dtos;
 
 import br.com.copyimagem.core.domain.entities.Address;
+import br.com.copyimagem.core.domain.entities.CustomerContract;
 import br.com.copyimagem.core.domain.entities.MonthlyPayment;
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,8 +31,8 @@ public class UpdateCustomerDTO implements Serializable{
     private CustomerContract customerContract;
     private String financialSituation;
     private byte payDay;
-    private List<MultiPrinter> multiPrinterList = new LinkedList<>();
-    private List<MonthlyPayment> monthlyPaymentList = new LinkedList<>();
+    private List<MultiPrinter> multiPrinterList = new ArrayList<>();
+    private List<MonthlyPayment> monthlyPaymentList = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

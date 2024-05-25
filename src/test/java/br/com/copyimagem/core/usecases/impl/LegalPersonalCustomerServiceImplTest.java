@@ -8,6 +8,7 @@ import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
 import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.infra.persistence.repositories.AddressRepository;
+import br.com.copyimagem.infra.persistence.repositories.CustomerContractRepository;
 import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
 import br.com.copyimagem.infra.persistence.repositories.LegalPersonalCustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -161,6 +162,16 @@ class LegalPersonalCustomerServiceImplTest {
                 .existsCustomerByPrimaryEmail(customerPjDTO.getPrimaryEmail());
         verify(legalPersonalCustomerRepository, times(1)).existsLegalPersonalCustomerByCnpj(customerPj.getCnpj());
     }
+
+    @Test
+    @DisplayName("Must return exception when Address is null")
+    void mustReturnExceptionWhenAddressIsNull(){
+        customerPjDTO.setAddress(null);
+        String message = assertThrows(DataIntegrityViolationException.class,
+                () -> legalPersonalCustomerService.saveLegalPersonalCustomer(customerPjDTO)).getMessage();
+        assertEquals("Address is null!", message);
+    }
+
     @Test
     @DisplayName("Must return exception when Email exist")
     void mustReturnExceptionWhenEmailExist(){

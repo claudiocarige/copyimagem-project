@@ -28,7 +28,7 @@ public class NaturalPersonCustomerDTOBuilder {
     private byte payDay;
     private CustomerContract customerContract;
     private List<MultiPrinter> multiPrinterList = new ArrayList<>();
-    private List<MonthlyPayment> monthlyPaymentList = new ArrayList<>();;
+    private List<MonthlyPayment> monthlyPaymentList = new ArrayList<>();
 
     private NaturalPersonCustomerDTOBuilder(){}
 

@@ -12,7 +12,6 @@ import org.hibernate.validator.constraints.br.CNPJ;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Data
@@ -50,7 +49,8 @@ public class LegalPersonalCustomerDTO implements Serializable{
 
     private CustomerContract customerContract;
 
-    private List<MultiPrinter> multiPrinterList = new LinkedList<>();
+    private List<MultiPrinter> multiPrinterList = new ArrayList<>();
 
-    private List<MonthlyPayment> monthlyPaymentList = new LinkedList<>();
+    private List<MonthlyPayment> monthlyPaymentList = new ArrayList<>();
+
 }
