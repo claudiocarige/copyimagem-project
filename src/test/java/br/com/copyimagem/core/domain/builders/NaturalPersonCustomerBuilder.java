@@ -25,7 +25,7 @@ public class NaturalPersonCustomerBuilder implements Serializable {
     private Address address;
     private FinancialSituation financialSituation;
     private byte payDay;
-    private List<CustomerContract> customerContractList = new ArrayList<>();
+    private CustomerContract customerContract;
     private List<MultiPrinter> multiPrinterList = new ArrayList<>();
     private List<MonthlyPayment> monthlyPaymentList = new ArrayList<>();
     private String cpf;
@@ -49,7 +49,7 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         builder.address = oneAddress().now();
         builder.financialSituation = FinancialSituation.PAGO;
         builder.payDay = 5;
-        builder.customerContractList = Arrays.asList(CustomerContract.generateBasicContract());
+        builder.customerContract = new CustomerContract();
         builder.multiPrinterList = Arrays.asList(oneMultiPrinter().now());
         builder.monthlyPaymentList = Arrays.asList(oneMonthlyPayment().now());
         builder.cpf = "156.258.240-29";
@@ -105,8 +105,8 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         return this;
     }
 
-    public NaturalPersonCustomerBuilder withCustomerContractList(CustomerContract... customerContractList) {
-        this.customerContractList = Arrays.asList(customerContractList);
+    public NaturalPersonCustomerBuilder withCustomerContractList(CustomerContract customerContract) {
+        this.customerContract = customerContract;
         return this;
     }
 
@@ -115,7 +115,7 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         return this;
     }
 
-    public NaturalPersonCustomerBuilder withMonthlyPaymentList(MonthlyPayment... monthlyPaymentList) {
+    public NaturalPersonCustomerBuilder withMonthlyPayment(MonthlyPayment... monthlyPaymentList) {
         this.monthlyPaymentList = Arrays.asList(monthlyPaymentList);
         return this;
     }
@@ -137,9 +137,9 @@ public class NaturalPersonCustomerBuilder implements Serializable {
         customer.setAddress(address);
         customer.setFinancialSituation(financialSituation);
         customer.setPayDay(payDay);
-        customer.addCustomerContract(customerContractList);
-        customer.addMultiPrinter(multiPrinterList);
-        customer.addMonthlyPayment(monthlyPaymentList);
+        customer.setCustomerContract(customerContract);
+        customer.addMultiPrinter(oneMultiPrinter().now());
+        customer.addMonthlyPayment(oneMonthlyPayment().now());
         return customer;
     }
 }

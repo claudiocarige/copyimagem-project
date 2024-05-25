@@ -42,10 +42,9 @@ public abstract class Customer implements Serializable {
     private FinancialSituation financialSituation;
     private byte payDay;
 
-    @Setter(AccessLevel.NONE)
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer")
-    private List<CustomerContract> customerContractList = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "contract_id")
+    private CustomerContract customerContract;
 
     @Setter(AccessLevel.NONE)
     @JsonIgnore

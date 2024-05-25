@@ -26,9 +26,9 @@ public class LegalPersonalCustomerDTOBuilder {
     private Address address;
     private String financialSituation;
     private byte payDay;
-    private List<CustomerContract> customerContractList = new ArrayList<>();
-    private List<MultiPrinter> multiPrinterList;
-    private List<MonthlyPayment> monthlyPaymentList;
+    private CustomerContract customerContract;
+    private List<MultiPrinter> multiPrinterList = new ArrayList<>();
+    private List<MonthlyPayment> monthlyPaymentList = new ArrayList<>();
 
     private LegalPersonalCustomerDTOBuilder(){}
 
@@ -50,7 +50,7 @@ public class LegalPersonalCustomerDTOBuilder {
         builder.address = oneAddress().now();
         builder.financialSituation = FinancialSituation.PAGO.toString();
         builder.payDay = 5;
-        builder.customerContractList = Arrays.asList(CustomerContract.generateBasicContract());
+        builder.customerContract = new CustomerContract();
         builder.multiPrinterList = Arrays.asList(oneMultiPrinter().now());
         builder.monthlyPaymentList = Arrays.asList(oneMonthlyPayment().now());
     }
@@ -110,8 +110,8 @@ public class LegalPersonalCustomerDTOBuilder {
         return this;
     }
 
-    public LegalPersonalCustomerDTOBuilder withCustomerContractList(CustomerContract... customerContractList) {
-        this.customerContractList = Arrays.asList(customerContractList);
+    public LegalPersonalCustomerDTOBuilder withCustomerContract(CustomerContract customerContract) {
+        this.customerContract = customerContract;
         return this;
     }
 
@@ -138,7 +138,7 @@ public class LegalPersonalCustomerDTOBuilder {
         customerDTO.setAddress(address);
         customerDTO.setFinancialSituation(financialSituation);
         customerDTO.setPayDay(payDay);
-        customerDTO.setCustomerContractList(customerContractList);
+        customerDTO.setCustomerContract(customerContract);
         customerDTO.setMultiPrinterList(multiPrinterList);
         customerDTO.setMonthlyPaymentList(monthlyPaymentList);
         return customerDTO;

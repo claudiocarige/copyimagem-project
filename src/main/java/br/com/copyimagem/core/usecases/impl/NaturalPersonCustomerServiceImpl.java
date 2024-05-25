@@ -1,6 +1,7 @@
 package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.Address;
+import br.com.copyimagem.core.domain.entities.CustomerContract;
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.dtos.NaturalPersonCustomerDTO;
@@ -8,6 +9,7 @@ import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.NaturalPersonCustomerService;
 import br.com.copyimagem.infra.persistence.repositories.AddressRepository;
+import br.com.copyimagem.infra.persistence.repositories.CustomerContractRepository;
 import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
 import br.com.copyimagem.infra.persistence.repositories.NaturalPersonCustomerRepository;
 import lombok.extern.log4j.Log4j2;
@@ -24,14 +26,16 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
     private final NaturalPersonCustomerRepository naturalPersonCustomerRepository;
     private final CustomerRepository customerRepository;
     private final AddressRepository addressRepository;
+    private final CustomerContractRepository customerContractRepository;
     private final ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
 
     public NaturalPersonCustomerServiceImpl(
             NaturalPersonCustomerRepository naturalPersonCustomerRepository,
-            CustomerRepository customerRepository, AddressRepository addressRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
+            CustomerRepository customerRepository, AddressRepository addressRepository, CustomerContractRepository customerContractRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
         this.naturalPersonCustomerRepository = naturalPersonCustomerRepository;
         this.customerRepository = customerRepository;
         this.addressRepository = addressRepository;
+        this.customerContractRepository = customerContractRepository;
         this.convertObjectToObjectDTOService = convertObjectToObjectDTOService;
     }
 
@@ -56,7 +60,8 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
         log.info("[ INFO ] Saving customer. {}", naturalPersonCustomerDTO.getClass());
         naturalPersonCustomerDTO.setId(null);
         Address address = addressRepository.save(naturalPersonCustomerDTO.getAddress());
-        naturalPersonCustomerDTO.setAddress(address);
+        saveAddress(naturalPersonCustomerDTO);
+        generateCustomerContract(naturalPersonCustomerDTO);
         existsCpfOrEmail(naturalPersonCustomerDTO);
         NaturalPersonCustomer savedNaturalCustomer = naturalPersonCustomerRepository
                     .save(convertObjectToObjectDTOService.convertToNaturalPersonCustomer(naturalPersonCustomerDTO));
@@ -80,6 +85,22 @@ public class NaturalPersonCustomerServiceImpl implements NaturalPersonCustomerSe
         } else if (naturalPersonCustomerRepository.existsNaturalPersonCustomerByCpf(naturalPersonCustomerDTO.getCpf())) {
             log.error("[ ERROR ] Exception : CPF already exists! : {}.", DataIntegrityViolationException.class);
             throw new DataIntegrityViolationException("CPF already exists!");
+        }
+    }
+
+    private void generateCustomerContract(NaturalPersonCustomerDTO naturalPersonCustomerDTO) {
+        if(naturalPersonCustomerDTO.getCustomerContract() == null){
+            CustomerContract contract = new CustomerContract();
+            naturalPersonCustomerDTO.setCustomerContract(contract);
+            customerContractRepository.save(contract);
+        }
+    }
+
+    private void saveAddress(NaturalPersonCustomerDTO naturalPersonCustomerDTO) {
+        if(naturalPersonCustomerDTO.getAddress() != null){
+            naturalPersonCustomerDTO.setAddress(addressRepository.save(naturalPersonCustomerDTO.getAddress()));
+        }else{
+            throw new DataIntegrityViolationException("Address is null!");
         }
     }
 }

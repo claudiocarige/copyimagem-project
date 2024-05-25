@@ -1,6 +1,6 @@
 package br.com.copyimagem.core.usecases.impl;
 
-import br.com.copyimagem.core.domain.entities.Address;
+import br.com.copyimagem.core.domain.entities.CustomerContract;
 import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
@@ -8,6 +8,7 @@ import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.LegalPersonalCustomerService;
 import br.com.copyimagem.infra.persistence.repositories.AddressRepository;
+import br.com.copyimagem.infra.persistence.repositories.CustomerContractRepository;
 import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
 import br.com.copyimagem.infra.persistence.repositories.LegalPersonalCustomerRepository;
 import lombok.extern.log4j.Log4j2;
@@ -26,15 +27,17 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
     private final CustomerRepository customerRepository;
 
     private final AddressRepository addressRepository;
+    private final CustomerContractRepository customerContractRepository;
 
     private final ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
 
     public LegalPersonalCustomerServiceImpl(
             LegalPersonalCustomerRepository legalPersonalCustomerRepository,
-            CustomerRepository customerRepository, AddressRepository addressRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
+            CustomerRepository customerRepository, AddressRepository addressRepository, CustomerContractRepository customerContractRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
         this.legalPersonalCustomerRepository = legalPersonalCustomerRepository;
         this.customerRepository = customerRepository;
         this.addressRepository = addressRepository;
+        this.customerContractRepository = customerContractRepository;
         this.convertObjectToObjectDTOService = convertObjectToObjectDTOService;
     }
 
@@ -59,9 +62,9 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
     public LegalPersonalCustomerDTO saveLegalPersonalCustomer(LegalPersonalCustomerDTO legalPersonalCustomerDTO){
         log.info("[ INFO ] Saving LegalPersonalCustomer");
         legalPersonalCustomerDTO.setId(null);
-        Address address = addressRepository.save(legalPersonalCustomerDTO.getAddress());
-        legalPersonalCustomerDTO.setAddress(address);
+        saveAddress(legalPersonalCustomerDTO);
         existsCnpjOrEmail(legalPersonalCustomerDTO);
+        generateCustomerContract(legalPersonalCustomerDTO);
         LegalPersonalCustomer saveLegalPersonalCustomer = legalPersonalCustomerRepository
                 .save(convertObjectToObjectDTOService.convertToLegalPersonalCustomer(legalPersonalCustomerDTO));
         return convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(saveLegalPersonalCustomer);
@@ -79,12 +82,28 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
     }
 
     private void existsCnpjOrEmail(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
-        if(customerRepository.existsCustomerByPrimaryEmail(legalPersonalCustomerDTO.getPrimaryEmail())){
+        if (customerRepository.existsCustomerByPrimaryEmail(legalPersonalCustomerDTO.getPrimaryEmail())) {
             log.error("[ ERROR ] Exception : Email already exists! : {}.", customerRepository.existsCustomerByPrimaryEmail(legalPersonalCustomerDTO.getPrimaryEmail()));
             throw new DataIntegrityViolationException("Email already exists!");
         } else if (legalPersonalCustomerRepository.existsLegalPersonalCustomerByCnpj(legalPersonalCustomerDTO.getCnpj())) {
             log.error("[ ERROR ] Exception : CNPJ already exists! : {}.", DataIntegrityViolationException.class);
             throw new DataIntegrityViolationException("CNPJ already exists!");
+        }
+    }
+
+    private void generateCustomerContract(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
+        if (legalPersonalCustomerDTO.getCustomerContract() == null) {
+            CustomerContract contract = new CustomerContract();
+            CustomerContract savedContract = customerContractRepository.save(contract);
+            legalPersonalCustomerDTO.setCustomerContract(savedContract);
+        }
+    }
+
+    private void saveAddress(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
+        if(legalPersonalCustomerDTO.getAddress() != null){
+            legalPersonalCustomerDTO.setAddress(addressRepository.save(legalPersonalCustomerDTO.getAddress()));
+        }else{
+            throw new DataIntegrityViolationException("Address is null!");
         }
     }
 }

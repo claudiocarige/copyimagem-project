@@ -44,6 +44,9 @@ class LegalPersonalCustomerServiceImplTest {
     private CustomerRepository customerRepository;
 
     @Mock
+    private CustomerContractRepository customerContractRepository;
+
+    @Mock
     private ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
 
     @Mock
@@ -244,6 +247,7 @@ class LegalPersonalCustomerServiceImplTest {
         customerPjDTO.setBankCode(customerPj.getBankCode());
         customerPjDTO.setFinancialSituation(customerPj.getFinancialSituation().toString());
         customerPjDTO.setPayDay(customerPj.getPayDay());
+        customerPjDTO.setCustomerContract(customerPj.getCustomerContract());
         customerPjDTO.setMonthlyPaymentList(customerPj.getMonthlyPaymentList());
         customerPjDTO.setMultiPrinterList(customerPj.getMultiPrinterList());
     }

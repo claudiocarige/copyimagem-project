@@ -50,7 +50,7 @@ public class NaturalPersonCustomerDTO implements Serializable{
     private String financialSituation;
     private byte payDay;
 
-    private List<CustomerContract> customerContractList = new LinkedList<>();
+    private CustomerContract customerContract;
 
     private List<MultiPrinter> multiPrinterList = new LinkedList<>();
 

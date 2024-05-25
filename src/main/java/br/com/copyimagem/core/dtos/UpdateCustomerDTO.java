@@ -29,8 +29,7 @@ public class UpdateCustomerDTO implements Serializable{
     private String whatsapp;
     private String bankCode;
     private Address address;
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate startContract;
+    private CustomerContract customerContract;
     private String financialSituation;
     private byte payDay;
     private List<MultiPrinter> multiPrinterList = new LinkedList<>();

@@ -1,5 +1,6 @@
 package br.com.copyimagem.core.domain.builders;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import br.com.copyimagem.core.domain.entities.Address;
@@ -25,9 +26,9 @@ public class NaturalPersonCustomerDTOBuilder {
     private Address address;
     private String financialSituation;
     private byte payDay;
-    private List<CustomerContract> customerContractList;
-    private List<MultiPrinter> multiPrinterList;
-    private List<MonthlyPayment> monthlyPaymentList;
+    private CustomerContract customerContract;
+    private List<MultiPrinter> multiPrinterList = new ArrayList<>();
+    private List<MonthlyPayment> monthlyPaymentList = new ArrayList<>();;
 
     private NaturalPersonCustomerDTOBuilder(){}
 
@@ -49,7 +50,7 @@ public class NaturalPersonCustomerDTOBuilder {
         builder.address = oneAddress().now();
         builder.financialSituation = FinancialSituation.PAGO.toString();
         builder.payDay = 5;
-        builder.customerContractList = Arrays.asList(CustomerContract.generateBasicContract());
+        builder.customerContract = new CustomerContract();
         builder.multiPrinterList = Arrays.asList(oneMultiPrinter().now());
         builder.monthlyPaymentList = Arrays.asList(oneMonthlyPayment().now());
     }
@@ -109,8 +110,8 @@ public class NaturalPersonCustomerDTOBuilder {
         return this;
     }
 
-    public NaturalPersonCustomerDTOBuilder withCustomerContractList(List<CustomerContract> customerContractList) {
-        this.customerContractList = customerContractList;
+    public NaturalPersonCustomerDTOBuilder withCustomerContract(CustomerContract customerContract) {
+        this.customerContract = customerContract;
         return this;
     }
 
@@ -137,7 +138,7 @@ public class NaturalPersonCustomerDTOBuilder {
         customerDTO.setAddress(address);
         customerDTO.setFinancialSituation(financialSituation);
         customerDTO.setPayDay(payDay);
-        customerDTO.setCustomerContractList(customerContractList);
+        customerDTO.setCustomerContract(customerContract);
         customerDTO.setMultiPrinterList(multiPrinterList);
         customerDTO.setMonthlyPaymentList(monthlyPaymentList);
         return customerDTO;

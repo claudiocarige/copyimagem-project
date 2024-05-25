@@ -29,8 +29,7 @@ class LegalPersonalCustomerTest {
                 () -> assertTrue(legalPersonalCustomer.getEmailList().contains("mail1@mail.com")),
                 () -> assertEquals(2, legalPersonalCustomer.getEmailList().size()),
                 () -> assertEquals(LegalPersonalCustomer.class, legalPersonalCustomer.getClass()),
-                () -> assertEquals(300.0, legalPersonalCustomer.getCustomerContractList()
-                                                                                .get(0).getMonthlyAmount()),
+                () -> assertEquals(300.0, legalPersonalCustomer.getCustomerContract().getMonthlyAmount()),
                 () -> assertEquals(1, legalPersonalCustomer.getMultiPrinterList().get(0).getId()),
                 () -> assertEquals(1, legalPersonalCustomer.getMonthlyPaymentList().get(0).getId())
         );
