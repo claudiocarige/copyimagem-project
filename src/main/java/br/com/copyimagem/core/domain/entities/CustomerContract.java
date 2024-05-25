@@ -29,20 +29,14 @@ public class CustomerContract implements Serializable {
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate startContract;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
-
-    public static CustomerContract generateBasicContract(){
-        CustomerContract customerContract = new CustomerContract();
-        basicContract(customerContract);
-        return customerContract;
+    public CustomerContract(){
+        basicContract();
     }
 
-    private static void basicContract(CustomerContract customerContract) {
-        customerContract.printingFranchise = 2000;
-        customerContract.monthlyAmount = 300.0;
-        customerContract.contractTime = 6;
-        customerContract.startContract = LocalDate.now();
+    private void basicContract() {
+        this.printingFranchise = 2000;
+        this.monthlyAmount = 300.0;
+        this.contractTime = 6;
+        this.startContract = LocalDate.now();
     }
 }
