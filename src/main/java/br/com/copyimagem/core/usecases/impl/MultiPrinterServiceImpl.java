@@ -60,6 +60,7 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
         if (multiPrinterDTO.getCustomer_id() != null){
             throw new IllegalArgumentException("This printer is already Customer.");
         }
+        multiPrinterDTO.setCustomer_id(customer.getId().toString());
         multiPrinterDTO.setMachineStatus(MachineStatus.LOCADA);
         MultiPrinter multiPrinter = convertObjectToObjectDTOService.convertToMultiPrinter(multiPrinterDTO);
         multiPrinter.setCustomer(customer);
