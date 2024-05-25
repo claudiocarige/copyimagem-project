@@ -1,8 +1,10 @@
 package br.com.copyimagem.infra.config;
 
 import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
+import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
+import br.com.copyimagem.core.dtos.MultiPrinterDTO;
 import br.com.copyimagem.core.dtos.UpdateCustomerDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -43,6 +45,14 @@ public class ModelMapperConfig {
                 map().setCpfOrCnpj(source.getCpf());
             }
         });
+
+        modelMapper.addMappings(new PropertyMap<MultiPrinter, MultiPrinterDTO>() {
+            @Override
+            protected void configure() {
+                map().setCustomer_id(source.getCustomer().getId().toString());
+            }
+        });
+
         return modelMapper;
     }
 }
