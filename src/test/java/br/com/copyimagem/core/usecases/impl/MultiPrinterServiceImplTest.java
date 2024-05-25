@@ -173,6 +173,14 @@ public class MultiPrinterServiceImplTest {
     }
 
     @Test
+    @DisplayName("Must throw an exception with invalid status")
+    void mustThrowAnExceptionWithInvalidStatus(){
+        String message = assertThrows(IllegalArgumentException.class,
+                () -> multiPrinterServiceImpl.setMachineStatus(1, "INVALIDO")).getMessage();
+        assertEquals("Invalid Status: INVALIDO", message);
+    }
+
+    @Test
     @DisplayName("Must SET Impression Counter")
     void mustSetImpressionCounter(){
         when(multiPrinterRepository.updateImpressionCounterById(1, 10000)).thenReturn(multiPrinter);
