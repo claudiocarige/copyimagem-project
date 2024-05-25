@@ -81,7 +81,7 @@ public class MultiPrinterServiceImplTest {
         assertEquals(multiPrinterDTO, multiPrinterDto);
         assertEquals(multiPrinterDTO.getId(), multiPrinterDto.getId());
         assertEquals(MultiPrinterDTO.class, multiPrinterDto.getClass());
-        assertEquals(multiPrinterDTO.getCustomer().getClientName(),multiPrinterDto.getCustomer().getClientName());
+        assertEquals(multiPrinterDTO.getCustomer_id(),multiPrinterDto.getCustomer_id());
     }
 
     @Test
@@ -101,7 +101,7 @@ public class MultiPrinterServiceImplTest {
     @Test
     @DisplayName("Must set up a client on a MultiPrinter")
     void mustSetUpClientOnAMultiPrinter(){
-        multiPrinterDTO.setCustomer(null);
+        multiPrinterDTO.setCustomer_id(null);
         when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
         when(multiPrinterRepository.save(multiPrinter)).thenReturn(multiPrinter);
         when(customerRepository.findById(1L))
@@ -113,7 +113,7 @@ public class MultiPrinterServiceImplTest {
         assertEquals(multiPrinterDTO, multiPrinterDto);
         assertEquals(multiPrinterDTO.getId(), multiPrinterDto.getId());
         assertEquals(MultiPrinterDTO.class, multiPrinterDto.getClass());
-        assertEquals(multiPrinterDTO.getCustomer().getClientName(), multiPrinterDto.getCustomer().getClientName());
+        assertEquals(multiPrinterDTO.getCustomer_id(), multiPrinterDto.getCustomer_id());
     }
 
     @Test
@@ -158,7 +158,7 @@ public class MultiPrinterServiceImplTest {
         assertEquals(multiPrinterDTO, multiPrinterDto);
         assertEquals(multiPrinterDTO.getId(), multiPrinterDto.getId());
         assertEquals(MultiPrinterDTO.class, multiPrinterDto.getClass());
-        assertNull(multiPrinterDto.getCustomer());
+        assertNull(multiPrinterDto.getCustomer_id());
     }
 
     @Test
@@ -193,6 +193,6 @@ public class MultiPrinterServiceImplTest {
         multiPrinterDTO.setMachineValue(multiPrinter.getMachineValue());
         multiPrinterDTO.setMachineStatus(multiPrinter.getMachineStatus());
         multiPrinterDTO.setImpressionCounter(multiPrinter.getImpressionCounter());
-        multiPrinterDTO.setCustomer(multiPrinter.getCustomer());
+        multiPrinterDTO.setCustomer_id("1");
     }
 }
