@@ -57,14 +57,14 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
         Customer customer = customerRepository.findById(customer_Id)
                                            .orElseThrow(() -> new NoSuchElementException("Customer not found"));
         MultiPrinterDTO multiPrinterDTO = findMultiPrinterById(id);
-        if (multiPrinterDTO.getCustomer() != null){
+        if (multiPrinterDTO.getCustomer_id() != null){
             throw new IllegalArgumentException("This printer is already Customer.");
         }
-        multiPrinterDTO.setCustomer(customer);
         multiPrinterDTO.setMachineStatus(MachineStatus.LOCADA);
         saveMultiPrinter(multiPrinterDTO);
         return multiPrinterDTO;
     }
+
 
     @Override
     public void deleteMultiPrinter(Integer id) {
@@ -79,7 +79,7 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
     @Override
     public MultiPrinterDTO deleteCustomerFromMultiPrinter(Integer id){
         MultiPrinterDTO multiPrinterDTO = findMultiPrinterById(id);
-        multiPrinterDTO.setCustomer(null);
+        multiPrinterDTO.setCustomer_id(null);
         multiPrinterDTO.setMachineStatus(MachineStatus.DISPONIVEL);
         multiPrinterRepository.save(convertObjectToObjectDTOService.convertToMultiPrinter(multiPrinterDTO));
         return multiPrinterDTO;
