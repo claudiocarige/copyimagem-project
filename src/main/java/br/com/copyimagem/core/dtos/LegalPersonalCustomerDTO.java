@@ -3,7 +3,6 @@ package br.com.copyimagem.core.dtos;
 import br.com.copyimagem.core.domain.entities.Address;
 import br.com.copyimagem.core.domain.entities.CustomerContract;
 import br.com.copyimagem.core.domain.entities.MonthlyPayment;
-import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
@@ -49,7 +48,7 @@ public class LegalPersonalCustomerDTO implements Serializable{
 
     private CustomerContract customerContract;
 
-    private List<MultiPrinter> multiPrinterList = new ArrayList<>();
+    private List<MultiPrinterDTO> multiPrinterList = new ArrayList<>();
 
     private List<MonthlyPayment> monthlyPaymentList = new ArrayList<>();
 

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -33,7 +34,9 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
 
     public LegalPersonalCustomerServiceImpl(
             LegalPersonalCustomerRepository legalPersonalCustomerRepository,
-            CustomerRepository customerRepository, AddressRepository addressRepository, CustomerContractRepository customerContractRepository, ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
+            CustomerRepository customerRepository, AddressRepository addressRepository,
+            CustomerContractRepository customerContractRepository,
+            ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
         this.legalPersonalCustomerRepository = legalPersonalCustomerRepository;
         this.customerRepository = customerRepository;
         this.addressRepository = addressRepository;
@@ -46,7 +49,13 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
         log.info("[ INFO ] Finding LegalPersonalCustomer by id: {}", id);
         LegalPersonalCustomer legalPersonalCustomer = legalPersonalCustomerRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Customer not found"));
-        return convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(legalPersonalCustomer);
+        LegalPersonalCustomerDTO legalPersonalCustomerDTO =
+                            convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(legalPersonalCustomer);
+        legalPersonalCustomerDTO.setMultiPrinterList(legalPersonalCustomer
+                            .getMultiPrinterList().stream()
+                                             .map(convertObjectToObjectDTOService::convertToMultiPrinterDTO)
+                                                                                      .collect(Collectors.toList()));
+        return legalPersonalCustomerDTO;
     }
 
     @Override
