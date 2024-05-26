@@ -1,28 +1,18 @@
-package br.com.copyimagem.core.domain.entities;
+package br.com.copyimagem.core.dtos;
 
-import br.com.copyimagem.core.domain.enums.PaymentStatus;
+import br.com.copyimagem.core.domain.entities.Customer;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-@Entity
-public class MonthlyPayment implements Serializable {
-
+@Data
+public class MonthlyPaymentDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column( nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer monthPayment;
     private Integer yearPayment;
@@ -36,17 +26,10 @@ public class MonthlyPayment implements Serializable {
     private Integer printingFranchise;
     private Double rateExcessColorPrinting;
     private Double rateExcessBlackAndWhitePrinting;
-
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate expirationDate;
-
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate paymentDate;
-
-    @Enumerated(EnumType.STRING)
-    private PaymentStatus paymentStatus;
-
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private String paymentStatus;
+    private Long customerId;
 }

@@ -3,6 +3,7 @@ import br.com.copyimagem.core.domain.entities.Customer;
 import java.time.LocalDate;
 import br.com.copyimagem.core.domain.enums.PaymentStatus;
 import br.com.copyimagem.core.domain.entities.MonthlyPayment;
+import br.com.copyimagem.core.domain.enums.PrinterType;
 
 public class MonthlyPaymentBuilder {
     private Long id;
@@ -20,6 +21,8 @@ public class MonthlyPaymentBuilder {
     private String invoiceNumber;
     private String ticketNumber;
     private Integer printingFranchise;
+    private Double rateExcessColorPrinting;
+    private Double rateExcessBlackAndWhitePrinting;
 
     private MonthlyPaymentBuilder(){}
 
@@ -42,6 +45,8 @@ public class MonthlyPaymentBuilder {
         builder.paymentDate = LocalDate.of(2022, 12, 10);
         builder.paymentStatus = PaymentStatus.PENDENTE;
         builder.printingFranchise = 2000;
+        builder.rateExcessColorPrinting = PrinterType.LASER_COLOR_EASY.getRate();
+        builder.rateExcessBlackAndWhitePrinting = PrinterType.LASER_BLACK_AND_WHITE_EASY.getRate();
         builder.invoiceNumber = "0001";
         builder.ticketNumber = "0002";
     }
@@ -105,6 +110,17 @@ public class MonthlyPaymentBuilder {
         this.printingFranchise = printingFranchise;
         return this;
     }
+
+    public MonthlyPaymentBuilder withRateExcessColorPrinting(Double rateExcessColorPrinting) {
+        this.rateExcessColorPrinting = rateExcessColorPrinting;
+        return this;
+    }
+
+    public MonthlyPaymentBuilder withRateExcessBlackAndWhitePrinting(Double rateExcessBlackAndWhitePrinting) {
+        this.rateExcessBlackAndWhitePrinting = rateExcessBlackAndWhitePrinting;
+        return this;
+    }
+
     public MonthlyPaymentBuilder withInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
         return this;
@@ -113,7 +129,6 @@ public class MonthlyPaymentBuilder {
         this.ticketNumber = ticketNumber;
         return this;
     }
-
 
     public MonthlyPaymentBuilder withCustomer(Customer customer) {
         this.customer = customer;
@@ -125,6 +140,7 @@ public class MonthlyPaymentBuilder {
                 id, monthPayment, yearPayment, monthlyAmount,
                 impressionsCounter, quantityPrints, excessValuePrints,
                 amountPrinter, invoiceNumber, ticketNumber,printingFranchise,
+                rateExcessColorPrinting, rateExcessBlackAndWhitePrinting,
                 expirationDate, paymentDate, paymentStatus,customer);
     }
 }

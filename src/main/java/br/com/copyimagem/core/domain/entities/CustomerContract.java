@@ -1,5 +1,6 @@
 package br.com.copyimagem.core.domain.entities;
 
+import br.com.copyimagem.core.domain.enums.PrinterType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ public class CustomerContract implements Serializable {
     private Short contractTime;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate startContract;
+    private PrinterType printerType;
 
     public CustomerContract(){
         basicContract();
