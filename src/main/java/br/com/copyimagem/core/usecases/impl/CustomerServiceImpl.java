@@ -1,6 +1,7 @@
 package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.Customer;
+import br.com.copyimagem.core.domain.entities.CustomerContract;
 import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
 import br.com.copyimagem.core.domain.enums.FinancialSituation;
@@ -105,6 +106,13 @@ public class CustomerServiceImpl implements CustomerService {
             throw new NoSuchElementException("Customer not found");
         }
         return convertObjectToObjectDTOService.convertToCustomerResponseDTO(customerOptional.get());
+    }
+
+    @Override
+    public CustomerContract getCustomerContract(Long id) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Customer not found"));
+        return customer.getCustomerContract();
     }
 
     @Override
