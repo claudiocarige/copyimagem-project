@@ -8,6 +8,9 @@ public interface MultiPrinterService {
 
     MultiPrinterDTO findMultiPrinterById(Integer id);
     List<MultiPrinterDTO> findAllMultiPrinters();
+
+    List<MultiPrinterDTO> findAllMultiPrintersByCustomerId(Long customer_Id);
+
     MultiPrinterDTO saveMultiPrinter(MultiPrinterDTO multiPrinterDTO);
     MultiPrinterDTO setUpClientOnAMultiPrinter(Integer id, Long customer_Id);
     void deleteMultiPrinter(Integer id);

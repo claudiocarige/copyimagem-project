@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 public interface MultiPrinterRepository extends JpaRepository<MultiPrinter, Integer>{
     boolean existsBySerialNumber(String serialNumber);
@@ -24,4 +26,6 @@ public interface MultiPrinterRepository extends JpaRepository<MultiPrinter, Inte
             "mp.impressionCounter = :counter WHERE mp.id = :id AND :counter > mp.impressionCounter")
     MultiPrinter updateImpressionCounterById(
                          @Param(value = "id") Integer id, @Param(value = "counter") Integer counter);
+
+    List<MultiPrinter> findAllByCustomerId(Long customerId);
 }

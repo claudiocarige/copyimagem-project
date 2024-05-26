@@ -45,6 +45,11 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
     }
 
     @Override
+    public List<MultiPrinterDTO> findAllMultiPrintersByCustomerId(Long customer_Id){
+        List<MultiPrinter> multiPrinterList = multiPrinterRepository.findAllByCustomerId(customer_Id);
+        return multiPrinterList.stream().map(convertObjectToObjectDTOService::convertToMultiPrinterDTO).toList();
+    }
+    @Override
     public MultiPrinterDTO saveMultiPrinter(MultiPrinterDTO multiPrinterDTO) {
         checkSerialNumber(multiPrinterDTO.getSerialNumber());
         MultiPrinter multiPrinter = multiPrinterRepository.save(convertObjectToObjectDTOService
