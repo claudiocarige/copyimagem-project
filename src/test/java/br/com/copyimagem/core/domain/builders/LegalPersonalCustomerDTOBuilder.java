@@ -9,6 +9,7 @@ import br.com.copyimagem.core.domain.entities.MonthlyPayment;
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.domain.enums.FinancialSituation;
 import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
+import br.com.copyimagem.core.dtos.MultiPrinterDTO;
 
 import static br.com.copyimagem.core.domain.builders.AddressBuilder.oneAddress;
 import static br.com.copyimagem.core.domain.builders.MonthlyPaymentBuilder.oneMonthlyPayment;
@@ -139,7 +140,7 @@ public class LegalPersonalCustomerDTOBuilder {
         customerDTO.setFinancialSituation(financialSituation);
         customerDTO.setPayDay(payDay);
         customerDTO.setCustomerContract(customerContract);
-        customerDTO.setMultiPrinterList(multiPrinterList);
+        customerDTO.setMultiPrinterList(Arrays.asList(new MultiPrinterDTO()));
         customerDTO.setMonthlyPaymentList(monthlyPaymentList);
         return customerDTO;
     }

@@ -2,9 +2,9 @@ package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
 import br.com.copyimagem.core.domain.entities.MonthlyPayment;
-import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
 import br.com.copyimagem.core.dtos.LegalPersonalCustomerDTO;
+import br.com.copyimagem.core.dtos.MultiPrinterDTO;
 import br.com.copyimagem.core.exceptions.DataIntegrityViolationException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.infra.persistence.repositories.AddressRepository;
@@ -21,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -107,7 +108,7 @@ class LegalPersonalCustomerServiceImplTest {
                 () -> {
                     assertAll("MultPrint",
                             () -> assertNotNull(legalPersonalCustomerList.get(0).getMultiPrinterList()),
-                            () -> assertEquals(MultiPrinter.class, legalPersonalCustomerList.get(0).getMultiPrinterList().get(0).getClass()),
+                            () -> assertEquals(MultiPrinterDTO.class, legalPersonalCustomerList.get(0).getMultiPrinterList().get(0).getClass()),
                             () -> assertEquals(1, legalPersonalCustomerList.get(0).getMultiPrinterList().size())
                     );
                 },
@@ -143,7 +144,7 @@ class LegalPersonalCustomerServiceImplTest {
                 () -> {
                     assertAll("MultPrint",
                             () -> assertNotNull(legalPersonalCustomerDTO.getMultiPrinterList()),
-                            () -> assertEquals(MultiPrinter.class, legalPersonalCustomerDTO.getMultiPrinterList().get(0).getClass()),
+                            () -> assertEquals(MultiPrinterDTO.class, legalPersonalCustomerDTO.getMultiPrinterList().get(0).getClass()),
                             () -> assertEquals(1, legalPersonalCustomerDTO.getMultiPrinterList().size())
                     );
                 },
@@ -260,6 +261,6 @@ class LegalPersonalCustomerServiceImplTest {
         customerPjDTO.setPayDay(customerPj.getPayDay());
         customerPjDTO.setCustomerContract(customerPj.getCustomerContract());
         customerPjDTO.setMonthlyPaymentList(customerPj.getMonthlyPaymentList());
-        customerPjDTO.setMultiPrinterList(customerPj.getMultiPrinterList());
+        customerPjDTO.setMultiPrinterList(Arrays.asList(new MultiPrinterDTO()));
     }
 }
