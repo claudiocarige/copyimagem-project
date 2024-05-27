@@ -1,6 +1,7 @@
 package br.com.copyimagem.core.domain.entities;
 
 import br.com.copyimagem.core.domain.enums.MachineStatus;
+import br.com.copyimagem.core.domain.enums.PrinterType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,7 +33,9 @@ public class MultiPrinter implements Serializable {
     private Double machineValue;
     @Enumerated(EnumType.STRING)
     private MachineStatus machineStatus;
-    private Integer impressionCounter;
+    private Integer impressionCounterInitial;
+    private PrinterType printType;
+    private Integer impressionCounterNow;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")

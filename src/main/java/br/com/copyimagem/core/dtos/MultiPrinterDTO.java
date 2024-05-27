@@ -1,6 +1,7 @@
 package br.com.copyimagem.core.dtos;
 
 import br.com.copyimagem.core.domain.enums.MachineStatus;
+import br.com.copyimagem.core.domain.enums.PrinterType;
 import lombok.*;
 
 @Getter
@@ -16,6 +17,8 @@ public class MultiPrinterDTO {
     private String serialNumber;
     private Double machineValue;
     private MachineStatus machineStatus;
-    private Integer impressionCounter;
+    private Integer impressionCounterInitial;
+    private PrinterType printType;
+    private Integer impressionCounterNow;
     private String customer_id;
 }
