@@ -23,7 +23,7 @@ public interface MultiPrinterRepository extends JpaRepository<MultiPrinter, Inte
     @Transactional
     @Modifying
     @Query("UPDATE MultiPrinter mp SET " +
-            "mp.impressionCounter = :counter WHERE mp.id = :id AND :counter > mp.impressionCounter")
+            "mp.impressionCounterInitial = :counter WHERE mp.id = :id AND :counter > mp.impressionCounterInitial")
     MultiPrinter updateImpressionCounterById(
                          @Param(value = "id") Integer id, @Param(value = "counter") Integer counter);
 
