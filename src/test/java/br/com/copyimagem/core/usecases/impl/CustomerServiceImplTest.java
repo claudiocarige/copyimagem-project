@@ -1,6 +1,7 @@
 package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.Customer;
+import br.com.copyimagem.core.domain.entities.CustomerContract;
 import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
@@ -177,7 +178,14 @@ public class CustomerServiceImplTest {
         assertEquals("Customer not found", message);
     }
 
-
+    @Test
+    @DisplayName("Must return a CustomerContract with sucess.")
+    void mustReturnACustomerContractWithSucess(){
+        when(customerRepository.findById(ID1L)).thenReturn(Optional.of(legalPersonalCustomer));
+        CustomerContract  customerContract = customerService.getCustomerContract(ID1L);
+        assertEquals(CustomerContract.class, customerContract.getClass());
+        assertEquals(legalPersonalCustomer.getCustomerContract().getId(), customerContract.getId());
+    }
 
     @Test
     @DisplayName("Must return all customers")
