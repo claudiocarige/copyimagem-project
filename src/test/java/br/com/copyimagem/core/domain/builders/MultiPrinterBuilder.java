@@ -3,6 +3,7 @@ package br.com.copyimagem.core.domain.builders;
 import br.com.copyimagem.core.domain.entities.Customer;
 import br.com.copyimagem.core.domain.enums.MachineStatus;
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
+import br.com.copyimagem.core.domain.enums.PrinterType;
 
 public class MultiPrinterBuilder {
     private Integer id;
@@ -12,7 +13,10 @@ public class MultiPrinterBuilder {
     private Double machineValue;
     private MachineStatus machineStatus;
 
-    private Integer impressionCounter;
+    private Integer impressionCounterInitial;
+
+    private PrinterType printType;
+    private Integer impressionCounterNow;
     private Customer customer;
 
     private MultiPrinterBuilder(){}
@@ -30,7 +34,9 @@ public class MultiPrinterBuilder {
         builder.serialNumber = "x1x2x3";
         builder.machineValue = 1000.0;
         builder.machineStatus = MachineStatus.DISPONIVEL;
-        builder.impressionCounter = 1000;
+        builder.impressionCounterInitial = 1000;
+        builder.printType = PrinterType.LASER_COLOR_EASY;
+        builder.impressionCounterNow = 10000;
     }
 
 
@@ -64,8 +70,17 @@ public class MultiPrinterBuilder {
         return this;
     }
 
-    public MultiPrinterBuilder withImpressionCounter(Integer impressionCounter) {
-        this.impressionCounter = impressionCounter;
+    public MultiPrinterBuilder withImpressionCounterInitial(Integer impressionCounterInitial) {
+        this.impressionCounterInitial = impressionCounterInitial;
+        return this;
+    }
+    public MultiPrinterBuilder withPrintType(PrinterType printType) {
+        this.printType = printType;
+        return this;
+    }
+
+    public MultiPrinterBuilder withImpressionCounterNow(Integer impressionCounterNow) {
+        this.impressionCounterNow = impressionCounterNow;
         return this;
     }
 
@@ -75,6 +90,7 @@ public class MultiPrinterBuilder {
     }
 
     public MultiPrinter now() {
-        return new MultiPrinter(id, brand, model, serialNumber, machineValue, machineStatus, impressionCounter, customer);
+        return new MultiPrinter(id, brand, model, serialNumber, machineValue, machineStatus,
+                                impressionCounterInitial, printType, impressionCounterNow, customer);
     }
 }

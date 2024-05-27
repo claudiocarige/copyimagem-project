@@ -1,6 +1,7 @@
 package br.com.copyimagem.core.domain.entities;
 
 import br.com.copyimagem.core.domain.enums.MachineStatus;
+import br.com.copyimagem.core.domain.enums.PrinterType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ class MultiPrinterTest {
                 () -> assertEquals(MachineStatus.DISPONIVEL, multiPrinter.getMachineStatus()),
                 () -> assertEquals(1L, multiPrinter.getCustomer().getId()),
                 () -> assertEquals(MultiPrinter.class, multiPrinter.getClass()),
-                () -> assertEquals(1000, multiPrinter.getImpressionCounter())
+                () -> assertEquals(1000, multiPrinter.getImpressionCounterInitial())
         );
     }
 
@@ -40,7 +41,9 @@ class MultiPrinterTest {
         multiPrinter.setSerialNumber("1234567890");
         multiPrinter.setMachineValue(1000.0);
         multiPrinter.setMachineStatus(MachineStatus.DISPONIVEL);
-        multiPrinter.setImpressionCounter(1000);
+        multiPrinter.setImpressionCounterInitial(1000);
+        multiPrinter.setImpressionCounterNow(10000);
+        multiPrinter.setPrintType(PrinterType.LASER_COLOR_EASY);
         LegalPersonalCustomer legalPersonalCustomer = new LegalPersonalCustomer("12.123.123/0001-12");
         legalPersonalCustomer.setId(1L);
         multiPrinter.setCustomer(legalPersonalCustomer);

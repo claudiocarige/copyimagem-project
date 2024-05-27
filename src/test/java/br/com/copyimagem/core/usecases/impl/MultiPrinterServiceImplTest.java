@@ -2,6 +2,7 @@ package br.com.copyimagem.core.usecases.impl;
 
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.domain.enums.MachineStatus;
+import br.com.copyimagem.core.domain.enums.PrinterType;
 import br.com.copyimagem.core.dtos.MultiPrinterDTO;
 import br.com.copyimagem.core.exceptions.IllegalArgumentException;
 import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
@@ -185,10 +186,10 @@ public class MultiPrinterServiceImplTest {
     void mustSetImpressionCounter(){
         when(multiPrinterRepository.updateImpressionCounterById(1, 10000)).thenReturn(multiPrinter);
         when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
-        multiPrinterDTO.setImpressionCounter(10000);
+        multiPrinterDTO.setImpressionCounterInitial(10000);
         MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.setImpressionCounter(1, 10000);
         assertEquals(multiPrinterDTO, multiPrinterDto);
-        assertEquals(10000, multiPrinterDto.getImpressionCounter());
+        assertEquals(10000, multiPrinterDto.getImpressionCounterInitial());
     }
 
     void start(){
@@ -200,7 +201,9 @@ public class MultiPrinterServiceImplTest {
         multiPrinterDTO.setSerialNumber(multiPrinter.getSerialNumber());
         multiPrinterDTO.setMachineValue(multiPrinter.getMachineValue());
         multiPrinterDTO.setMachineStatus(multiPrinter.getMachineStatus());
-        multiPrinterDTO.setImpressionCounter(multiPrinter.getImpressionCounter());
+        multiPrinterDTO.setImpressionCounterInitial(multiPrinter.getImpressionCounterInitial());
+        multiPrinterDTO.setPrintType(PrinterType.LASER_COLOR_EASY);
+        multiPrinterDTO.setImpressionCounterNow(multiPrinter.getImpressionCounterNow());
         multiPrinterDTO.setCustomer_id("1");
     }
 }
