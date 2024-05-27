@@ -70,6 +70,18 @@ public class MultiPrinterServiceImplTest {
     }
 
     @Test
+    @DisplayName("Must return all MultiPrinter by customer_id")
+    void mustReturnAllMultiPrinterByCustomerId(){
+        when(multiPrinterRepository.findAllByCustomerId(1L)).thenReturn(Collections.singletonList(multiPrinter));
+        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
+        List<MultiPrinterDTO> listMultiPrinterDto =
+                                          multiPrinterServiceImpl.findAllMultiPrintersByCustomerId(1L);
+        assertEquals(multiPrinterDTO, listMultiPrinterDto.get(0));
+        assertEquals(multiPrinterDTO.getId(), listMultiPrinterDto.get(0).getId());
+        assertEquals(MultiPrinterDTO.class, listMultiPrinterDto.get(0).getClass());
+    }
+
+    @Test
     @DisplayName("Must save a MultiPrinter With success")
     void mustSaveAMultiPrinterWithSuccess(){
         multiPrinter.setCustomer(oneLegalPersonalCustomer().nowCustomerPJ());
