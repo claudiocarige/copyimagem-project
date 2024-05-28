@@ -26,14 +26,16 @@ public class MonthlyPayment implements Serializable {
     private Long id;
     private Integer monthPayment;
     private Integer yearPayment;
-    private Double monthlyAmount;
-    private Integer impressionsCounter;
-    private Integer quantityPrints;
-    private Double excessValuePrints;
-    private Double amountPrinter;
+    private Integer quantityPrintsPB;
+    private Integer quantityPrintsColor;
+    private Integer printingFranchisePB;
+    private Integer printingFranchiseColor;
     private String invoiceNumber;
     private String ticketNumber;
-    private Integer printingFranchise;
+    private Double amountPrinter;
+    private Double monthlyAmount;
+    private Double excessValuePrintsPB;
+    private Double excessValuePrintsColor;
     private Double rateExcessColorPrinting;
     private Double rateExcessBlackAndWhitePrinting;
 
