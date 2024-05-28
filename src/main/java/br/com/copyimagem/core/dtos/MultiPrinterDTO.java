@@ -20,5 +20,15 @@ public class MultiPrinterDTO {
     private Integer impressionCounterInitial;
     private PrinterType printType;
     private Integer impressionCounterNow;
+    private Integer printingFranchise;
+    private Double amountPrinter;
     private String customer_id;
+
+    public int getSumQuantityPrints() {
+        if (this.impressionCounterNow != null && this.impressionCounterNow > this.impressionCounterInitial) {
+            return this.impressionCounterNow - this.impressionCounterInitial;
+        }else {
+            return this.impressionCounterInitial;
+        }
+    }
 }

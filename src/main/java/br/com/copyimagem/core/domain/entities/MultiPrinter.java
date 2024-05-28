@@ -36,6 +36,8 @@ public class MultiPrinter implements Serializable {
     private Integer impressionCounterInitial;
     private PrinterType printType;
     private Integer impressionCounterNow;
+    private Integer printingFranchise;
+    private Double amountPrinter;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")

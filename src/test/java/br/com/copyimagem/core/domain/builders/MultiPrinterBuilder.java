@@ -12,11 +12,11 @@ public class MultiPrinterBuilder {
     private String serialNumber;
     private Double machineValue;
     private MachineStatus machineStatus;
-
     private Integer impressionCounterInitial;
-
     private PrinterType printType;
     private Integer impressionCounterNow;
+    private Integer printingFranchise;
+    private Double amountPrinter;
     private Customer customer;
 
     private MultiPrinterBuilder(){}
@@ -37,6 +37,8 @@ public class MultiPrinterBuilder {
         builder.impressionCounterInitial = 1000;
         builder.printType = PrinterType.LASER_COLOR_EASY;
         builder.impressionCounterNow = 10000;
+        builder.printingFranchise = 2000;
+        builder.amountPrinter = 3525.20;
     }
 
 
@@ -84,6 +86,16 @@ public class MultiPrinterBuilder {
         return this;
     }
 
+    public MultiPrinterBuilder withPrintingFranchise(Integer printingFranchise) {
+        this.printingFranchise = printingFranchise;
+        return this;
+    }
+
+    public MultiPrinterBuilder withAmountPrinter(Double amountPrinter) {
+        this.amountPrinter = amountPrinter;
+        return this;
+    }
+
     public MultiPrinterBuilder withCustomer(Customer customer) {
         this.customer = customer;
         return this;
@@ -91,6 +103,6 @@ public class MultiPrinterBuilder {
 
     public MultiPrinter now() {
         return new MultiPrinter(id, brand, model, serialNumber, machineValue, machineStatus,
-                                impressionCounterInitial, printType, impressionCounterNow, customer);
+                impressionCounterInitial, printType, impressionCounterNow, printingFranchise, amountPrinter, customer);
     }
 }
