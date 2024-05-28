@@ -1,9 +1,6 @@
 package br.com.copyimagem.core.usecases.impl;
 
-import br.com.copyimagem.core.domain.entities.Customer;
-import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
-import br.com.copyimagem.core.domain.entities.MultiPrinter;
-import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
+import br.com.copyimagem.core.domain.entities.*;
 import br.com.copyimagem.core.dtos.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -50,5 +47,9 @@ public class ConvertObjectToObjectDTOService {
     }
     public MultiPrinter convertToMultiPrinter(MultiPrinterDTO multiPrinterDTO) {
         return modelMapper.map(multiPrinterDTO, MultiPrinter.class);
+    }
+
+    public MonthlyPaymentDTO convertToMonthlyPaymentDTO(MonthlyPayment monthlyPayment) {
+        return modelMapper.map(monthlyPayment, MonthlyPaymentDTO.class);
     }
 }
