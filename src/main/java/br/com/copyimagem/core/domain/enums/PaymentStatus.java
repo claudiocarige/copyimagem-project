@@ -5,5 +5,5 @@ public enum PaymentStatus {
     PAGO,
     PENDENTE,
     ATRASADO,
-    CANCELADO;
+    CANCELADO
 }
