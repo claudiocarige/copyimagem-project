@@ -1,6 +1,7 @@
 package br.com.copyimagem.infra.config;
 
 import br.com.copyimagem.core.domain.entities.LegalPersonalCustomer;
+import br.com.copyimagem.core.domain.entities.MonthlyPayment;
 import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.domain.entities.NaturalPersonCustomer;
 import br.com.copyimagem.core.dtos.CustomerResponseDTO;
@@ -23,8 +24,7 @@ public class ModelMapperConfig {
         modelMapper.addMappings(new PropertyMap<LegalPersonalCustomer, CustomerResponseDTO>() {
             @Override
             protected void configure(){
-                map().setCpfOrCnpj(source.getCnpj());
-            }
+                map().setCpfOrCnpj(source.getCnpj());            }
         });
         modelMapper.addMappings(new PropertyMap<NaturalPersonCustomer, CustomerResponseDTO>() {
             @Override
@@ -32,12 +32,10 @@ public class ModelMapperConfig {
                 map().setCpfOrCnpj(source.getCpf());
             }
         });
-
         modelMapper.addMappings(new PropertyMap<LegalPersonalCustomer, UpdateCustomerDTO>() {
             @Override
             protected void configure(){
-                map().setCpfOrCnpj(source.getCnpj());
-            }
+                map().setCpfOrCnpj(source.getCnpj());           }
         });
         modelMapper.addMappings(new PropertyMap<NaturalPersonCustomer, UpdateCustomerDTO>() {
             @Override
@@ -45,13 +43,12 @@ public class ModelMapperConfig {
                 map().setCpfOrCnpj(source.getCpf());
             }
         });
-
         modelMapper.addMappings(new PropertyMap<MultiPrinter, MultiPrinterDTO>() {
             @Override
-            protected void configure() {
-                map().setCustomer_id(source.getCustomer().getId().toString());
-            }
-        });
+            protected void configure() {map().setCustomer_id(source.getCustomer().getId().toString());}});
+        modelMapper.addMappings(new PropertyMap<MonthlyPayment, MultiPrinterDTO>() {
+            @Override
+            protected void configure() {map().setCustomer_id(source.getCustomer().getId().toString());}});
 
         return modelMapper;
     }
