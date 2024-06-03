@@ -11,6 +11,7 @@ import lombok.Setter;
 import java.io.Serial;
 import java.io.Serializable;
 
+
 @Entity
 @Getter
 @Setter
@@ -18,29 +19,39 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class MultiPrinter implements Serializable {
 
+
     @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue( strategy = GenerationType.IDENTITY )
+    @Column( name = "id", nullable = false )
     private Integer id;
 
     private String brand;
+
     private String model;
-    @Column(unique = true)
+
+    @Column( unique = true )
     private String serialNumber;
+
     private Double machineValue;
-    @Enumerated(EnumType.STRING)
+
+    @Enumerated( EnumType.STRING )
     private MachineStatus machineStatus;
+
     private Integer impressionCounterInitial;
+
     private PrinterType printType;
+
     private Integer impressionCounterNow;
+
     private Integer printingFranchise;
+
     private Double amountPrinter;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn( name = "customer_id" )
     private Customer customer;
 
 }

@@ -13,42 +13,48 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+
 @Log4j2
 @RestController
-@RequestMapping("/api/v1/customers/pj")
+@RequestMapping( "/api/v1/customers/pj" )
 public class LegalPersonalCustomerController {
+
 
     private final LegalPersonalCustomerService legalPersonalCustomerService;
 
-    public LegalPersonalCustomerController(LegalPersonalCustomerService legalPersonalCustomerService) {
+    public LegalPersonalCustomerController( LegalPersonalCustomerService legalPersonalCustomerService ) {
+
         this.legalPersonalCustomerService = legalPersonalCustomerService;
     }
 
 
-    @GetMapping(value = "/all")
-    public ResponseEntity<List<LegalPersonalCustomerDTO>> getAllLegalPersonalCustomers(){
-        return  ResponseEntity.ok().body(legalPersonalCustomerService.findAllLegalPersonalCustomer());
+    @GetMapping( value = "/all" )
+    public ResponseEntity< List< LegalPersonalCustomerDTO > > getAllLegalPersonalCustomers() {
+
+        return ResponseEntity.ok().body( legalPersonalCustomerService.findAllLegalPersonalCustomer() );
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<LegalPersonalCustomerDTO> getLegalPersonalCustomerById(@PathVariable Long id){
-        log.info("[ INFO ] HTTP call with GET method with path: ../customers/pj/{id}");
+    @GetMapping( value = "/{id}" )
+    public ResponseEntity< LegalPersonalCustomerDTO > getLegalPersonalCustomerById( @PathVariable Long id ) {
+
+        log.info( "[ INFO ] HTTP call with GET method with path: ../customers/pj/{id}" );
         LegalPersonalCustomerDTO legalPersonalCustomerById = legalPersonalCustomerService
-                                                                .findLegalPersonalCustomerById(id);
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(legalPersonalCustomerById);
+                .findLegalPersonalCustomerById( id );
+        return ResponseEntity.ok().contentType( MediaType.APPLICATION_JSON ).body( legalPersonalCustomerById );
     }
 
-    @PostMapping(value = "/save", produces = "application/json")
-    public ResponseEntity<HttpStatus> saveLegalPersonalCustomer(@Valid
-            @RequestBody LegalPersonalCustomerDTO legalPersonalCustomerDTO){
-        log.info("[ INFO ] HTTP call with POST method with path: ../customers/pj/save");
+    @PostMapping( value = "/save", produces = "application/json" )
+    public ResponseEntity< HttpStatus > saveLegalPersonalCustomer( @Valid
+                                                                   @RequestBody LegalPersonalCustomerDTO legalPersonalCustomerDTO ) {
+
+        log.info( "[ INFO ] HTTP call with POST method with path: ../customers/pj/save" );
         LegalPersonalCustomerDTO legalPersonalCustomer = legalPersonalCustomerService
-                                                                .saveLegalPersonalCustomer(legalPersonalCustomerDTO);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(legalPersonalCustomer.getId())
+                .saveLegalPersonalCustomer( legalPersonalCustomerDTO );
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path( "/{id}" )
+                .buildAndExpand( legalPersonalCustomer.getId() )
                 .toUri();
-        log.info("[ INFO ] New LegalPersonalCustomer created with success.");
-        return ResponseEntity.created(uri).build();
+        log.info( "[ INFO ] New LegalPersonalCustomer created with success." );
+        return ResponseEntity.created( uri ).build();
     }
 
 }

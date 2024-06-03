@@ -5,10 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface LegalPersonalCustomerRepository extends JpaRepository<LegalPersonalCustomer, Long>{
-    Optional<LegalPersonalCustomer> findByPrimaryEmail(String primaryEmail);
 
-    Optional<LegalPersonalCustomer> findByCnpj(String cpf);
+public interface LegalPersonalCustomerRepository extends JpaRepository< LegalPersonalCustomer, Long > {
 
-    boolean existsLegalPersonalCustomerByCnpj(String cnpj);
+
+    Optional< LegalPersonalCustomer > findByPrimaryEmail( String primaryEmail );
+
+    Optional< LegalPersonalCustomer > findByCnpj( String cpf );
+
+    boolean existsLegalPersonalCustomerByCnpj( String cnpj );
+
 }

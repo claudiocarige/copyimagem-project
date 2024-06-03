@@ -8,15 +8,17 @@ import java.util.List;
 
 
 public interface CustomerService {
-    CustomerResponseDTO searchCustomer(String type, String value);
 
-    List<CustomerResponseDTO> searchAllCustomers();
 
-    List<CustomerResponseDTO> searchFinancialSituation(String situation);
+    CustomerResponseDTO searchCustomer( String type, String value );
 
-    CustomerContract getCustomerContract(Long id);
+    List< CustomerResponseDTO > searchAllCustomers();
 
-    UpdateCustomerDTO updateCustomerAttribute(String attribute, String value, Long id);
+    List< CustomerResponseDTO > searchFinancialSituation( String situation );
+
+    CustomerContract getCustomerContract( Long id );
+
+    UpdateCustomerDTO updateCustomerAttribute( String attribute, String value, Long id );
 
 
 }

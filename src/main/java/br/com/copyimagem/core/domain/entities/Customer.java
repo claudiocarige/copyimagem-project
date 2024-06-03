@@ -17,65 +17,80 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@DiscriminatorColumn(name = "dtype")
+@DiscriminatorColumn( name = "dtype" )
 public abstract class Customer implements Serializable {
+
+
     @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column( nullable = false)
+    @GeneratedValue( strategy = GenerationType.IDENTITY )
+    @Column( nullable = false )
     private Long id;
+
     private String clientName;
-    @Column(unique = true)
+
+    @Column( unique = true )
     private String primaryEmail;
+
     @ElementCollection
-    private List<String> emailList = new ArrayList<>();
+    private List< String > emailList = new ArrayList<>();
+
     private String phoneNumber;
+
     private String whatsapp;
+
     private String bankCode;
+
     @OneToOne
-    @JoinColumn(name = "adress_id")
+    @JoinColumn( name = "adress_id" )
     private Address address;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated( EnumType.STRING )
     private FinancialSituation financialSituation;
+
     private byte payDay;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "contract_id")
+    @OneToOne( cascade = CascadeType.ALL )
+    @JoinColumn( name = "contract_id" )
     private CustomerContract customerContract;
 
-    @Setter(AccessLevel.NONE)
+    @Setter( AccessLevel.NONE )
     @JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer")
-    private List<MultiPrinter> multiPrinterList = new ArrayList<>();
+    @OneToMany( fetch = FetchType.EAGER, mappedBy = "customer" )
+    private List< MultiPrinter > multiPrinterList = new ArrayList<>();
 
-    @Setter(AccessLevel.NONE)
+    @Setter( AccessLevel.NONE )
     @JsonIgnore
-    @OneToMany(fetch =FetchType.EAGER  ,mappedBy = "customer")
-    private List<MonthlyPayment> monthlyPaymentList = new ArrayList<>();
+    @OneToMany( fetch = FetchType.EAGER, mappedBy = "customer" )
+    private List< MonthlyPayment > monthlyPaymentList = new ArrayList<>();
 
 
-    public void addMultiPrinter(MultiPrinter multiPrinter){
-        multiPrinterList.add(multiPrinter);
+    public void addMultiPrinter( MultiPrinter multiPrinter ) {
+
+        multiPrinterList.add( multiPrinter );
     }
 
-    public void addMonthlyPayment(MonthlyPayment monthlyPayment){
-        monthlyPaymentList.add(monthlyPayment);
+    public void addMonthlyPayment( MonthlyPayment monthlyPayment ) {
+
+        monthlyPaymentList.add( monthlyPayment );
     }
 
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Customer customer = (Customer) o;
-        return Objects.equals(id, customer.id) && Objects.equals(primaryEmail, customer.primaryEmail);
+    public boolean equals( Object o ) {
+
+        if( this == o ) return true;
+        if( o == null || getClass() != o.getClass() ) return false;
+        Customer customer = ( Customer ) o;
+        return Objects.equals( id, customer.id ) && Objects.equals( primaryEmail, customer.primaryEmail );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, primaryEmail);
+
+        return Objects.hash( id, primaryEmail );
     }
+
 }

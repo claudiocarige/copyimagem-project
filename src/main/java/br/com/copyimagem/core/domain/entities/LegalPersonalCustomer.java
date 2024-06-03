@@ -12,18 +12,20 @@ import java.io.Serial;
 @ToString
 @NoArgsConstructor
 @Entity
-public class LegalPersonalCustomer extends Customer{
+public class LegalPersonalCustomer extends Customer {
+
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Column(unique = true,length = 18)
+    @Column( unique = true, length = 18 )
     private String cnpj;
 
-    public LegalPersonalCustomer(String cnpj) {
+    public LegalPersonalCustomer( String cnpj ) {
+
         super();
-        if (cnpj == null || cnpj.length() != 18) {
-            throw new IllegalArgumentException("Invalid CNPJ");
+        if( cnpj == null || cnpj.length() != 18 ) {
+            throw new IllegalArgumentException( "Invalid CNPJ" );
         }
         this.cnpj = cnpj;
     }
@@ -32,5 +34,6 @@ public class LegalPersonalCustomer extends Customer{
     public int hashCode() { return super.hashCode(); }
 
     @Override
-    public boolean equals(Object obj) { return super.equals(obj); }
+    public boolean equals( Object obj ) { return super.equals( obj ); }
+
 }

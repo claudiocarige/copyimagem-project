@@ -14,24 +14,29 @@ import java.io.Serializable;
 @Entity
 public class NaturalPersonCustomer extends Customer implements Serializable {
 
+
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Column(unique = true, length = 14)
+    @Column( unique = true, length = 14 )
     private String cpf;
 
-    public NaturalPersonCustomer(String cpf) {
+    public NaturalPersonCustomer( String cpf ) {
+
         super();
-        if (cpf == null || cpf.length() != 14) {
-            throw new IllegalArgumentException("Invalid CPF");
+        if( cpf == null || cpf.length() != 14 ) {
+            throw new IllegalArgumentException( "Invalid CPF" );
         }
         this.cpf = cpf;
     }
+
     @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
+    public boolean equals( Object o ) {
+
+        return super.equals( o );
     }
 
     @Override
     public int hashCode() { return super.hashCode(); }
+
 }

@@ -19,15 +19,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @Log4j2
 @Service
 public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerService {
+
 
     private final LegalPersonalCustomerRepository legalPersonalCustomerRepository;
 
     private final CustomerRepository customerRepository;
 
     private final AddressRepository addressRepository;
+
     private final CustomerContractRepository customerContractRepository;
 
     private final ConvertObjectToObjectDTOService convertObjectToObjectDTOService;
@@ -36,7 +39,8 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
             LegalPersonalCustomerRepository legalPersonalCustomerRepository,
             CustomerRepository customerRepository, AddressRepository addressRepository,
             CustomerContractRepository customerContractRepository,
-            ConvertObjectToObjectDTOService convertObjectToObjectDTOService) {
+            ConvertObjectToObjectDTOService convertObjectToObjectDTOService ) {
+
         this.legalPersonalCustomerRepository = legalPersonalCustomerRepository;
         this.customerRepository = customerRepository;
         this.addressRepository = addressRepository;
@@ -45,74 +49,82 @@ public class LegalPersonalCustomerServiceImpl implements LegalPersonalCustomerSe
     }
 
     @Override
-    public LegalPersonalCustomerDTO findLegalPersonalCustomerById(Long id) {
-        log.info("[ INFO ] Finding LegalPersonalCustomer by id: {}", id);
-        LegalPersonalCustomer legalPersonalCustomer = legalPersonalCustomerRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Customer not found"));
+    public LegalPersonalCustomerDTO findLegalPersonalCustomerById( Long id ) {
+
+        log.info( "[ INFO ] Finding LegalPersonalCustomer by id: {}", id );
+        LegalPersonalCustomer legalPersonalCustomer = legalPersonalCustomerRepository.findById( id )
+                .orElseThrow( () -> new NoSuchElementException( "Customer not found" ) );
         LegalPersonalCustomerDTO legalPersonalCustomerDTO =
-                            convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(legalPersonalCustomer);
-        legalPersonalCustomerDTO.setMultiPrinterList(legalPersonalCustomer
-                            .getMultiPrinterList().stream()
-                                             .map(convertObjectToObjectDTOService::convertToMultiPrinterDTO)
-                                                                                      .collect(Collectors.toList()));
+                convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO( legalPersonalCustomer );
+        legalPersonalCustomerDTO.setMultiPrinterList( legalPersonalCustomer
+                .getMultiPrinterList().stream()
+                .map( convertObjectToObjectDTOService::convertToMultiPrinterDTO )
+                .collect( Collectors.toList() ) );
         return legalPersonalCustomerDTO;
     }
 
     @Override
-    public List<LegalPersonalCustomerDTO> findAllLegalPersonalCustomer() {
-        log.info("[ INFO ] Finding all LegalPersonalCustomers.");
-        List<LegalPersonalCustomer> legalPersonalCustumerList = legalPersonalCustomerRepository.findAll();
+    public List< LegalPersonalCustomerDTO > findAllLegalPersonalCustomer() {
+
+        log.info( "[ INFO ] Finding all LegalPersonalCustomers." );
+        List< LegalPersonalCustomer > legalPersonalCustumerList = legalPersonalCustomerRepository.findAll();
         return legalPersonalCustumerList.stream()
-                .map(convertObjectToObjectDTOService::convertToLegalPersonalCustomerDTO).toList();
+                .map( convertObjectToObjectDTOService::convertToLegalPersonalCustomerDTO ).toList();
     }
 
     @Transactional
     @Override
-    public LegalPersonalCustomerDTO saveLegalPersonalCustomer(LegalPersonalCustomerDTO legalPersonalCustomerDTO){
-        log.info("[ INFO ] Saving LegalPersonalCustomer");
-        legalPersonalCustomerDTO.setId(null);
-        saveAddress(legalPersonalCustomerDTO);
-        existsCnpjOrEmail(legalPersonalCustomerDTO);
-        generateCustomerContract(legalPersonalCustomerDTO);
+    public LegalPersonalCustomerDTO saveLegalPersonalCustomer( LegalPersonalCustomerDTO legalPersonalCustomerDTO ) {
+
+        log.info( "[ INFO ] Saving LegalPersonalCustomer" );
+        legalPersonalCustomerDTO.setId( null );
+        saveAddress( legalPersonalCustomerDTO );
+        existsCnpjOrEmail( legalPersonalCustomerDTO );
+        generateCustomerContract( legalPersonalCustomerDTO );
         LegalPersonalCustomer saveLegalPersonalCustomer = legalPersonalCustomerRepository
-                .save(convertObjectToObjectDTOService.convertToLegalPersonalCustomer(legalPersonalCustomerDTO));
-        return convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO(saveLegalPersonalCustomer);
+                .save( convertObjectToObjectDTOService.convertToLegalPersonalCustomer( legalPersonalCustomerDTO ) );
+        return convertObjectToObjectDTOService.convertToLegalPersonalCustomerDTO( saveLegalPersonalCustomer );
     }
 
     @Override
-    public CustomerResponseDTO findByCnpj(String cnpj) {
-        log.info("[ INFO ] Finding LegalPersonalCustomer by CNPJ.");
-        Optional<LegalPersonalCustomer> legalPersonalCustomer = legalPersonalCustomerRepository.findByCnpj(cnpj);
-        if (legalPersonalCustomer.isEmpty()) {
-            log.error("[ ERROR ] Exception : Customer not found :  {}.", NoSuchElementException.class);
-            throw new NoSuchElementException("Customer not found");
+    public CustomerResponseDTO findByCnpj( String cnpj ) {
+
+        log.info( "[ INFO ] Finding LegalPersonalCustomer by CNPJ." );
+        Optional< LegalPersonalCustomer > legalPersonalCustomer = legalPersonalCustomerRepository.findByCnpj( cnpj );
+        if( legalPersonalCustomer.isEmpty() ) {
+            log.error( "[ ERROR ] Exception : Customer not found :  {}.", NoSuchElementException.class );
+            throw new NoSuchElementException( "Customer not found" );
         }
-        return convertObjectToObjectDTOService.convertToCustomerResponseDTO(legalPersonalCustomer.get());
+        return convertObjectToObjectDTOService.convertToCustomerResponseDTO( legalPersonalCustomer.get() );
     }
 
-    private void existsCnpjOrEmail(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
-        if (customerRepository.existsCustomerByPrimaryEmail(legalPersonalCustomerDTO.getPrimaryEmail())) {
-            log.error("[ ERROR ] Exception : Email already exists! : {}.", customerRepository.existsCustomerByPrimaryEmail(legalPersonalCustomerDTO.getPrimaryEmail()));
-            throw new DataIntegrityViolationException("Email already exists!");
-        } else if (legalPersonalCustomerRepository.existsLegalPersonalCustomerByCnpj(legalPersonalCustomerDTO.getCnpj())) {
-            log.error("[ ERROR ] Exception : CNPJ already exists! : {}.", DataIntegrityViolationException.class);
-            throw new DataIntegrityViolationException("CNPJ already exists!");
+    private void existsCnpjOrEmail( LegalPersonalCustomerDTO legalPersonalCustomerDTO ) {
+
+        if( customerRepository.existsCustomerByPrimaryEmail( legalPersonalCustomerDTO.getPrimaryEmail() ) ) {
+            log.error( "[ ERROR ] Exception : Email already exists! : {}.", customerRepository.existsCustomerByPrimaryEmail( legalPersonalCustomerDTO.getPrimaryEmail() ) );
+            throw new DataIntegrityViolationException( "Email already exists!" );
+        } else if( legalPersonalCustomerRepository.existsLegalPersonalCustomerByCnpj( legalPersonalCustomerDTO.getCnpj() ) ) {
+            log.error( "[ ERROR ] Exception : CNPJ already exists! : {}.", DataIntegrityViolationException.class );
+            throw new DataIntegrityViolationException( "CNPJ already exists!" );
         }
     }
 
-    private void generateCustomerContract(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
-        if (legalPersonalCustomerDTO.getCustomerContract() == null) {
+    private void generateCustomerContract( LegalPersonalCustomerDTO legalPersonalCustomerDTO ) {
+
+        if( legalPersonalCustomerDTO.getCustomerContract() == null ) {
             CustomerContract contract = new CustomerContract();
-            CustomerContract savedContract = customerContractRepository.save(contract);
-            legalPersonalCustomerDTO.setCustomerContract(savedContract);
+            CustomerContract savedContract = customerContractRepository.save( contract );
+            legalPersonalCustomerDTO.setCustomerContract( savedContract );
         }
     }
 
-    private void saveAddress(LegalPersonalCustomerDTO legalPersonalCustomerDTO) {
-        if(legalPersonalCustomerDTO.getAddress() != null){
-            legalPersonalCustomerDTO.setAddress(addressRepository.save(legalPersonalCustomerDTO.getAddress()));
-        }else{
-            throw new DataIntegrityViolationException("Address is null!");
+    private void saveAddress( LegalPersonalCustomerDTO legalPersonalCustomerDTO ) {
+
+        if( legalPersonalCustomerDTO.getAddress() != null ) {
+            legalPersonalCustomerDTO.setAddress( addressRepository.save( legalPersonalCustomerDTO.getAddress() ) );
+        } else {
+            throw new DataIntegrityViolationException( "Address is null!" );
         }
     }
+
 }
