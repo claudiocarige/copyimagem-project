@@ -47,11 +47,6 @@ public class ConvertObjectToObjectDTOService {
         return modelMapper.map( customer, UpdateCustomerDTO.class );
     }
 
-    public Customer convertToCustomer( UpdateCustomerDTO updateCustomerDTO ) {
-
-        return modelMapper.map( updateCustomerDTO, Customer.class );
-    }
-
     public MultiPrinterDTO convertToMultiPrinterDTO( MultiPrinter multiPrinter ) {
 
         return modelMapper.map( multiPrinter, MultiPrinterDTO.class );
@@ -60,11 +55,6 @@ public class ConvertObjectToObjectDTOService {
     public MultiPrinter convertToMultiPrinter( MultiPrinterDTO multiPrinterDTO ) {
 
         return modelMapper.map( multiPrinterDTO, MultiPrinter.class );
-    }
-
-    public MonthlyPaymentDTO convertToMonthlyPaymentDTO( MonthlyPayment monthlyPayment ) {
-
-        return modelMapper.map( monthlyPayment, MonthlyPaymentDTO.class );
     }
 
 }
