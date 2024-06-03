@@ -4,7 +4,8 @@
 
 O objetivo principal do Projeto COPY IMAGEM é solucionar os desafios enfrentados no controle de
 informações nas locações de impressoras pela empresa Copyimagem, visando uma gestão mais eficaz e transparente.
- Iremos desenvolver e implementar uma arquitetura de software robusta e escalável para a aplicação CopyImagem. Faremos uso de
+Iremos desenvolver e implementar uma arquitetura de software robusta e escalável para a aplicação CopyImagem. Faremos
+uso de
 tecnologias avançadas como Java, Spring Boot e PostgreSQL para garantir um sistema eficiente e seguro. Adotaremos a
 prática de Desenvolvimento Orientado a Testes (TDD) para garantir a qualidade do código e a robustez das funcionalidades
 implementadas.
@@ -41,7 +42,8 @@ A arquitetura da aplicação seguirá o padrão composto de camadas distintas pa
 
 ##### d. Camada DTO (representationDTO):
 
-- Esta camada terá a responsabilidade de transferir os dados entre as camadas da aplicação, sobretudo quando são expostas para o externo.
+- Esta camada terá a responsabilidade de transferir os dados entre as camadas da aplicação, sobretudo quando são
+  expostas para o externo.
 
 #### 2. Camada INFRA da aplicação:
 
@@ -51,12 +53,13 @@ A arquitetura da aplicação seguirá o padrão composto de camadas distintas pa
 
 ##### b. Camada Adapter (adapter):
 
-
 ##### c. Camada de Controle (controllers):
 
-- Será responsável por receber as entradas dos usuários, coordenar as ações necessárias e chamar os casos de uso (use cases) apropriados.
+- Será responsável por receber as entradas dos usuários, coordenar as ações necessárias e chamar os casos de uso (use
+  cases) apropriados.
 
-- Terá a responsabilidade de traduzir os dados entre os casos de uso da aplicação e os detalhes da implementação externa, com frameworks, bibliotecas, APIs ou sistemas.
+- Terá a responsabilidade de traduzir os dados entre os casos de uso da aplicação e os detalhes da implementação
+  externa, com frameworks, bibliotecas, APIs ou sistemas.
 
 ##### c. Camada de Persistência (persistence):
 
@@ -119,84 +122,87 @@ A arquitetura da aplicação seguirá o padrão composto de camadas distintas pa
 
 - **Padrões de Commits e Versionamento**:
     - (detalhado na seção)
-- Exemplo: 
-  - [ topico ] : "**descrição do commit**"
-  - <span style="color:green; font-weight: bold"> [ addition ] : First commit</span>
+- Exemplo:
+    - [ topico ] : "**descrição do commit**"
+    - <span style="color:green; font-weight: bold"> [ addition ] : First commit</span>
 
-  - **Tópicos de Commit:**
-    1. addition / inclusion: Usado especificamente para adicionar novos elementos ao código, como atributos, métodos, classes, etc.
-    2. feature: Usado para adicionar uma nova funcionalidade ao código.
-    3. refactor: Usado para fazer alterações no código para melhorar sua estrutura, legibilidade ou desempenho sem alterar seu comportamento externo.
-    4. enhancement: Usado para adicionar melhorias ou otimizações ao código existente.
-    5. update: Usado quando você está atualizando ou modificando partes existentes do código.
-    6. docs: Usado para fazer alterações na documentação do código, como adicionar ou corrigir comentários, atualizar documentação de API, etc.
-    7. cleanup: Usado para realizar tarefas de limpeza no código, como remover código morto, otimizar imports, etc.
-    8. fix: Usado para corrigir um bug existente no código.
-    9. test: Usado para adicionar, modificar ou corrigir testes de unidade, testes de integração, etc.
-    10. test refactor: Usado para informar alterações no código dos testes.
-    11. build: Usado para modificações nos arquivos de Build.
+    - **Tópicos de Commit:**
+        1. addition / inclusion: Usado especificamente para adicionar novos elementos ao código, como atributos,
+           métodos, classes, etc.
+        2. feature: Usado para adicionar uma nova funcionalidade ao código.
+        3. refactor: Usado para fazer alterações no código para melhorar sua estrutura, legibilidade ou desempenho sem
+           alterar seu comportamento externo.
+        4. enhancement: Usado para adicionar melhorias ou otimizações ao código existente.
+        5. update: Usado quando você está atualizando ou modificando partes existentes do código.
+        6. docs: Usado para fazer alterações na documentação do código, como adicionar ou corrigir comentários,
+           atualizar documentação de API, etc.
+        7. cleanup: Usado para realizar tarefas de limpeza no código, como remover código morto, otimizar imports, etc.
+        8. fix: Usado para corrigir um bug existente no código.
+        9. test: Usado para adicionar, modificar ou corrigir testes de unidade, testes de integração, etc.
+        10. test refactor: Usado para informar alterações no código dos testes.
+        11. build: Usado para modificações nos arquivos de Build.
 
 ### 6. Arquitetura do Projeto Backend:
-    
+
 - **src**
     - main
-       - java
-          - <span style="color:yellow; font-weight: bold">core</span>
-              - <span style="color:blue; font-weight: bold">domain</span>
-                  - entities
-                    - Customer
-                    - LegalPesonalCustomer
-                    - NaturalPersonCustomer
-                    - Address
-                    - MonthlyPayment
-                    - MultiPrinter
-                  - enums
-                      - FinancialSituation.java
-                      - MachineStatus.java
-                      - PaymentStatus
-              - <span style="color:blue; font-weight: bold">dto</span>
-                - CustomerResponseDTO
-                - LegalPersonalCustomerDTO
-                - NaturalPersonCustomrDTO
-                - UpdateCustometDTO
-              - <span style="color:red; font-weight: bold">exceptions</span>
-                - GlobalExceptionHandler
-                - DataIntegrityViolationException
-                - IllegalArgumentException
-                - NoSuchElementException
-                - StandardError
-              - <span style="color:blue; font-weight: bold">usecases</span>
-                  - interfaces
-                      - CustomerService.java
-                      - LegalPersonalCustomerService.java
-                      - NaturalPersonCustomerService.java
-                  - impl
-                      - CustomerServiceImpl.java
-                      - LegalPersonalCustomerServiceImpl.java
-                      - NaturalPersonCustomerServiceImpl.java
-          - <span style="color:yellow; font-weight: bold">infra</span>
-              - <span style="color:blue; font-weight: bold">controllers</span>
-                  - CustomerController
-                  - LegalPersonalController
-                  - NaturalPersonController
-              - <span style="color:blue; font-weight: bold">adaptors
-                  - apiexterna
-                      - ApiExternaAdapter.java
-                      - ApiExternaAdapterInterface.java
-                  - emailapi
-                      - MensageriaAdapter.java
-                      - MensageriaAdapterInterface.java
-            - <span style="color:blue; font-weight: bold">config</span>
-                - ModelMapperConfig
-                - SecurityConfig.java
-                - security
-                    - JwtTokenProvider.java  // Provedor JWT
-            - <span style="color:blue; font-weight: bold">persistence
-                - repositorios
-                    - AddressRepository.java
-                    - CustomerRepository.java
-                    - LegalPersonalCustomerRepository.java
-                    - NaturalPersonCustomerRepository.java
+        - java
+            - <span style="color:yellow; font-weight: bold">core</span>
+                - <span style="color:blue; font-weight: bold">domain</span>
+                    - entities
+                        - Customer
+                        - LegalPesonalCustomer
+                        - NaturalPersonCustomer
+                        - Address
+                        - MonthlyPayment
+                        - MultiPrinter
+                    - enums
+                        - FinancialSituation.java
+                        - MachineStatus.java
+                        - PaymentStatus
+                - <span style="color:blue; font-weight: bold">dto</span>
+                    - CustomerResponseDTO
+                    - LegalPersonalCustomerDTO
+                    - NaturalPersonCustomrDTO
+                    - UpdateCustometDTO
+                - <span style="color:red; font-weight: bold">exceptions</span>
+                    - GlobalExceptionHandler
+                    - DataIntegrityViolationException
+                    - IllegalArgumentException
+                    - NoSuchElementException
+                    - StandardError
+                - <span style="color:blue; font-weight: bold">usecases</span>
+                    - interfaces
+                        - CustomerService.java
+                        - LegalPersonalCustomerService.java
+                        - NaturalPersonCustomerService.java
+                    - impl
+                        - CustomerServiceImpl.java
+                        - LegalPersonalCustomerServiceImpl.java
+                        - NaturalPersonCustomerServiceImpl.java
+            - <span style="color:yellow; font-weight: bold">infra</span>
+                - <span style="color:blue; font-weight: bold">controllers</span>
+                    - CustomerController
+                    - LegalPersonalController
+                    - NaturalPersonController
+                - <span style="color:blue; font-weight: bold">adaptors
+                    - apiexterna
+                        - ApiExternaAdapter.java
+                        - ApiExternaAdapterInterface.java
+                    - emailapi
+                        - MensageriaAdapter.java
+                        - MensageriaAdapterInterface.java
+                - <span style="color:blue; font-weight: bold">config</span>
+                    - ModelMapperConfig
+                    - SecurityConfig.java
+                    - security
+                        - JwtTokenProvider.java // Provedor JWT
+                - <span style="color:blue; font-weight: bold">persistence
+                    - repositorios
+                        - AddressRepository.java
+                        - CustomerRepository.java
+                        - LegalPersonalCustomerRepository.java
+                        - NaturalPersonCustomerRepository.java
 
 - **Gerenciamento de Dependências**:
     - Utilizar uma ferramenta de gerenciamento de dependências, como Maven ou Gradle.

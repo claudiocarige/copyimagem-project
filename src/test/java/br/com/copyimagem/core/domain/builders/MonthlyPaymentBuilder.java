@@ -1,41 +1,66 @@
 package br.com.copyimagem.core.domain.builders;
+
 import br.com.copyimagem.core.domain.entities.Customer;
+
 import java.time.LocalDate;
+
 import br.com.copyimagem.core.domain.enums.PaymentStatus;
 import br.com.copyimagem.core.domain.entities.MonthlyPayment;
 import br.com.copyimagem.core.domain.enums.PrinterType;
 
+
 public class MonthlyPaymentBuilder {
 
+
     private Long id;
+
     private Integer monthPayment;
+
     private Integer yearPayment;
+
     private Integer quantityPrintsPB;
+
     private Integer quantityPrintsColor;
+
     private Integer printingFranchisePB;
+
     private Integer printingFranchiseColor;
+
     private String invoiceNumber;
+
     private String ticketNumber;
+
     private Double amountPrinter;
+
     private Double monthlyAmount;
+
     private Double excessValuePrintsPB;
+
     private Double excessValuePrintsColor;
+
     private Double rateExcessColorPrinting;
+
     private Double rateExcessBlackAndWhitePrinting;
+
     private LocalDate expirationDate;
+
     private LocalDate paymentDate;
+
     private PaymentStatus paymentStatus;
+
     private Customer customer;
 
-    private MonthlyPaymentBuilder(){}
+    private MonthlyPaymentBuilder() { }
 
     public static MonthlyPaymentBuilder oneMonthlyPayment() {
+
         MonthlyPaymentBuilder builder = new MonthlyPaymentBuilder();
-        initializeDefaultData(builder);
+        initializeDefaultData( builder );
         return builder;
     }
 
-    private static void initializeDefaultData(MonthlyPaymentBuilder builder) {
+    private static void initializeDefaultData( MonthlyPaymentBuilder builder ) {
+
         builder.id = 1L;
         builder.monthPayment = 1;
         builder.yearPayment = 2024;
@@ -51,115 +76,136 @@ public class MonthlyPaymentBuilder {
         builder.excessValuePrintsColor = 0.0;
         builder.rateExcessColorPrinting = PrinterType.LASER_COLOR_EASY.getRate();
         builder.rateExcessBlackAndWhitePrinting = PrinterType.LASER_BLACK_AND_WHITE_EASY.getRate();
-        builder.expirationDate = LocalDate.of(2023, 11, 30);
-        builder.paymentDate = LocalDate.of(2022, 12, 10);
+        builder.expirationDate = LocalDate.of( 2023, 11, 30 );
+        builder.paymentDate = LocalDate.of( 2022, 12, 10 );
         builder.paymentStatus = PaymentStatus.PENDENTE;
     }
 
-    public MonthlyPaymentBuilder withId(Long id) {
+    public MonthlyPaymentBuilder withId( Long id ) {
+
         this.id = id;
         return this;
     }
 
 
-    public MonthlyPaymentBuilder withMonthPayment(Integer monthPayment) {
+    public MonthlyPaymentBuilder withMonthPayment( Integer monthPayment ) {
+
         this.monthPayment = monthPayment;
         return this;
     }
 
-    public MonthlyPaymentBuilder withYearPayment(Integer yearPayment) {
+    public MonthlyPaymentBuilder withYearPayment( Integer yearPayment ) {
+
         this.yearPayment = yearPayment;
         return this;
     }
 
-    public MonthlyPaymentBuilder withQuantityPrintsPB(Integer quantityPrintsPB) {
+    public MonthlyPaymentBuilder withQuantityPrintsPB( Integer quantityPrintsPB ) {
+
         this.quantityPrintsPB = quantityPrintsPB;
         return this;
     }
 
-    public MonthlyPaymentBuilder withQuantityPrintsColor(Integer quantityPrintsColor) {
+    public MonthlyPaymentBuilder withQuantityPrintsColor( Integer quantityPrintsColor ) {
+
         this.quantityPrintsColor = quantityPrintsColor;
         return this;
     }
 
-    public MonthlyPaymentBuilder withPrintingFranchisePB(Integer printingFranchisePB) {
+    public MonthlyPaymentBuilder withPrintingFranchisePB( Integer printingFranchisePB ) {
+
         this.printingFranchisePB = printingFranchisePB;
         return this;
     }
 
-    public MonthlyPaymentBuilder withPrintingFranchiseColor(Integer printingFranchiseColor) {
+    public MonthlyPaymentBuilder withPrintingFranchiseColor( Integer printingFranchiseColor ) {
+
         this.printingFranchiseColor = printingFranchiseColor;
         return this;
     }
 
-    public MonthlyPaymentBuilder withInvoiceNumber(String invoiceNumber) {
+    public MonthlyPaymentBuilder withInvoiceNumber( String invoiceNumber ) {
+
         this.invoiceNumber = invoiceNumber;
         return this;
     }
 
-    public MonthlyPaymentBuilder withTicketNumber(String ticketNumber) {
+    public MonthlyPaymentBuilder withTicketNumber( String ticketNumber ) {
+
         this.ticketNumber = ticketNumber;
         return this;
     }
 
-    public MonthlyPaymentBuilder withAmountPrinter(Double amountPrinter) {
+    public MonthlyPaymentBuilder withAmountPrinter( Double amountPrinter ) {
+
         this.amountPrinter = amountPrinter;
         return this;
     }
 
-    public MonthlyPaymentBuilder withMonthlyAmount(Double monthlyAmount) {
+    public MonthlyPaymentBuilder withMonthlyAmount( Double monthlyAmount ) {
+
         this.monthlyAmount = monthlyAmount;
         return this;
     }
 
-    public MonthlyPaymentBuilder withExcessValuePrintsPB(Double excessValuePrintsPB) {
+    public MonthlyPaymentBuilder withExcessValuePrintsPB( Double excessValuePrintsPB ) {
+
         this.excessValuePrintsPB = excessValuePrintsPB;
         return this;
     }
 
-    public MonthlyPaymentBuilder withExcessValuePrintsColor(Double excessValuePrintsColor) {
+    public MonthlyPaymentBuilder withExcessValuePrintsColor( Double excessValuePrintsColor ) {
+
         this.excessValuePrintsColor = excessValuePrintsColor;
         return this;
     }
 
-    public MonthlyPaymentBuilder withRateExcessColorPrinting(Double rateExcessColorPrinting) {
+    public MonthlyPaymentBuilder withRateExcessColorPrinting( Double rateExcessColorPrinting ) {
+
         this.rateExcessColorPrinting = rateExcessColorPrinting;
         return this;
     }
 
-    public MonthlyPaymentBuilder withRateExcessBlackAndWhitePrinting(Double rateExcessBlackAndWhitePrinting) {
+    public MonthlyPaymentBuilder withRateExcessBlackAndWhitePrinting( Double rateExcessBlackAndWhitePrinting ) {
+
         this.rateExcessBlackAndWhitePrinting = rateExcessBlackAndWhitePrinting;
         return this;
     }
 
-    public MonthlyPaymentBuilder withExpirationDate(LocalDate expirationDate) {
+    public MonthlyPaymentBuilder withExpirationDate( LocalDate expirationDate ) {
+
         this.expirationDate = expirationDate;
         return this;
     }
 
-    public MonthlyPaymentBuilder withPaymentDate(LocalDate paymentDate) {
+    public MonthlyPaymentBuilder withPaymentDate( LocalDate paymentDate ) {
+
         this.paymentDate = paymentDate;
         return this;
     }
 
-    public MonthlyPaymentBuilder withPaymentStatus(PaymentStatus paymentStatus) {
+    public MonthlyPaymentBuilder withPaymentStatus( PaymentStatus paymentStatus ) {
+
         this.paymentStatus = paymentStatus;
         return this;
     }
 
-    public MonthlyPaymentBuilder withCustomer(Customer customer) {
+    public MonthlyPaymentBuilder withCustomer( Customer customer ) {
+
         this.customer = customer;
         return this;
     }
 
     public MonthlyPayment now() {
+
         return new MonthlyPayment(
-                id,monthPayment, yearPayment, quantityPrintsPB,
+                id, monthPayment, yearPayment, quantityPrintsPB,
                 quantityPrintsColor, printingFranchisePB, printingFranchiseColor,
                 invoiceNumber, ticketNumber, amountPrinter,
                 monthlyAmount, excessValuePrintsPB, excessValuePrintsColor,
                 rateExcessColorPrinting, rateExcessBlackAndWhitePrinting,
                 expirationDate, paymentDate, paymentStatus, customer
-                );
+        );
     }
+
 }

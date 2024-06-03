@@ -27,128 +27,150 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
 class CustomerControllerTest {
 
+
     public static final String CUSTOMER_NOT_FOUND = "Customer not found";
+
     public static final String NUMBER_1 = "1";
+
     public static final String CPF = "156.258.240-29";
+
     public static final String CPF_PARAM = "cpf";
+
     public static final String ID_TYPE_PARAM = "id";
+
     private CustomerResponseDTO customerResponseDTO;
+
     private UpdateCustomerDTO updateCustomerDTO;
+
     @Mock
     private CustomerService customerService;
+
     private MockMvc mockMvc;
+
     @InjectMocks
     private CustomerController customerController;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+
+        MockitoAnnotations.openMocks( this );
+        mockMvc = MockMvcBuilders.standaloneSetup( customerController ).build();
         start();
     }
 
     @Test
-    @DisplayName("Must return a customer by id")
+    @DisplayName( "Must return a customer by id" )
     void mustReturnACustomerById() throws Exception {
-        when(customerService.searchCustomer(ID_TYPE_PARAM, NUMBER_1)).thenReturn(
-                customerResponseDTO);
-        mockMvc.perform(get("/api/v1/customers/search-client")
-                        .param("typeParam", ID_TYPE_PARAM)
-                        .param("valueParam", NUMBER_1)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L));
+
+        when( customerService.searchCustomer( ID_TYPE_PARAM, NUMBER_1 ) ).thenReturn(
+                customerResponseDTO );
+        mockMvc.perform( get( "/api/v1/customers/search-client" )
+                        .param( "typeParam", ID_TYPE_PARAM )
+                        .param( "valueParam", NUMBER_1 )
+                        .contentType( MediaType.APPLICATION_JSON ) )
+                .andExpect( status().isOk() )
+                .andExpect( jsonPath( "$.id" ).value( 1L ) );
     }
 
     @Test
-    @DisplayName("Must return a exception when customer not found.")
-    void mustReturnAExceptionWhenCustomerNotFound(){
-        when(customerService.searchCustomer(ID_TYPE_PARAM, NUMBER_1))
-                .thenThrow(new NoSuchElementException("Customer not found"));
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
-                () -> customerService.searchCustomer(ID_TYPE_PARAM, NUMBER_1));
-        assertEquals(CUSTOMER_NOT_FOUND, exception.getMessage());
+    @DisplayName( "Must return a exception when customer not found." )
+    void mustReturnAExceptionWhenCustomerNotFound() {
 
-        verify(customerService, Mockito.times(1)).searchCustomer(ID_TYPE_PARAM, NUMBER_1);
+        when( customerService.searchCustomer( ID_TYPE_PARAM, NUMBER_1 ) )
+                .thenThrow( new NoSuchElementException( "Customer not found" ) );
+        NoSuchElementException exception = assertThrows( NoSuchElementException.class,
+                () -> customerService.searchCustomer( ID_TYPE_PARAM, NUMBER_1 ) );
+        assertEquals( CUSTOMER_NOT_FOUND, exception.getMessage() );
+
+        verify( customerService, Mockito.times( 1 ) ).searchCustomer( ID_TYPE_PARAM, NUMBER_1 );
     }
 
     @Test
-    @DisplayName("Must return a customer by CPF")
-    void mustReturnACustomerByCPF(){
-        when(customerService.searchCustomer(CPF_PARAM, CPF)).thenReturn(
-                customerResponseDTO);
+    @DisplayName( "Must return a customer by CPF" )
+    void mustReturnACustomerByCPF() {
 
-        ResponseEntity<CustomerResponseDTO> responseEntity = customerController.searchCustomerByParams(CPF_PARAM, CPF);
+        when( customerService.searchCustomer( CPF_PARAM, CPF ) ).thenReturn(
+                customerResponseDTO );
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(customerResponseDTO, responseEntity.getBody());
+        ResponseEntity< CustomerResponseDTO > responseEntity = customerController.searchCustomerByParams( CPF_PARAM, CPF );
+
+        assertEquals( HttpStatus.OK, responseEntity.getStatusCode() );
+        assertEquals( customerResponseDTO, responseEntity.getBody() );
     }
 
     @Test
-    @DisplayName("Must return a exception when customer not found.")
-    void mustReturnAExceptionWhenCustomerNotFoundByCPF(){
-        when(customerService.searchCustomer(CPF_PARAM, CPF))
-                .thenThrow(new NoSuchElementException(CUSTOMER_NOT_FOUND));
-        RuntimeException exception = assertThrows(NoSuchElementException.class,
-                () -> customerService.searchCustomer(CPF_PARAM, CPF));
-        assertEquals(CUSTOMER_NOT_FOUND, exception.getMessage());
+    @DisplayName( "Must return a exception when customer not found." )
+    void mustReturnAExceptionWhenCustomerNotFoundByCPF() {
 
-        verify(customerService, Mockito.times(1)).searchCustomer(CPF_PARAM, CPF);
+        when( customerService.searchCustomer( CPF_PARAM, CPF ) )
+                .thenThrow( new NoSuchElementException( CUSTOMER_NOT_FOUND ) );
+        RuntimeException exception = assertThrows( NoSuchElementException.class,
+                () -> customerService.searchCustomer( CPF_PARAM, CPF ) );
+        assertEquals( CUSTOMER_NOT_FOUND, exception.getMessage() );
+
+        verify( customerService, Mockito.times( 1 ) ).searchCustomer( CPF_PARAM, CPF );
     }
 
     @Test
-    @DisplayName("Must return all customers by FinancialSituation")
-    void mustReturnAllCustomersByFinancialSituation(){
+    @DisplayName( "Must return all customers by FinancialSituation" )
+    void mustReturnAllCustomersByFinancialSituation() {
+
         String situation = "PAGO";
-        when(customerService.searchFinancialSituation(situation)).thenReturn(List.of(customerResponseDTO));
-        ResponseEntity<List<CustomerResponseDTO>> responseEntity =
-                customerController.searchFinancialSituation(situation);
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(CustomerResponseDTO.class, Objects.requireNonNull(responseEntity.getBody()).get(0).getClass());
-        assertEquals(1, responseEntity.getBody().size());
+        when( customerService.searchFinancialSituation( situation ) ).thenReturn( List.of( customerResponseDTO ) );
+        ResponseEntity< List< CustomerResponseDTO > > responseEntity =
+                customerController.searchFinancialSituation( situation );
+        assertEquals( HttpStatus.OK, responseEntity.getStatusCode() );
+        assertEquals( CustomerResponseDTO.class, Objects.requireNonNull( responseEntity.getBody() ).get( 0 ).getClass() );
+        assertEquals( 1, responseEntity.getBody().size() );
     }
+
     @Test
-    @DisplayName("Must return a exception when param invalid")
-    void mustReturnAExceptionWhenParamInvalidByFinancialSituation(){
+    @DisplayName( "Must return a exception when param invalid" )
+    void mustReturnAExceptionWhenParamInvalidByFinancialSituation() {
+
         String situation = "INVALID";
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                                              () ->customerController.searchFinancialSituation(situation));
-        assertEquals("The argument is not correct", exception.getMessage());
-        verify(customerService, never()).searchFinancialSituation(situation);
+        IllegalArgumentException exception = assertThrows( IllegalArgumentException.class,
+                () -> customerController.searchFinancialSituation( situation ) );
+        assertEquals( "The argument is not correct", exception.getMessage() );
+        verify( customerService, never() ).searchFinancialSituation( situation );
     }
 
     @Test
-    @DisplayName("Must return all customers")
-    void mustReturnAllCustomers(){
-        when(customerService.searchAllCustomers()).thenReturn(List.of(customerResponseDTO));
-        ResponseEntity<List<CustomerResponseDTO>> responseEntity =
+    @DisplayName( "Must return all customers" )
+    void mustReturnAllCustomers() {
+
+        when( customerService.searchAllCustomers() ).thenReturn( List.of( customerResponseDTO ) );
+        ResponseEntity< List< CustomerResponseDTO > > responseEntity =
                 customerController.searchAllCustomers();
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(CustomerResponseDTO.class, Objects.requireNonNull(responseEntity.getBody()).get(0).getClass());
-        assertEquals(1, responseEntity.getBody().size());
+        assertEquals( HttpStatus.OK, responseEntity.getStatusCode() );
+        assertEquals( CustomerResponseDTO.class, Objects.requireNonNull( responseEntity.getBody() ).get( 0 ).getClass() );
+        assertEquals( 1, responseEntity.getBody().size() );
     }
 
     @Test
-    @DisplayName("Must return a ResponseEntity from UpdateCustomerDTO")
-    void mustReturnAResponseEntityFromUpdateCustomerDTO(){
+    @DisplayName( "Must return a ResponseEntity from UpdateCustomerDTO" )
+    void mustReturnAResponseEntityFromUpdateCustomerDTO() {
 
         String attribute = "cnpj";
         String value = "123.456.789-10";
-        when(customerService.updateCustomerAttribute(attribute, value, 1L)).thenReturn(updateCustomerDTO);
-        ResponseEntity<UpdateCustomerDTO> responseEntity =
-                customerController.updateCustomerAttribute(attribute, value, 1L);
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(UpdateCustomerDTO.class, Objects.requireNonNull(responseEntity.getBody()).getClass());
-        assertEquals(customerResponseDTO.getId(), responseEntity.getBody().getId());
+        when( customerService.updateCustomerAttribute( attribute, value, 1L ) ).thenReturn( updateCustomerDTO );
+        ResponseEntity< UpdateCustomerDTO > responseEntity =
+                customerController.updateCustomerAttribute( attribute, value, 1L );
+        assertEquals( HttpStatus.OK, responseEntity.getStatusCode() );
+        assertEquals( UpdateCustomerDTO.class, Objects.requireNonNull( responseEntity.getBody() ).getClass() );
+        assertEquals( customerResponseDTO.getId(), responseEntity.getBody().getId() );
     }
 
     private void start() {
-        customerResponseDTO = oneCustomerResponseDTO().withCpfOrCnpj(CPF).now();
+
+        customerResponseDTO = oneCustomerResponseDTO().withCpfOrCnpj( CPF ).now();
         updateCustomerDTO = new UpdateCustomerDTO();
-        updateCustomerDTO.setPrimaryEmail("ccarige@gmail.com");
-        updateCustomerDTO.setId(1L);
-        updateCustomerDTO.setCpfOrCnpj("14.124.420/0001-94");
+        updateCustomerDTO.setPrimaryEmail( "ccarige@gmail.com" );
+        updateCustomerDTO.setId( 1L );
+        updateCustomerDTO.setCpfOrCnpj( "14.124.420/0001-94" );
     }
+
 }

@@ -8,37 +8,43 @@ import org.junit.jupiter.api.Test;
 import static br.com.copyimagem.core.domain.builders.NaturalPersonCustomerBuilder.oneNaturalPersonCustomer;
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class NaturalPersonCustomerTest {
+
 
     private NaturalPersonCustomer naturalPersonCustomer;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
+
         startNaturalPersonCustomer();
     }
 
     @Test
-    @DisplayName("You must create a valid natural person customer")
+    @DisplayName( "You must create a valid natural person customer" )
     void youMustCreateAValidNaturalPersonCustomer() {
 
-        assertAll("NaturalPersonCustomer",
-                () -> assertEquals(1L, naturalPersonCustomer.getId()),
-                () -> assertEquals("Claudio Carigé", naturalPersonCustomer.getClientName()),
-                () -> assertEquals("123.456.789-01", naturalPersonCustomer.getCpf()),
-                () -> assertEquals(Byte.parseByte("5"), naturalPersonCustomer.getPayDay()),
-                () -> assertEquals(2, naturalPersonCustomer.getEmailList().size()),
-                () -> assertEquals(NaturalPersonCustomer.class, naturalPersonCustomer.getClass())
+        assertAll( "NaturalPersonCustomer",
+                () -> assertEquals( 1L, naturalPersonCustomer.getId() ),
+                () -> assertEquals( "Claudio Carigé", naturalPersonCustomer.getClientName() ),
+                () -> assertEquals( "123.456.789-01", naturalPersonCustomer.getCpf() ),
+                () -> assertEquals( Byte.parseByte( "5" ), naturalPersonCustomer.getPayDay() ),
+                () -> assertEquals( 2, naturalPersonCustomer.getEmailList().size() ),
+                () -> assertEquals( NaturalPersonCustomer.class, naturalPersonCustomer.getClass() )
         );
     }
 
     @Test
-    @DisplayName("You must reject a user without a CPF")
-    void youMustRejectANaturalPersonCustomerWithoutACPF(){
-        assertAll("NaturalPersonCustomer NULL CPF",
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> oneNaturalPersonCustomer().withCpf(null).nowCustomerPF()));
+    @DisplayName( "You must reject a user without a CPF" )
+    void youMustRejectANaturalPersonCustomerWithoutACPF() {
+
+        assertAll( "NaturalPersonCustomer NULL CPF",
+                () -> Assertions.assertThrows( IllegalArgumentException.class, () -> oneNaturalPersonCustomer().withCpf( null ).nowCustomerPF() ) );
     }
 
     private void startNaturalPersonCustomer() {
-        naturalPersonCustomer = oneNaturalPersonCustomer().withCpf("123.456.789-01").nowCustomerPF();
+
+        naturalPersonCustomer = oneNaturalPersonCustomer().withCpf( "123.456.789-01" ).nowCustomerPF();
     }
+
 }

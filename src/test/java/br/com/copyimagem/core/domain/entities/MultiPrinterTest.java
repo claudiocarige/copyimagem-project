@@ -9,43 +9,50 @@ import org.junit.jupiter.api.Test;
 import static br.com.copyimagem.core.domain.builders.MultiPrinterBuilder.oneMultiPrinter;
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class MultiPrinterTest {
+
 
     private MultiPrinter multiPrinter;
 
     @BeforeEach
     void setUp() {
+
         startMultiPrint();
     }
+
     @Test
-    @DisplayName("Must create a valid MultiPrinter")
+    @DisplayName( "Must create a valid MultiPrinter" )
     void youMustCreateAValidMultiPrinter() {
-        assertAll("MultiPrinter",
-                () -> assertEquals(1, multiPrinter.getId()),
-                () -> assertEquals("HP", multiPrinter.getBrand()),
-                () -> assertEquals("LaserJet Pro MFP M227fdw", multiPrinter.getModel()),
-                () -> assertEquals("1234567890", multiPrinter.getSerialNumber()),
-                () -> assertEquals(1000.0, multiPrinter.getMachineValue()),
-                () -> assertEquals(MachineStatus.DISPONIVEL, multiPrinter.getMachineStatus()),
-                () -> assertEquals(1L, multiPrinter.getCustomer().getId()),
-                () -> assertEquals(MultiPrinter.class, multiPrinter.getClass()),
-                () -> assertEquals(1000, multiPrinter.getImpressionCounterInitial())
+
+        assertAll( "MultiPrinter",
+                () -> assertEquals( 1, multiPrinter.getId() ),
+                () -> assertEquals( "HP", multiPrinter.getBrand() ),
+                () -> assertEquals( "LaserJet Pro MFP M227fdw", multiPrinter.getModel() ),
+                () -> assertEquals( "1234567890", multiPrinter.getSerialNumber() ),
+                () -> assertEquals( 1000.0, multiPrinter.getMachineValue() ),
+                () -> assertEquals( MachineStatus.DISPONIVEL, multiPrinter.getMachineStatus() ),
+                () -> assertEquals( 1L, multiPrinter.getCustomer().getId() ),
+                () -> assertEquals( MultiPrinter.class, multiPrinter.getClass() ),
+                () -> assertEquals( 1000, multiPrinter.getImpressionCounterInitial() )
         );
     }
 
-    private void startMultiPrint(){
+    private void startMultiPrint() {
+
         multiPrinter = oneMultiPrinter().now();
-        multiPrinter.setId(1);
-        multiPrinter.setBrand("HP");
-        multiPrinter.setModel("LaserJet Pro MFP M227fdw");
-        multiPrinter.setSerialNumber("1234567890");
-        multiPrinter.setMachineValue(1000.0);
-        multiPrinter.setMachineStatus(MachineStatus.DISPONIVEL);
-        multiPrinter.setImpressionCounterInitial(1000);
-        multiPrinter.setImpressionCounterNow(10000);
-        multiPrinter.setPrintType(PrinterType.LASER_COLOR_EASY);
-        LegalPersonalCustomer legalPersonalCustomer = new LegalPersonalCustomer("12.123.123/0001-12");
-        legalPersonalCustomer.setId(1L);
-        multiPrinter.setCustomer(legalPersonalCustomer);
+        multiPrinter.setId( 1 );
+        multiPrinter.setBrand( "HP" );
+        multiPrinter.setModel( "LaserJet Pro MFP M227fdw" );
+        multiPrinter.setSerialNumber( "1234567890" );
+        multiPrinter.setMachineValue( 1000.0 );
+        multiPrinter.setMachineStatus( MachineStatus.DISPONIVEL );
+        multiPrinter.setImpressionCounterInitial( 1000 );
+        multiPrinter.setImpressionCounterNow( 10000 );
+        multiPrinter.setPrintType( PrinterType.LASER_COLOR_EASY );
+        LegalPersonalCustomer legalPersonalCustomer = new LegalPersonalCustomer( "12.123.123/0001-12" );
+        legalPersonalCustomer.setId( 1L );
+        multiPrinter.setCustomer( legalPersonalCustomer );
     }
+
 }

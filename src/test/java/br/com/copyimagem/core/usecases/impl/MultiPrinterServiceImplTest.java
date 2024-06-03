@@ -23,11 +23,14 @@ import static br.com.copyimagem.core.domain.builders.MultiPrinterBuilder.oneMult
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+
 public class MultiPrinterServiceImplTest {
+
 
     private MultiPrinter multiPrinter;
 
     private MultiPrinterDTO multiPrinterDTO;
+
     @Mock
     private MultiPrinterRepository multiPrinterRepository;
 
@@ -42,180 +45,197 @@ public class MultiPrinterServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+
+        MockitoAnnotations.openMocks( this );
         start();
     }
 
     @Test
-    @DisplayName("Must return a MultiPrinter by Id")
-    void mustReturnMultiPrinterById(){
-        when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
-        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
-        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.findMultiPrinterById(1);
+    @DisplayName( "Must return a MultiPrinter by Id" )
+    void mustReturnMultiPrinterById() {
 
-        assertEquals(multiPrinterDTO, multiPrinterDto);
-        assertEquals(multiPrinterDTO.getId(), multiPrinterDto.getId());
-        assertEquals(MultiPrinterDTO.class, multiPrinterDto.getClass());
-    }
-    @Test
-    @DisplayName("Must return a List of MultiPrinterDTO")
-    void mustReturnListOfMultiPrinterDTO(){
-        when(multiPrinterRepository.findAll()).thenReturn(Collections.singletonList(multiPrinter));
-        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
-        List<MultiPrinterDTO> listMultiPrinterDto = multiPrinterServiceImpl.findAllMultiPrinters();
+        when( multiPrinterRepository.findById( 1 ) ).thenReturn( Optional.ofNullable( multiPrinter ) );
+        when( convertObjectToObjectDTOService.convertToMultiPrinterDTO( multiPrinter ) ).thenReturn( multiPrinterDTO );
+        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.findMultiPrinterById( 1 );
 
-        assertEquals(multiPrinterDTO, listMultiPrinterDto.get(0));
-        assertEquals(multiPrinterDTO.getId(), listMultiPrinterDto.get(0).getId());
-        assertEquals(MultiPrinterDTO.class, listMultiPrinterDto.get(0).getClass());
+        assertEquals( multiPrinterDTO, multiPrinterDto );
+        assertEquals( multiPrinterDTO.getId(), multiPrinterDto.getId() );
+        assertEquals( MultiPrinterDTO.class, multiPrinterDto.getClass() );
     }
 
     @Test
-    @DisplayName("Must return all MultiPrinter by customer_id")
-    void mustReturnAllMultiPrinterByCustomerId(){
-        when(multiPrinterRepository.findAllByCustomerId(1L)).thenReturn(Collections.singletonList(multiPrinter));
-        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
-        List<MultiPrinterDTO> listMultiPrinterDto =
-                                          multiPrinterServiceImpl.findAllMultiPrintersByCustomerId(1L);
-        assertEquals(multiPrinterDTO, listMultiPrinterDto.get(0));
-        assertEquals(multiPrinterDTO.getId(), listMultiPrinterDto.get(0).getId());
-        assertEquals(MultiPrinterDTO.class, listMultiPrinterDto.get(0).getClass());
+    @DisplayName( "Must return a List of MultiPrinterDTO" )
+    void mustReturnListOfMultiPrinterDTO() {
+
+        when( multiPrinterRepository.findAll() ).thenReturn( Collections.singletonList( multiPrinter ) );
+        when( convertObjectToObjectDTOService.convertToMultiPrinterDTO( multiPrinter ) ).thenReturn( multiPrinterDTO );
+        List< MultiPrinterDTO > listMultiPrinterDto = multiPrinterServiceImpl.findAllMultiPrinters();
+
+        assertEquals( multiPrinterDTO, listMultiPrinterDto.get( 0 ) );
+        assertEquals( multiPrinterDTO.getId(), listMultiPrinterDto.get( 0 ).getId() );
+        assertEquals( MultiPrinterDTO.class, listMultiPrinterDto.get( 0 ).getClass() );
     }
 
     @Test
-    @DisplayName("Must save a MultiPrinter With success")
-    void mustSaveAMultiPrinterWithSuccess(){
-        multiPrinter.setCustomer(oneLegalPersonalCustomer().nowCustomerPJ());
-        when(multiPrinterRepository.existsBySerialNumber(multiPrinterDTO.getSerialNumber())).thenReturn(false);
-        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
-        when(convertObjectToObjectDTOService.convertToMultiPrinter(multiPrinterDTO)).thenReturn(multiPrinter);
-        when(multiPrinterRepository.save(multiPrinter)).thenReturn(multiPrinter);
+    @DisplayName( "Must return all MultiPrinter by customer_id" )
+    void mustReturnAllMultiPrinterByCustomerId() {
 
-        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.saveMultiPrinter(multiPrinterDTO);
-        assertEquals(multiPrinterDTO, multiPrinterDto);
-        assertEquals(multiPrinterDTO.getId(), multiPrinterDto.getId());
-        assertEquals(MultiPrinterDTO.class, multiPrinterDto.getClass());
-        assertEquals(multiPrinterDTO.getCustomer_id(),multiPrinterDto.getCustomer_id());
+        when( multiPrinterRepository.findAllByCustomerId( 1L ) ).thenReturn( Collections.singletonList( multiPrinter ) );
+        when( convertObjectToObjectDTOService.convertToMultiPrinterDTO( multiPrinter ) ).thenReturn( multiPrinterDTO );
+        List< MultiPrinterDTO > listMultiPrinterDto =
+                multiPrinterServiceImpl.findAllMultiPrintersByCustomerId( 1L );
+        assertEquals( multiPrinterDTO, listMultiPrinterDto.get( 0 ) );
+        assertEquals( multiPrinterDTO.getId(), listMultiPrinterDto.get( 0 ).getId() );
+        assertEquals( MultiPrinterDTO.class, listMultiPrinterDto.get( 0 ).getClass() );
     }
 
     @Test
-    @DisplayName("You should not save a MultiPrint")
-    void mustNotSaveAMultiPrinter(){
-        multiPrinter.setCustomer(oneLegalPersonalCustomer().nowCustomerPJ());
-        when(multiPrinterRepository.existsBySerialNumber(multiPrinterDTO.getSerialNumber())).thenReturn(true);
-        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
-        when(convertObjectToObjectDTOService.convertToMultiPrinter(multiPrinterDTO)).thenReturn(multiPrinter);
-        when(multiPrinterRepository.save(multiPrinter)).thenReturn(multiPrinter);
+    @DisplayName( "Must save a MultiPrinter With success" )
+    void mustSaveAMultiPrinterWithSuccess() {
 
-        String message = assertThrows(IllegalArgumentException.class,
-                                   () -> multiPrinterServiceImpl.saveMultiPrinter(multiPrinterDTO)).getMessage();
-        assertEquals("Serial number already exists", message);
+        multiPrinter.setCustomer( oneLegalPersonalCustomer().nowCustomerPJ() );
+        when( multiPrinterRepository.existsBySerialNumber( multiPrinterDTO.getSerialNumber() ) ).thenReturn( false );
+        when( convertObjectToObjectDTOService.convertToMultiPrinterDTO( multiPrinter ) ).thenReturn( multiPrinterDTO );
+        when( convertObjectToObjectDTOService.convertToMultiPrinter( multiPrinterDTO ) ).thenReturn( multiPrinter );
+        when( multiPrinterRepository.save( multiPrinter ) ).thenReturn( multiPrinter );
+
+        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.saveMultiPrinter( multiPrinterDTO );
+        assertEquals( multiPrinterDTO, multiPrinterDto );
+        assertEquals( multiPrinterDTO.getId(), multiPrinterDto.getId() );
+        assertEquals( MultiPrinterDTO.class, multiPrinterDto.getClass() );
+        assertEquals( multiPrinterDTO.getCustomer_id(), multiPrinterDto.getCustomer_id() );
     }
 
     @Test
-    @DisplayName("Must set up a client on a MultiPrinter")
-    void mustSetUpClientOnAMultiPrinter(){
-        multiPrinterDTO.setCustomer_id(null);
-        when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
-        when(multiPrinterRepository.save(multiPrinter)).thenReturn(multiPrinter);
-        when(customerRepository.findById(1L))
-                                    .thenReturn(Optional.ofNullable(oneLegalPersonalCustomer().nowCustomerPJ()));
-        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
-        when(convertObjectToObjectDTOService.convertToMultiPrinter(multiPrinterDTO)).thenReturn(multiPrinter);
+    @DisplayName( "You should not save a MultiPrint" )
+    void mustNotSaveAMultiPrinter() {
 
-        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.setUpClientOnAMultiPrinter(1, 1L);
-        assertEquals(multiPrinterDTO, multiPrinterDto);
-        assertEquals(multiPrinterDTO.getId(), multiPrinterDto.getId());
-        assertEquals(MultiPrinterDTO.class, multiPrinterDto.getClass());
-        assertEquals(multiPrinterDTO.getCustomer_id(), multiPrinterDto.getCustomer_id());
+        multiPrinter.setCustomer( oneLegalPersonalCustomer().nowCustomerPJ() );
+        when( multiPrinterRepository.existsBySerialNumber( multiPrinterDTO.getSerialNumber() ) ).thenReturn( true );
+        when( convertObjectToObjectDTOService.convertToMultiPrinterDTO( multiPrinter ) ).thenReturn( multiPrinterDTO );
+        when( convertObjectToObjectDTOService.convertToMultiPrinter( multiPrinterDTO ) ).thenReturn( multiPrinter );
+        when( multiPrinterRepository.save( multiPrinter ) ).thenReturn( multiPrinter );
+
+        String message = assertThrows( IllegalArgumentException.class,
+                () -> multiPrinterServiceImpl.saveMultiPrinter( multiPrinterDTO ) ).getMessage();
+        assertEquals( "Serial number already exists", message );
     }
 
     @Test
-    @DisplayName("Must throw an exception with existing Custome")
-    void mustThrowAnExceptionWithExistingCustomerOnMultiPrinter(){
-        when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
-        when(customerRepository.findById(1L))
-                                    .thenReturn(Optional.ofNullable(oneLegalPersonalCustomer().nowCustomerPJ()));
-        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
-        when(convertObjectToObjectDTOService.convertToMultiPrinter(multiPrinterDTO)).thenReturn(multiPrinter);
-        String message = assertThrows(IllegalArgumentException.class,
-                () -> multiPrinterServiceImpl.setUpClientOnAMultiPrinter(1, 1L)).getMessage();
-        assertEquals("This printer is already Customer.", message);
+    @DisplayName( "Must set up a client on a MultiPrinter" )
+    void mustSetUpClientOnAMultiPrinter() {
+
+        multiPrinterDTO.setCustomer_id( null );
+        when( multiPrinterRepository.findById( 1 ) ).thenReturn( Optional.ofNullable( multiPrinter ) );
+        when( multiPrinterRepository.save( multiPrinter ) ).thenReturn( multiPrinter );
+        when( customerRepository.findById( 1L ) )
+                .thenReturn( Optional.ofNullable( oneLegalPersonalCustomer().nowCustomerPJ() ) );
+        when( convertObjectToObjectDTOService.convertToMultiPrinterDTO( multiPrinter ) ).thenReturn( multiPrinterDTO );
+        when( convertObjectToObjectDTOService.convertToMultiPrinter( multiPrinterDTO ) ).thenReturn( multiPrinter );
+
+        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.setUpClientOnAMultiPrinter( 1, 1L );
+        assertEquals( multiPrinterDTO, multiPrinterDto );
+        assertEquals( multiPrinterDTO.getId(), multiPrinterDto.getId() );
+        assertEquals( MultiPrinterDTO.class, multiPrinterDto.getClass() );
+        assertEquals( multiPrinterDTO.getCustomer_id(), multiPrinterDto.getCustomer_id() );
     }
 
     @Test
-    @DisplayName("Must delete a MultiPrinter")
-    void mustDeleteAMultiPrinter(){
-        multiPrinter.setCustomer(null);
-        when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
-        multiPrinterServiceImpl.deleteMultiPrinter(1);
-        verify(multiPrinterRepository, times(1)).deleteById(1);
+    @DisplayName( "Must throw an exception with existing Custome" )
+    void mustThrowAnExceptionWithExistingCustomerOnMultiPrinter() {
+
+        when( multiPrinterRepository.findById( 1 ) ).thenReturn( Optional.ofNullable( multiPrinter ) );
+        when( customerRepository.findById( 1L ) )
+                .thenReturn( Optional.ofNullable( oneLegalPersonalCustomer().nowCustomerPJ() ) );
+        when( convertObjectToObjectDTOService.convertToMultiPrinterDTO( multiPrinter ) ).thenReturn( multiPrinterDTO );
+        when( convertObjectToObjectDTOService.convertToMultiPrinter( multiPrinterDTO ) ).thenReturn( multiPrinter );
+        String message = assertThrows( IllegalArgumentException.class,
+                () -> multiPrinterServiceImpl.setUpClientOnAMultiPrinter( 1, 1L ) ).getMessage();
+        assertEquals( "This printer is already Customer.", message );
     }
 
     @Test
-    @DisplayName("Must throw an exception with existing Custome")
-    void mustThrowAnExceptionWithExistingCustomer(){
-        when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
-        String message = assertThrows(IllegalArgumentException.class,
-                () -> multiPrinterServiceImpl.deleteMultiPrinter(1)).getMessage();
-        assertEquals("This printer cannot be deleted.", message);
+    @DisplayName( "Must delete a MultiPrinter" )
+    void mustDeleteAMultiPrinter() {
+
+        multiPrinter.setCustomer( null );
+        when( multiPrinterRepository.findById( 1 ) ).thenReturn( Optional.ofNullable( multiPrinter ) );
+        multiPrinterServiceImpl.deleteMultiPrinter( 1 );
+        verify( multiPrinterRepository, times( 1 ) ).deleteById( 1 );
     }
 
     @Test
-    @DisplayName("Must delete Customer From Multiprinter")
-    void mustDeleteCustomerFromMultiPrinter(){
-        when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
-        when(multiPrinterRepository.save(multiPrinter)).thenReturn(multiPrinter);
-        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
-        when(convertObjectToObjectDTOService.convertToMultiPrinter(multiPrinterDTO)).thenReturn(multiPrinter);
-        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.deleteCustomerFromMultiPrinter(1);
-        assertEquals(multiPrinterDTO, multiPrinterDto);
-        assertEquals(multiPrinterDTO.getId(), multiPrinterDto.getId());
-        assertEquals(MultiPrinterDTO.class, multiPrinterDto.getClass());
-        assertNull(multiPrinterDto.getCustomer_id());
+    @DisplayName( "Must throw an exception with existing Custome" )
+    void mustThrowAnExceptionWithExistingCustomer() {
+
+        when( multiPrinterRepository.findById( 1 ) ).thenReturn( Optional.ofNullable( multiPrinter ) );
+        String message = assertThrows( IllegalArgumentException.class,
+                () -> multiPrinterServiceImpl.deleteMultiPrinter( 1 ) ).getMessage();
+        assertEquals( "This printer cannot be deleted.", message );
     }
 
     @Test
-    @DisplayName("Must SET Machine Status")
-    void mustSetMAchineStatus(){
-        when(multiPrinterRepository.updateMachineStatusById(1, MachineStatus.MANUTENCAO)).thenReturn(multiPrinter);
-        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
-        multiPrinterDTO.setMachineStatus(MachineStatus.MANUTENCAO);
-        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.setMachineStatus(1,"MANUTENCAO");
-        assertEquals(multiPrinterDTO, multiPrinterDto);
-        assertEquals(MachineStatus.MANUTENCAO, multiPrinterDto.getMachineStatus());
+    @DisplayName( "Must delete Customer From Multiprinter" )
+    void mustDeleteCustomerFromMultiPrinter() {
+
+        when( multiPrinterRepository.findById( 1 ) ).thenReturn( Optional.ofNullable( multiPrinter ) );
+        when( multiPrinterRepository.save( multiPrinter ) ).thenReturn( multiPrinter );
+        when( convertObjectToObjectDTOService.convertToMultiPrinterDTO( multiPrinter ) ).thenReturn( multiPrinterDTO );
+        when( convertObjectToObjectDTOService.convertToMultiPrinter( multiPrinterDTO ) ).thenReturn( multiPrinter );
+        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.deleteCustomerFromMultiPrinter( 1 );
+        assertEquals( multiPrinterDTO, multiPrinterDto );
+        assertEquals( multiPrinterDTO.getId(), multiPrinterDto.getId() );
+        assertEquals( MultiPrinterDTO.class, multiPrinterDto.getClass() );
+        assertNull( multiPrinterDto.getCustomer_id() );
     }
 
     @Test
-    @DisplayName("Must throw an exception with invalid status")
-    void mustThrowAnExceptionWithInvalidStatus(){
-        String message = assertThrows(IllegalArgumentException.class,
-                () -> multiPrinterServiceImpl.setMachineStatus(1, "INVALIDO")).getMessage();
-        assertEquals("Invalid Status: INVALIDO", message);
+    @DisplayName( "Must SET Machine Status" )
+    void mustSetMAchineStatus() {
+
+        when( multiPrinterRepository.updateMachineStatusById( 1, MachineStatus.MANUTENCAO ) ).thenReturn( multiPrinter );
+        when( convertObjectToObjectDTOService.convertToMultiPrinterDTO( multiPrinter ) ).thenReturn( multiPrinterDTO );
+        multiPrinterDTO.setMachineStatus( MachineStatus.MANUTENCAO );
+        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.setMachineStatus( 1, "MANUTENCAO" );
+        assertEquals( multiPrinterDTO, multiPrinterDto );
+        assertEquals( MachineStatus.MANUTENCAO, multiPrinterDto.getMachineStatus() );
     }
 
     @Test
-    @DisplayName("Must SET Impression Counter")
-    void mustSetImpressionCounter(){
-        when(multiPrinterRepository.updateImpressionCounterById(1, 10000)).thenReturn(multiPrinter);
-        when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
-        multiPrinterDTO.setImpressionCounterInitial(10000);
-        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.setImpressionCounter(1, 10000);
-        assertEquals(multiPrinterDTO, multiPrinterDto);
-        assertEquals(10000, multiPrinterDto.getImpressionCounterInitial());
+    @DisplayName( "Must throw an exception with invalid status" )
+    void mustThrowAnExceptionWithInvalidStatus() {
+
+        String message = assertThrows( IllegalArgumentException.class,
+                () -> multiPrinterServiceImpl.setMachineStatus( 1, "INVALIDO" ) ).getMessage();
+        assertEquals( "Invalid Status: INVALIDO", message );
     }
 
-    void start(){
-        multiPrinter = oneMultiPrinter().withCustomer(oneLegalPersonalCustomer().nowCustomerPJ()).now();
+    @Test
+    @DisplayName( "Must SET Impression Counter" )
+    void mustSetImpressionCounter() {
+
+        when( multiPrinterRepository.updateImpressionCounterById( 1, 10000 ) ).thenReturn( multiPrinter );
+        when( convertObjectToObjectDTOService.convertToMultiPrinterDTO( multiPrinter ) ).thenReturn( multiPrinterDTO );
+        multiPrinterDTO.setImpressionCounterInitial( 10000 );
+        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.setImpressionCounter( 1, 10000 );
+        assertEquals( multiPrinterDTO, multiPrinterDto );
+        assertEquals( 10000, multiPrinterDto.getImpressionCounterInitial() );
+    }
+
+    void start() {
+
+        multiPrinter = oneMultiPrinter().withCustomer( oneLegalPersonalCustomer().nowCustomerPJ() ).now();
         multiPrinterDTO = new MultiPrinterDTO();
-        multiPrinterDTO.setId(multiPrinter.getId());
-        multiPrinterDTO.setBrand(multiPrinter.getBrand());
-        multiPrinterDTO.setModel(multiPrinter.getModel());
-        multiPrinterDTO.setSerialNumber(multiPrinter.getSerialNumber());
-        multiPrinterDTO.setMachineValue(multiPrinter.getMachineValue());
-        multiPrinterDTO.setMachineStatus(multiPrinter.getMachineStatus());
-        multiPrinterDTO.setImpressionCounterInitial(multiPrinter.getImpressionCounterInitial());
-        multiPrinterDTO.setPrintType(PrinterType.LASER_COLOR_EASY);
-        multiPrinterDTO.setImpressionCounterNow(multiPrinter.getImpressionCounterNow());
-        multiPrinterDTO.setCustomer_id("1");
+        multiPrinterDTO.setId( multiPrinter.getId() );
+        multiPrinterDTO.setBrand( multiPrinter.getBrand() );
+        multiPrinterDTO.setModel( multiPrinter.getModel() );
+        multiPrinterDTO.setSerialNumber( multiPrinter.getSerialNumber() );
+        multiPrinterDTO.setMachineValue( multiPrinter.getMachineValue() );
+        multiPrinterDTO.setMachineStatus( multiPrinter.getMachineStatus() );
+        multiPrinterDTO.setImpressionCounterInitial( multiPrinter.getImpressionCounterInitial() );
+        multiPrinterDTO.setPrintType( PrinterType.LASER_COLOR_EASY );
+        multiPrinterDTO.setImpressionCounterNow( multiPrinter.getImpressionCounterNow() );
+        multiPrinterDTO.setCustomer_id( "1" );
     }
+
 }
