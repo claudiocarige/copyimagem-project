@@ -25,9 +25,11 @@ public class MultiPrinterDTO {
 
     private MachineStatus machineStatus;
 
+    private PrinterType printType;
+
     private Integer impressionCounterInitial;
 
-    private PrinterType printType;
+    private Integer impressionCounterBefore;
 
     private Integer impressionCounterNow;
 
@@ -35,15 +37,21 @@ public class MultiPrinterDTO {
 
     private Double amountPrinter;
 
+    private Double monthlyPrinterAmount;
+
     private String customer_id;
 
-    public int getSumQuantityPrints() {
+    public int sumQuantityPrints() {
 
-        if( this.impressionCounterNow != null && this.impressionCounterNow > this.impressionCounterInitial ) {
+        if( this.impressionCounterBefore != null ) {
+            var sum = this.impressionCounterNow - this.impressionCounterBefore;
+            this.impressionCounterBefore = this.impressionCounterNow;
+            return sum;
+        } else if(this.impressionCounterNow != null){
             return this.impressionCounterNow - this.impressionCounterInitial;
-        } else {
-            return this.impressionCounterInitial;
         }
+        return 0;
     }
+
 
 }

@@ -40,15 +40,19 @@ public class MultiPrinter implements Serializable {
     @Enumerated( EnumType.STRING )
     private MachineStatus machineStatus;
 
+    private PrinterType printType;
+
     private Integer impressionCounterInitial;
 
-    private PrinterType printType;
+    private Integer impressionCounterBefore;
 
     private Integer impressionCounterNow;
 
     private Integer printingFranchise;
 
     private Double amountPrinter;
+
+    private Double monthlyPrinterAmount;
 
     @ManyToOne
     @JoinColumn( name = "customer_id" )
