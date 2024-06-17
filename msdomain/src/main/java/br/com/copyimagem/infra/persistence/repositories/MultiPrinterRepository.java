@@ -19,15 +19,24 @@ public interface MultiPrinterRepository extends JpaRepository< MultiPrinter, Int
     @Transactional
     @Modifying
     @Query( "UPDATE MultiPrinter mp SET mp.machineStatus = :status WHERE mp.id = :id" )
-    MultiPrinter updateMachineStatusById( @Param( value = "id" ) Integer id, @Param( value = "status" ) MachineStatus status );
+    int updateMachineStatusById( @Param( value = "id" ) Integer id, @Param( value = "status" ) MachineStatus status );
 
 
     @Transactional
     @Modifying
-    @Query( "UPDATE MultiPrinter mp SET " +
-            "mp.impressionCounterInitial = :counter WHERE mp.id = :id AND :counter > mp.impressionCounterInitial" )
-    MultiPrinter updateImpressionCounterById(
-            @Param( value = "id" ) Integer id, @Param( value = "counter" ) Integer counter );
+    @Query("UPDATE MultiPrinter mp SET " +
+    "mp.impressionCounterInitial = CASE WHEN :attribute = 'impressionCounterInitial' " +
+                                                              "THEN :counter ELSE mp.impressionCounterInitial END, " +
+    "mp.impressionCounterBefore = CASE WHEN :attribute = 'impressionCounterBefore' " +
+                                                              "THEN :counter ELSE mp.impressionCounterBefore END, " +
+    "mp.impressionCounterNow = CASE WHEN :attribute = 'impressionCounterNow' " +
+                                                              "THEN :counter ELSE mp.impressionCounterNow END " +
+    "WHERE mp.id = :id AND (:counter > mp.impressionCounterInitial " +
+                                    "OR :counter > mp.impressionCounterBefore OR :counter > mp.impressionCounterNow)")
+    int updateImpressionCounterByAttribute(@Param("id") Integer id,
+                                           @Param("counter") Integer counter,
+                                           @Param("attribute") String attribute);
+
 
     List< MultiPrinter > findAllByCustomerId( Long customerId );
 
