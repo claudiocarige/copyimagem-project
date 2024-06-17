@@ -5,6 +5,7 @@ import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.domain.enums.MachineStatus;
 import br.com.copyimagem.core.dtos.MultiPrinterDTO;
 import br.com.copyimagem.core.exceptions.IllegalArgumentException;
+import br.com.copyimagem.core.exceptions.IllegalStateException;
 import br.com.copyimagem.core.exceptions.NoSuchElementException;
 import br.com.copyimagem.core.usecases.interfaces.MultiPrinterService;
 import br.com.copyimagem.infra.persistence.repositories.CustomerRepository;
@@ -106,20 +107,32 @@ public class MultiPrinterServiceImpl implements MultiPrinterService {
     @Override
     public MultiPrinterDTO setMachineStatus( Integer id, String status ) {
 
-        MultiPrinter multiPrinter;
+        MultiPrinterDTO multiPrinterDTO;
+        int row;
         switch( status ) {
             case "DISPONIVEL", "MANUTENCAO", "LOCADA", "INATIVA" ->
-                    multiPrinter = multiPrinterRepository.updateMachineStatusById( id, MachineStatus.valueOf( status ) );
+                   row = multiPrinterRepository.updateMachineStatusById( id, MachineStatus.valueOf( status ) );
             default -> throw new IllegalArgumentException( "Invalid Status: " + status );
         }
-        return convertObjectToObjectDTOService.convertToMultiPrinterDTO( multiPrinter );
+        if( row > 0 ) {
+            multiPrinterDTO = findMultiPrinterById(id);
+        } else {
+            throw new IllegalStateException( "No rows updated. Check the conditions and input values." );
+        }
+        return multiPrinterDTO;
     }
 
     @Override
-    public MultiPrinterDTO setImpressionCounter( Integer id, Integer counter ) {
+    public MultiPrinterDTO setImpressionCounter( Integer id, Integer counter, String attribute) {
 
-        MultiPrinter multiPrinter = multiPrinterRepository.updateImpressionCounterById( id, counter );
-        return convertObjectToObjectDTOService.convertToMultiPrinterDTO( multiPrinter );
+        int row = multiPrinterRepository.updateImpressionCounterByAttribute( id, counter , attribute);
+        MultiPrinterDTO multiPrinterDTO;
+        if (row > 0) {
+            multiPrinterDTO = findMultiPrinterById(id);
+            return multiPrinterDTO;
+        } else {
+            throw new IllegalStateException("No rows updated. Check the conditions and input values.");
+        }
     }
 
     private void checkSerialNumber( String serialNumber ) {
