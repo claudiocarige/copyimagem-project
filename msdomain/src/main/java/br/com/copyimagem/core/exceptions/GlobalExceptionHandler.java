@@ -40,4 +40,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body( error );
     }
 
+    @ExceptionHandler( IllegalStateException.class )
+    public ResponseEntity< StandardError > IllegalStateException( IllegalStateException ex, HttpServletRequest request ) {
+
+        StandardError error = new StandardError( System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(), request.getRequestURI() );
+        log.error( String.format( "[ ERROR ] IllegalStateException Classs : %S", error.getMessage() ) );
+        return ResponseEntity.status( HttpStatus.BAD_REQUEST).body( error );
+    }
+
 }
