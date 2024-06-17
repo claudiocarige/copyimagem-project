@@ -177,7 +177,8 @@ public class MultiPrinterServiceImplTest {
     @Test
     @DisplayName("Must SET Machine Status")
     void mustSetMAchineStatus(){
-        when(multiPrinterRepository.updateMachineStatusById(1, MachineStatus.MANUTENCAO)).thenReturn(multiPrinter);
+        when(multiPrinterRepository.updateMachineStatusById(1, MachineStatus.MANUTENCAO)).thenReturn(1);
+        when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
         when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
         multiPrinterDTO.setMachineStatus(MachineStatus.MANUTENCAO);
         MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.setMachineStatus(1,"MANUTENCAO");
@@ -196,10 +197,13 @@ public class MultiPrinterServiceImplTest {
     @Test
     @DisplayName("Must SET Impression Counter")
     void mustSetImpressionCounter(){
-        when(multiPrinterRepository.updateImpressionCounterById(1, 10000)).thenReturn(multiPrinter);
+        when(multiPrinterRepository.updateImpressionCounterByAttribute(1, 10000,
+                                                "impressionCounterInitial")).thenReturn(1);
+        when(multiPrinterRepository.findById(1)).thenReturn(Optional.ofNullable(multiPrinter));
         when(convertObjectToObjectDTOService.convertToMultiPrinterDTO(multiPrinter)).thenReturn(multiPrinterDTO);
         multiPrinterDTO.setImpressionCounterInitial(10000);
-        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.setImpressionCounter(1, 10000);
+        MultiPrinterDTO multiPrinterDto = multiPrinterServiceImpl.setImpressionCounter(1, 10000,
+                                                "impressionCounterInitial");
         assertEquals(multiPrinterDTO, multiPrinterDto);
         assertEquals(10000, multiPrinterDto.getImpressionCounterInitial());
     }
@@ -216,6 +220,8 @@ public class MultiPrinterServiceImplTest {
         multiPrinterDTO.setImpressionCounterInitial(multiPrinter.getImpressionCounterInitial());
         multiPrinterDTO.setPrintType(PrinterType.LASER_COLOR_EASY);
         multiPrinterDTO.setImpressionCounterNow(multiPrinter.getImpressionCounterNow());
+        multiPrinterDTO.setImpressionCounterBefore( multiPrinterDTO.getImpressionCounterBefore() );
+        multiPrinterDTO.setMonthlyPrinterAmount( multiPrinter.getMonthlyPrinterAmount() );
         multiPrinterDTO.setCustomer_id("1");
     }
 }
