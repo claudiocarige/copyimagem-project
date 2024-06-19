@@ -65,6 +65,103 @@ A arquitetura da aplicação seguirá o padrão composto de camadas distintas pa
 
 ### 2. Diagramas:
 
+## Diagrama de Classes:
+    
+```mermaid
+classDiagram
+class Customer {
+<<abstract>>
+- Long id
+- String clientName
+- String primaryEmail
+- List~String~ emailList
+- String phoneNumber
+- String whatsapp
+- String bankCode
+- Address address
+- FinancialSituation financialSituation
+- byte payDay
+- CustomerContract customerContract
+- List~MultiPrinter~ multiPrinterList
+- List~MonthlyPayment~ monthlyPaymentList
+}
+
+    class LegalPersonalCustomer {
+        - String cnpj
+    }
+
+    class NaturalPersonCustomer {
+        - String cpf
+    }
+
+    class Address {
+        - Long id
+        - String street
+        - String number
+        - String city
+        - String state
+        - String country
+    }
+
+    class CustomerContract {
+        - Long id
+        - Integer printingFranchise
+        - Double monthlyAmount
+        - Short contractTime
+        - LocalDate startContract
+        - PrinterType printerType
+    }
+
+    class MultiPrinter {
+        - Integer id
+        - String brand
+        - String model
+        - String serialNumber
+        - Double machineValue
+        - MachineStatus machineStatus
+        - PrinterType printType
+        - Integer impressionCounterInitial
+        - Integer impressionCounterBefore
+        - Integer impressionCounterNow
+        - Integer printingFranchise
+        - Double amountPrinter
+        - Double monthlyPrinterAmount
+        - Customer customer
+    }
+
+    class MonthlyPayment {
+        - Long id
+        - Integer monthPayment
+        - Integer yearPayment
+        - Integer quantityPrintsPB
+        - Integer quantityPrintsColor
+        - Integer printingFranchisePB
+        - Integer printingFranchiseColor
+        - String invoiceNumber
+        - String ticketNumber
+        - Double amountPrinter
+        - Double monthlyAmount
+        - Double excessValuePrintsPB
+        - Double excessValuePrintsColor
+        - Double rateExcessColorPrinting
+        - Double rateExcessBlackAndWhitePrinting
+        - LocalDate expirationDate
+        - LocalDate paymentDate
+        - PaymentStatus paymentStatus
+        - Customer customer
+    }
+
+    Customer <|-- LegalPersonalCustomer
+    Customer <|-- NaturalPersonCustomer
+    Customer --> Address
+    Customer --> CustomerContract
+    Customer --> MultiPrinter
+    Customer --> MonthlyPayment
+    MultiPrinter --> Customer
+    MonthlyPayment --> Customer
+```
+
+
 - Diagrama de Componentes:
 - Diagrama de Sequência:
 
