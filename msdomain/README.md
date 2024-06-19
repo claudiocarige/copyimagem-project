@@ -153,10 +153,10 @@ class Customer {
 
     Customer <|-- LegalPersonalCustomer
     Customer <|-- NaturalPersonCustomer
-    Customer --> Address
-    Customer --> CustomerContract
-    Customer --> MultiPrinter
-    Customer --> MonthlyPayment
+    Customer "1" *-- "n" Address
+    Customer "1" *-- "1" CustomerContract
+    Customer "1" --> "1..N" MultiPrinter
+    Customer "1"*-- "1..N" MonthlyPayment
     MultiPrinter --> Customer
     MonthlyPayment --> Customer
 ```
