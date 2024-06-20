@@ -163,7 +163,7 @@ class Customer {
 
 
 - Diagrama de Componentes:
-- Diagrama de Sequência:
+  - Diagrama de Sequência:
 
 ### 3. Tecnologias Utilizadas:
 
