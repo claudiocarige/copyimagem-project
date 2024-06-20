@@ -58,4 +58,12 @@ public class MultiprinterController {
         return ResponseEntity.noContent().build();
     }
 
+
+    @PatchMapping( "/status" )
+    public ResponseEntity< MultiPrinterDTO > setMachineStatus( @RequestParam Integer id,
+                                                               @RequestParam String status ) {
+
+        return ResponseEntity.ok( multiPrinterService.setMachineStatus( id, status ) );
+    }
+
 }
