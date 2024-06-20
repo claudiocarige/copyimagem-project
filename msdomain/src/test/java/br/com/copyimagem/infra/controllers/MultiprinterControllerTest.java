@@ -141,6 +141,15 @@ class MultiprinterControllerTest {
                 .andExpect( content().contentType( MediaType.APPLICATION_JSON ) );
     }
 
+    @Test
+    @DisplayName( "Should delete a customer from a MultiPrinter by id" )
+    void shouldDeleteACustomerFromAMultiPrinterById() {
+
+        ResponseEntity<Void> response = multiprinterController.deleteCustomerFromMultiPrinter(1);
+        verify(multiPrinterService).deleteCustomerFromMultiPrinter(1);
+        assertThat(response.getStatusCode()).isEqualTo( HttpStatus.NO_CONTENT);
+    }
+
 
     private static String asJsonString( MultiPrinterDTO obj ) throws JsonProcessingException {
 
