@@ -164,6 +164,22 @@ class MultiprinterControllerTest {
                 .andExpect( status().isOk() );
     }
 
+    @Test
+    @DisplayName( "Should set the impression counter")
+    void shouldSetImpressionCounter() throws Exception {
+
+        when( multiPrinterService.setImpressionCounter( 1, 1000, "impressionCounterInitial" ) )
+                .thenReturn( multiPrinterDTO );
+        ResponseEntity< MultiPrinterDTO > multiPrinterDTOResponse =
+                multiprinterController.setImpressionCounter( 1, 1000, "impressionCounterInitial" );
+        assertNotNull( multiPrinterDTOResponse );
+        assertEquals( multiPrinterDTO, multiPrinterDTOResponse.getBody() );
+        mockMvc.perform( patch(
+          "/api/v1/multi-printer/impression-counter?id=1&counter=1000&attribute=impressionCounterInitial" ) )
+                .andExpect( status().isOk() );
+
+    }
+
 
     private static String asJsonString( MultiPrinterDTO obj ) throws JsonProcessingException {
 
