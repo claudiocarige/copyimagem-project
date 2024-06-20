@@ -151,6 +151,20 @@ class MultiprinterControllerTest {
     }
 
 
+    @Test
+    @DisplayName( "Should set the machine status" )
+    void shouldSetMachineStatus() throws Exception {
+
+        when( multiPrinterService.setMachineStatus( 1, MachineStatus.LOCADA.toString() ) ).thenReturn( multiPrinterDTO );
+        ResponseEntity< MultiPrinterDTO > multiPrinterDTOResponse =
+                multiprinterController.setMachineStatus( 1, MachineStatus.LOCADA.toString() );
+        assertNotNull( multiPrinterDTOResponse );
+        assertEquals( multiPrinterDTO, multiPrinterDTOResponse.getBody() );
+        mockMvc.perform( patch( "/api/v1/multi-printer/status?id=1&status=status" ) )
+                .andExpect( status().isOk() );
+    }
+
+
     private static String asJsonString( MultiPrinterDTO obj ) throws JsonProcessingException {
 
         final ObjectMapper mapper = new ObjectMapper();
