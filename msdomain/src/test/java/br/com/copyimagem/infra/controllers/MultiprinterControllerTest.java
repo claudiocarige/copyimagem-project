@@ -177,6 +177,17 @@ class MultiprinterControllerTest {
         mockMvc.perform( patch(
           "/api/v1/multi-printer/impression-counter?id=1&counter=1000&attribute=impressionCounterInitial" ) )
                 .andExpect( status().isOk() );
+    }
+
+    @Test
+    @DisplayName( "Should delete a MultiPrinter" )
+    void shouldDeleteAMultiPrinter() throws Exception {
+
+        ResponseEntity<Void> response = multiprinterController.deleteMultiPrinter(1);
+        verify(multiPrinterService).deleteMultiPrinter(1);
+        assertThat(response.getStatusCode()).isEqualTo( HttpStatus.NO_CONTENT);
+        mockMvc.perform( delete( "/api/v1/multi-printer/{id}", 1 ) )
+                .andExpect( status().isNoContent() );
 
     }
 
