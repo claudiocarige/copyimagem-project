@@ -66,4 +66,12 @@ public class MultiprinterController {
         return ResponseEntity.ok( multiPrinterService.setMachineStatus( id, status ) );
     }
 
+    @PatchMapping( "/impression-counter" )
+    public ResponseEntity< MultiPrinterDTO > setImpressionCounter( @RequestParam Integer id,
+                                                                   @RequestParam Integer counter,
+                                                                   @RequestParam String attribute ) {
+
+        return ResponseEntity.ok( multiPrinterService.setImpressionCounter( id, counter, attribute ) );
+    }
+
 }
