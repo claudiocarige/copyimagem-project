@@ -5,7 +5,6 @@ import br.com.copyimagem.core.domain.entities.MultiPrinter;
 import br.com.copyimagem.core.domain.enums.MachineStatus;
 import br.com.copyimagem.core.dtos.MultiPrinterDTO;
 import br.com.copyimagem.core.usecases.interfaces.MultiPrinterService;
-import br.com.copyimagem.infra.persistence.repositories.MultiPrinterRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -39,9 +38,6 @@ class MultiprinterControllerTest {
     private MultiPrinter multiPrinter;
 
     private MultiPrinterDTO multiPrinterDTO;
-
-    @Mock
-    private MultiPrinterRepository multiPrinterRepository;
 
     @Mock
     private MultiPrinterService multiPrinterService;
