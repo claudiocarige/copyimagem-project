@@ -1,5 +1,7 @@
 spring:
   application:
-    name: copyimagem-backend
+    name: msdomain
   profiles:
     active: dev
+server:
+  port: 8080
