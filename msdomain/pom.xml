@@ -13,6 +13,11 @@
     <name>msdomain</name>
     <description>Microserviço Principal do Dominio</description>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
