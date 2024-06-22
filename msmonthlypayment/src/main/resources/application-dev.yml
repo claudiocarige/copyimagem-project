@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: ${DB_URL_POSTGRESQL}
+    username: ${DB_USERNAME_POSTGRESQL}
+    password: ${DB_PASSWORD_POSTGRESQL}
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdc:
+          lob:
+            non_contextual_creation: true
+    show-sql: false
+    hibernate:
+      ddl-auto: update #none
+    open-in-view: false
+
+  flyway:
+    enabled: false
