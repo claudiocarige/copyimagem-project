@@ -14,6 +14,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="copyimagem-backend" options="DB_PASSWORD_POSTGRESQL=Mklauro@2024; DB_URL_POSTGRESQL=jdbc:postgresql://localhost:5432/copyimagem; DB_USERNAME_POSTGRESQL=postgres; H2_PASSWORD=Mklauro@2024; H2_USERNAME=admin" />
       <module name="msdomain" options="-parameters" />
       <module name="msmonthlypayment" options="-parameters" />
     </option>

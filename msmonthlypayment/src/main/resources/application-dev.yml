@@ -1,9 +1,9 @@
 spring:
-  datasource:
-    driverClassName: org.postgresql.Driver
-    url: ${DB_URL_POSTGRESQL}
-    username: ${DB_USERNAME_POSTGRESQL}
-    password: ${DB_PASSWORD_POSTGRESQL}
+#  datasource:
+#    driverClassName: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/copyimagem
+#    username: ${DB_USERNAME_POSTGRESQL}
+#    password: ${DB_PASSWORD_POSTGRESQL}
 
   jpa:
     properties:

@@ -24,3 +24,4 @@ spring:
     password: ${H2_PASSWORD}
     locations: classpath:db/migration
     baseline-on-migrate: true
+    placeholder-replacement: false
